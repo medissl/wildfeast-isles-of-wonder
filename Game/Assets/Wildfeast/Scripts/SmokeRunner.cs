@@ -57,6 +57,19 @@ namespace Wildfeast
             yield return Hotbar(2);yield return ClickWorld(new Vector2(-5,-4));Check(field.crop.wateredDay==game.Model.State.day&&game.Model.State.water==19,"Watering consumes one unit from the can");Capture("11-free-garden.png");
             game.Model.State.water=0;game.Model.Notify();game.world.SetArea(0,new Vector2(8,-8.6f));yield return new WaitForSeconds(.2f);yield return Tap(Key.Space);
             Check(game.Model.State.water==20,"Empty watering can refills beside a water source");
+            var mineral=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item=="stone"&&n.transform.IsChildOf(game.world.saltleaf));
+            game.world.SetArea(0,(Vector2)mineral.transform.position+Vector2.down*.9f);yield return new WaitForSeconds(.2f);yield return Hotbar(9);
+            Vector2 standing=game.world.player.position;
+            yield return Click(game.world.worldCamera.WorldToScreenPoint(mineral.transform.position));
+            Check(game.ToolBusy&&mineral.damage==0,"Pickaxe windup begins before any mining reward or damage");
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.D));yield return new WaitForSeconds(.2f);
+            Check(game.world.PlayerPose=="swing"&&game.world.playerArt.sprite.name.StartsWith("action-swing-"),"Tool use changes the chef's body and arm sprite");Capture("14-pickaxe-windup.png");
+            yield return Hotbar(7);Check(game.Model.State.equipped==9,"Equipment cannot change in the middle of a tool swing");
+            for(int spam=0;spam<6;spam++){yield return Click(game.world.worldCamera.WorldToScreenPoint(mineral.transform.position));yield return new WaitForSeconds(.02f);}
+            Capture("14b-pickaxe-contact.png");
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return WaitTool();
+            Check(mineral.damage==1,"Rapid mining clicks produce one contact, with no queued swings");
+            Check(Vector2.Distance(standing,game.world.player.position)<.08f,"Tool animation keeps the chef's feet planted until recovery finishes");
             foreach(var entry in new[]{new[]{"wood","7"},new[]{"stone","9"},new[]{"fiber","8"}})
             {
                 var node=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item==entry[0]&&n.transform.IsChildOf(game.world.saltleaf));
@@ -109,14 +122,31 @@ namespace Wildfeast
             Check(game.ActiveActivity=="forage"&&game.Model.Count("pepperbell",true)==0,"Forage reward waits for the pull-out animation");yield return new WaitForSeconds(1.1f);
             Check(game.Model.Count("pepperbell",true)==2,"Foraging grants two portions");game.Interact(pepper);
             Check(game.Model.Count("pepperbell",true)==2,"Harvest cannot be repeated the same day");
+            var pickup=game.world.transform.Find("pepperbell").GetComponent<SpriteRenderer>();Check(pickup.sprite.rect.height<=24,"Forage pickup uses a small ingredient sprite instead of a full plant");
             game.Interact(game.world.points.First(p=>p.action=="enter"));
             Check(game.Model.BagCount==0&&game.Model.Count("leafgill")==3,"Entering home deposits the catch");
+            yield return null;Check(!game.world.transform.Find("pepperbell"),"Outdoor pickup effects are cleared when entering the restaurant");
+            var kitchen=game.world.points.First(p=>p.action=="kitchen");
+            game.world.SetArea(2,new Vector2(-1.7f,1.5f));yield return new WaitForSeconds(.15f);
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.W));yield return new WaitForSeconds(.65f);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
+            Check(game.world.player.position.y<2.2f,"The kitchen worktop's footprint blocks walking through its front");
+            Check(game.world.playerArt.sortingOrder>kitchen.artwork.sortingOrder,"Chef in front of the kitchen draws in front of its furniture");Capture("15-kitchen-front.png");
+            game.world.SetArea(2,new Vector2(-1.7f,3.5f));yield return new WaitForSeconds(.15f);
+            Check(game.world.playerArt.sortingOrder<kitchen.artwork.sortingOrder,"Walking behind the kitchen gives it correct ground depth");
+            Check(game.world.restaurant.GetComponentsInChildren<SpriteRenderer>(true).Where(s=>s.name=="lantern"||s.name=="hanging-herbs").All(s=>s.sortingOrder<game.world.playerArt.sortingOrder),"Wall hangings cannot plaster over the chef");Capture("16-kitchen-behind.png");
+            game.world.SetArea(2,new Vector2(-5,-1.5f));yield return new WaitForSeconds(.15f);
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.W));yield return new WaitForSeconds(.65f);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
+            Check(game.world.player.position.y<-.3f,"Dining table footprint blocks walking through the table");Capture("17-dining-table.png");
+            Check(game.ui.GetComponentsInChildren<TMPro.TMP_Text>(true).All(t=>t.font==Resources.Load<TMPro.TMP_FontAsset>("Fonts/Pixelify")),"Every visible authored and runtime UI label uses the cozy font");
+            Check(WorldView.Art("tool-scythe")!=WorldView.Art("tool-pickaxe"),"Scythe and pickaxe have distinct icons");
+            game.world.SetArea(2,new Vector2(0,-3.5f));
             game.Model.State.menu.Clear();game.Model.State.menu.Add("seared");
             game.Interact(game.world.points.First(p=>p.action=="service"&&p.transform.IsChildOf(game.world.saltleaf)));
             Check(game.ui.PageOpen&&game.ui.title.text=="Open the Harbor Table","Outdoor opening sign leads directly to the restaurant");
             var openButton=game.ui.rows.GetComponentInChildren<UnityEngine.UI.Button>();
             yield return Click(RectTransformUtility.WorldToScreenPoint(null,openButton.transform.position));
             Check(game.Model.State.phase=="service"&&!game.ui.PageOpen,"Clicking the OPEN button starts stocked service");
+            Check(game.world.guests.Where(g=>g.position.y<=-4.5f).All(g=>!g.Find("held-dish-fish").GetComponent<SpriteRenderer>().enabled),"Queued guests do not show floating dish icons before entering the room");
             yield return new WaitForSeconds(.2f);
             Capture("02-restaurant.png");
             for(int n=0;n<3;n++)
@@ -221,9 +251,10 @@ namespace Wildfeast
         void MakeKeyboardCurrent(){keyboard?.MakeCurrent();testMouse?.MakeCurrent();}
         static Vector2 Center(RectTransform rect)=>RectTransformUtility.WorldToScreenPoint(null,rect.TransformPoint(rect.rect.center));
         IEnumerator Hotbar(int index){yield return Click(Center(game.ui.toolFrames[index].rectTransform));}
-        IEnumerator ClickWorld(Vector2 target){yield return Click(game.world.worldCamera.WorldToScreenPoint(target));}
+        IEnumerator WaitTool(){float deadline=Time.time+2;while(game.ToolBusy&&Time.time<deadline)yield return null;Check(!game.ToolBusy,"Tool recovery completes");}
+        IEnumerator ClickWorld(Vector2 target){yield return Click(game.world.worldCamera.WorldToScreenPoint(target));yield return WaitTool();}
         IEnumerator Tap(Key key)
-        {InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;yield return null;}
+        {InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;yield return null;if(game.ToolBusy&&(key==Key.Space||key==Key.A||key==Key.D))yield return WaitTool();}
         IEnumerator Drag(Vector2 start,Vector2 end)
         {
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=start});yield return null;yield return null;

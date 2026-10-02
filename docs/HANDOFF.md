@@ -1,3 +1,15 @@
+# Current handoff: cozy polish
+
+Read COZY_POLISH_PASS.md and the latest verification section first. Typography now uses one static Pixelify Sans font throughout authored and runtime UI, with original pixel slot/button borders. Large minigame images were removed from the restaurant and replaced with native world furniture, corrected footprints, ground depth and immediate centered framing. Compact held ingredients and cleanup of area effects prevent oversized pickup images from covering the room. Guests and Nori use clear aisle routes.
+
+ToolActionClock owns a windup/contact/recovery sequence; use its Busy state to gate movement, equipment and repeated tool input. Capture the target at windup, apply the model operation once at contact, and retain recovery even after contact. Forage/fishing remain activity locks. Cooking cuts and stirring also use the clock. WorldView selects actual directional chef action frames, and PropDepth sorts solid furniture from its feet. Save schema and persistent quantities remain unchanged.
+
+Preserve the original scale: all world sprites are 32 PPU. Small held assets have smaller native canvases; they are not scaled-down full-size monsters. Add cozy_polish_art.py after the earlier generation scripts. The Pixelify font's OFL license is included; retain it in builds and source distributions.
+
+CozyPolish.Typography / ArtAndRoom are targeted Editor repairs; they preserve the scene hierarchy. Back up manual work before Assemble, which intentionally reconstructs it. A fourth-pass original scene backup is outside the repo in work/fourth-pass-scene-backup.unity. The unrelated PackageManagerSettings.asset remains untracked and excluded.
+
+Latest delivery is Wildfeast-Cozy-Polish-Windows.zip, with source and verification captures. Previous Island-Life archives are historical.
+
 # Current handoff: island-life pass
 
 Read ISLAND_LIFE_PASS.md and the current section of VERIFICATION.md first. The entries below describe earlier builds where they differ.

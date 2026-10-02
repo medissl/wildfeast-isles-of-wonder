@@ -1,3 +1,39 @@
+# Latest verification: cozy polish
+
+Verified 2 October 2026, using Unity 6000.3.7f1 and the exact final Windows build. No ordinary save was used or replaced.
+
+- **45/45 Unity EditMode tests passed**, with zero failures. Existing economy/save/scene tests remain, plus contact/recovery spam protection, cancelled windup, timing for each ordinary tool, static font/glyph coverage, authored room footprints, all 120 chef action sprites and clear restaurant aisle routes. The visitor restart test now verifies the entrance queue rather than overlapping every guest at one exact coordinate.
+- **122 integrated checks passed at 1920×1080** and **122 at 1366×768**, both Windows processes exiting successfully without logged runtime errors. Inputs use isolated virtual keyboard/mouse devices; some progression and positioning are scripted.
+- The player checks actual clickable hotbar and inventory dragging, M maps, till/seed/water/refill, resource tools, one mining contact under rapid clicks, planted feet and stable equipment during the chef action, free continuous ferry voyages, real fishing, animated forage, kitchen/table collision, front/behind furniture depth, wall-hanging depth, consistent fonts, distinct tool icons, small pickup sprites, cleanup on entering the restaurant and hidden icons for guests still queued outside.
+- The complete journey also checks restaurant opening by mouse, timed chopping and stirring, pointer plating, serving/payouts, requests, crop growth, natural creature charge/collection, all upgrades, Nori delivery, Mistwake story/fruit and disk save round trip.
+- Captures inspected: inventory/font, pickaxe windup/contact, kitchen front/behind, dining-table footprint, service layout, expanded room, cooking/plating and the smaller-screen versions. All world art imports use 32 PPU, point filtering and no mipmaps; small held assets use native smaller canvases rather than fractional scaling of whole creatures.
+- The Windows build used the repaired checked-in scene. Scene, font and sprite changes were authored through public Unity Editor APIs; the scene was preserved before repair. Font source and OFL are included.
+
+Hidden-window 180-frame URP render-request samples on Intel Iris Xe, including UI setup:
+
+```
+Resolution: 1920 x 1080
+Renderer: Intel(R) Iris(R) Xe Graphics
+180-frame offscreen URP render-request sample on Mistwake, including UI setup. Hidden-window diagnostics; not a display FPS claim.
+Mean frame: 1.23 ms
+P95 frame: 1.49 ms
+Unity allocated: 109.2 MiB
+
+Resolution: 1366 x 768
+Renderer: Intel(R) Iris(R) Xe Graphics
+180-frame offscreen URP render-request sample on Mistwake, including UI setup. Hidden-window diagnostics; not a display FPS claim.
+Mean frame: 1.12 ms
+P95 frame: 1.53 ms
+Unity allocated: 109.2 MiB
+```
+
+These samples are not display FPS or a performance benchmark. Both processes still emit Unity's previously observed ComputeBuffer disposal warning during shutdown, after successful checks; no gameplay error or exception was logged.
+
+Human animation feel, cozy presentation, fresh-player comprehension, accessibility and physical controller support remain unverified. See COZY_POLISH_PASS.md for the playtest sequence. The pre-existing untracked PackageManagerSettings.asset is excluded from the commit and source archive.
+
+Previous verification sections below describe historical builds.
+
+
 # Current verification — island-life pass, 2 October 2026
 
 - Unity 6000.3.7f1 compiled and built the Windows x64 delivery player successfully: **124,483,503 bytes** in the build report.

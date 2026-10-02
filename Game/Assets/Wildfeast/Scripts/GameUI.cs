@@ -32,18 +32,19 @@ namespace Wildfeast
             if(menuTabs){menuTabs.gameObject.SetActive(false);Destroy(menuTabs.gameObject);}
             var bar=Rect(page,"Menu tabs",new Vector2(0,42),new Vector2(800,38),new Vector2(0,1));
             menuTabs=bar;
-            for(int i=0;i<labels.Length;i++){int index=i;var b=Button(bar,labels[i],new Vector2(i*133,0),new Vector2(128,38),()=>actions[index](),new Vector2(0,1));b.GetComponent<UnityEngine.UI.Image>().color=labels[i]==active?C("b0713f"):C("873e36");}
+            for(int i=0;i<labels.Length;i++){int index=i;var b=Button(bar,labels[i],new Vector2(i*133,0),new Vector2(128,38),()=>actions[index](),new Vector2(0,1));b.GetComponent<UnityEngine.UI.Image>().color=labels[i]==active?C("ffdb9d"):Color.white;}
         }
         public void Inventory(GameModel model,Action redraw)
         {
             ItemInventory.Sync(model.State);
-            Show("Your satchel","Drag between slots, or click an item then its destination. The first row is your hotbar.");
+            Show("Your satchel","Hotbar on top, backpack below. Drag to move items, or click an item and its destination.");
             for(int i=0;i<ItemInventory.Size;i++)
             {
                 int index=i;var item=model.State.slots[i];
                 var b=Button(rows,"",new Vector2(12+(i%10)*72,-12-(i/10)*78),new Vector2(66,68),()=>{if(inventorySelected<0){inventorySelected=index;redraw();}else{ItemInventory.Swap(model.State,inventorySelected,index);inventorySelected=-1;redraw();}},new Vector2(0,1));
                 b.gameObject.name="Inventory slot "+i;
-                b.GetComponent<UnityEngine.UI.Image>().color=inventorySelected==i?C("edbd67"):i<10?C("c59662"):C("dfc394");
+                Skin(b.GetComponent<UnityEngine.UI.Image>(),true);
+                b.GetComponent<UnityEngine.UI.Image>().color=inventorySelected==i?C("ffd583"):i<10?C("fff0c6"):Color.white;
                 var drag=b.gameObject.AddComponent<InventoryDrag>();drag.index=index;drag.ui=this;drag.move=(from,to)=>{ItemInventory.Swap(model.State,from,to);inventorySelected=-1;redraw();};
                 if(item.count>0){var img=Box(b.transform,"Item",new Vector2(11,-5),new Vector2(44,44),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.Art(item.id);img.preserveAspect=true;img.raycastTarget=false;Text(b.transform,item.id=="tool-can"?model.State.water+"/20":item.count>1?item.count.ToString():"",new Vector2(6,-48),new Vector2(55,17),13,Cream);}
                 Text(b.transform,i<10?((i+1)%10).ToString():"",new Vector2(4,-3),new Vector2(14,18),12,Cream);
@@ -98,6 +99,7 @@ namespace Wildfeast
             {
                 int slot=i;var b=Button(toolBelt,"",new Vector2(7+i*69,-7),new Vector2(62,52),()=>SelectTool?.Invoke(slot),new Vector2(0,1));
                 toolFrames[i]=b.GetComponent<UnityEngine.UI.Image>();
+                Skin(toolFrames[i],true);
                 var icon=Box(b.transform,"Tool",new Vector2(17,-5),new Vector2(30,34),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=string.IsNullOrEmpty(icons[i])?null:WorldView.Art(icons[i]);icon.preserveAspect=true;icon.raycastTarget=false;toolIcons[i]=icon;
                 Text(b.transform,((i+1)%10).ToString(),new Vector2(5,-3),new Vector2(14,18),12,Dim);
                 toolCounts[i]=Text(b.transform,"",new Vector2(-4,2),new Vector2(48,18),12,Cream,new Vector2(1,0));toolCounts[i].alignment=TextAlignmentOptions.Right;
@@ -202,7 +204,7 @@ namespace Wildfeast
             ItemInventory.Sync(model.State);
             for(int i=0;i<10;i++)
             {
-                var slot=model.State.slots[i];toolFrames[i].color=i==model.State.equipped?C("d8a049"):C("ead2a1");
+                var slot=model.State.slots[i];toolFrames[i].color=i==model.State.equipped?C("ffd583"):Color.white;
                 toolIcons[i].sprite=string.IsNullOrEmpty(slot.id)?null:WorldView.Art(slot.id);toolIcons[i].enabled=slot.count>0;
                 toolCounts[i].text=slot.id=="tool-can"?model.State.water+"/20":slot.count>1?slot.count.ToString():"";
             }
@@ -245,6 +247,8 @@ namespace Wildfeast
         }
         public static void Frame(RectTransform r)
         {var image=r.GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art("ui-frame");image.color=Color.white;image.type=UnityEngine.UI.Image.Type.Sliced;image.pixelsPerUnitMultiplier=2f;}
+        public static void Skin(UnityEngine.UI.Image image,bool slot=false)
+        {image.sprite=WorldView.Art(slot?"ui-slot":"ui-button");image.type=UnityEngine.UI.Image.Type.Sliced;image.color=Color.white;image.pixelsPerUnitMultiplier=2;}
         public void Message(string text) { toast.text=text;toast.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(text));if(!string.IsNullOrEmpty(text))toast.transform.parent.SetAsLastSibling(); }
         public static RectTransform Rect(Transform parent,string name,Vector2 pos,Vector2 size,Vector2 anchor)
         {
@@ -258,11 +262,11 @@ namespace Wildfeast
         public static TMP_Text Text(Transform parent,string text,Vector2 pos,Vector2 size,int fontSize,Color color,Vector2? anchor=null)
         {
             var r=Rect(parent,"Text",pos,size,anchor??new Vector2(0,1));var t=r.gameObject.AddComponent<TextMeshProUGUI>();t.text=text;t.fontSize=fontSize;t.color=color;
-            t.font=Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");t.textWrappingMode=TextWrappingModes.Normal;t.overflowMode=TextOverflowModes.Ellipsis;t.raycastTarget=false;return t;
+            t.font=Resources.Load<TMP_FontAsset>("Fonts/Pixelify");t.enableAutoSizing=false;t.textWrappingMode=TextWrappingModes.Normal;t.overflowMode=TextOverflowModes.Ellipsis;t.raycastTarget=false;return t;
         }
         public static UnityEngine.UI.Button Button(Transform parent,string caption,Vector2 pos,Vector2 size,Action action,Vector2 anchor)
         {
-            var r=Box(parent,caption,pos,size,anchor,C("873e36"));var b=r.gameObject.AddComponent<UnityEngine.UI.Button>();var c=b.colors;c.normalColor=Color.white;c.highlightedColor=Gold;c.selectedColor=Gold;c.pressedColor=C("adbc90");c.disabledColor=new Color(.45f,.5f,.48f,1);b.colors=c;
+            var r=Box(parent,caption,pos,size,anchor,Color.white);Skin(r.GetComponent<UnityEngine.UI.Image>());var b=r.gameObject.AddComponent<UnityEngine.UI.Button>();var c=b.colors;c.normalColor=Color.white;c.highlightedColor=C("ffe0b0");c.selectedColor=Color.white;c.pressedColor=C("cfb383");c.disabledColor=new Color(.55f,.55f,.55f,1);b.colors=c;
             var t=Text(r,caption,new Vector2(0,0),size,18,C("f6e7bf"));t.rectTransform.anchorMin=Vector2.zero;t.rectTransform.anchorMax=Vector2.one;t.rectTransform.offsetMin=Vector2.zero;t.rectTransform.offsetMax=Vector2.zero;t.alignment=TextAlignmentOptions.Center;
             b.onClick.AddListener(()=>action());return b;
         }

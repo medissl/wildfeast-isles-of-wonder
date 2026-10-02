@@ -1,6 +1,6 @@
 {
   "name": "Wildfeast.Tests",
-  "references": ["Wildfeast", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
+  "references": ["Wildfeast", "UnityEngine.TestRunner", "UnityEditor.TestRunner", "Unity.TextMeshPro"],
   "includePlatforms": ["Editor"],
   "overrideReferences": true,
   "precompiledReferences": ["nunit.framework.dll"],

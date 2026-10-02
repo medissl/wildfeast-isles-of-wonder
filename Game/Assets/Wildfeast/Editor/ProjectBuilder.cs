@@ -31,14 +31,14 @@ namespace Wildfeast.Editor
         public static void Assemble()
         {
             if(GraphicsSettings.currentRenderPipeline is not UniversalRenderPipelineAsset)throw new InvalidOperationException("Expected the inspected URP template.");
-            if(!Resources.Load<TMPro.TMP_FontAsset>("Fonts & Materials/LiberationSans SDF") || !Resources.Load<TMPro.TMP_Settings>("TMP Settings"))
+            if(!Resources.Load<TMPro.TMP_FontAsset>("Fonts/Pixelify") || !Resources.Load<TMPro.TMP_Settings>("TMP Settings"))
                 throw new InvalidOperationException("Import TMP Essential Resources first using ImportFontsAndExit without -quit.");
             AssetDatabase.Refresh();
             foreach(string path in Directory.GetFiles("Assets/Wildfeast/Resources/Art","*.png"))
             {
                 var importer=(TextureImporter)AssetImporter.GetAtPath(path.Replace('\\','/'));
                 importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.spritePixelsPerUnit=32;
-                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;settings.spritePivot=new Vector2(.5f,0);importer.SetTextureSettings(settings);if(path.EndsWith("ui-frame.png")||path.EndsWith("ui-board.png"))importer.spriteBorder=new Vector4(6,6,6,6);importer.maxTextureSize=2048;importer.SaveAndReimport();
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;string name=Path.GetFileNameWithoutExtension(path);settings.spritePivot=name.StartsWith("held-")?CozyPolish.HeldPivot(name):new Vector2(.5f,0);importer.SetTextureSettings(settings);if(path.EndsWith("ui-frame.png")||path.EndsWith("ui-board.png"))importer.spriteBorder=new Vector4(6,6,6,6);if(name=="ui-slot"||name=="ui-button")importer.spriteBorder=new Vector4(3,3,3,3);importer.maxTextureSize=2048;importer.SaveAndReimport();
             }
             var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             var cameraObject=new GameObject("WorldCamera",typeof(Camera),typeof(AudioListener),typeof(UniversalAdditionalCameraData));

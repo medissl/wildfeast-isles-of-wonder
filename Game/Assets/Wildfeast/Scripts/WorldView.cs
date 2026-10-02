@@ -19,11 +19,13 @@ namespace Wildfeast
         public bool FollowSea;
         Sprite[] chefFrames;
         Sprite[][] directional;
+        readonly Dictionary<string,Sprite[][]> actionFrames=new Dictionary<string,Sprite[][]>();
+        public string PlayerPose {get;private set;}="idle";
         SpriteRenderer heldTool, bobber, staffDish;
         LineRenderer fishingLine;
         Vector2 castPoint;
         Vector2 facing=Vector2.down;
-        readonly Vector2[] seats={new Vector2(-5,-.5f),new Vector2(0,-.5f),new Vector2(5,-.5f),new Vector2(-4,-3.3f),new Vector2(4,-3.3f)};
+        readonly Vector2[] seats={new Vector2(-5,-.9f),new Vector2(0,-.9f),new Vector2(5,-.9f),new Vector2(-4,-3.3f),new Vector2(4,-3.3f)};
         readonly List<SpriteRenderer> orderIcons=new List<SpriteRenderer>();
         readonly List<WorldMotion> ambience=new List<WorldMotion>();
         bool[] guestLeaving=new bool[5];
@@ -31,29 +33,36 @@ namespace Wildfeast
         float[] guestDelay=new float[5];
         string previousPhase;
         float burstCooldown;
+        readonly List<GameObject> transientEffects=new List<GameObject>();
+        readonly int[] guestWaypoint=new int[5];
+        Vector2[][] guestArrivals,guestDepartures;
         WorldPoint beast;
         Vector2 beastHome;
-        public static Sprite Art(string name) => Resources.Load<Sprite>("Art/" + name);
+        public static Sprite Art(string name) => Resources.Load<Sprite>("Art/" + (name=="tool-scythe"?"icon-scythe":name=="tool-pickaxe"?"icon-pickaxe":name));
         public void Init()
         {
             chefFrames = new Sprite[4]; for (int i = 0; i < 4; i++) chefFrames[i] = Art("player-" + i);
             directional=new Sprite[4][];
             string[] directions={"down","up","left","right"};
             for(int d=0;d<4;d++){directional[d]=new Sprite[4];for(int f=0;f<4;f++)directional[d][f]=Art("chef-"+directions[d]+"-"+f);}
+            foreach(string kind in new[]{"swing","pour","plant","pull","cast","stir"})
+            {var frames=new Sprite[4][];for(int d=0;d<4;d++){frames[d]=new Sprite[5];for(int f=0;f<5;f++)frames[d][f]=Art("action-"+kind+"-"+directions[d]+"-"+f);}actionFrames.Add(kind,frames);}
             heldTool=Add(player,"tool-rod",new Vector2(.38f,.35f),1500);heldTool.gameObject.name="Held tool";
             bobber=Add(transform,"bobber",Vector2.zero,1500);bobber.gameObject.SetActive(false);
             var lineObject=new GameObject("Fishing line",typeof(LineRenderer));lineObject.transform.SetParent(transform);
             fishingLine=lineObject.GetComponent<LineRenderer>();fishingLine.material=new Material(Shader.Find("Sprites/Default"));fishingLine.startColor=fishingLine.endColor=new Color(.95f,.93f,.72f,.85f);fishingLine.startWidth=fishingLine.endWidth=.025f;fishingLine.positionCount=3;fishingLine.sortingOrder=1600;fishingLine.enabled=false;
-            staffDish=Add(employee.transform,"dish-fish",new Vector2(.4f,.45f),1500);staffDish.transform.localScale=Vector3.one;staffDish.sprite=null;
-            for(int i=0;i<5;i++){var icon=Add(guests[i],"dish-fish",new Vector2(0,1.65f),1600);icon.transform.localScale=Vector3.one;orderIcons.Add(icon);}
+            staffDish=Add(employee.transform,"held-dish-fish",new Vector2(.3f,.55f),1500);staffDish.transform.localScale=Vector3.one;staffDish.sprite=null;
+            for(int i=0;i<5;i++){var icon=Add(guests[i],"held-dish-fish",new Vector2(0,1.5f),1600);icon.transform.localScale=Vector3.one;orderIcons.Add(icon);}
             ambience.AddRange(GetComponentsInChildren<WorldMotion>(true));
+            guestArrivals=new Vector2[5][];guestDepartures=new Vector2[5][];for(int i=0;i<5;i++){guestArrivals[i]=GuestRoute(i);guestDepartures[i]=GuestRoute(i,true);}
             beast=points.First(p=>p.action=="hunt");beastHome=beast.transform.position;
         }
         public void SetArea(int area, Vector2 position)
         {
+            foreach(var effect in transientEffects)if(effect)Destroy(effect);transientEffects.Clear();
             Area = area; saltleaf.gameObject.SetActive(area == 0); mistwake.gameObject.SetActive(area == 1); restaurant.gameObject.SetActive(area == 2);
             player.position = position; player.GetComponent<Rigidbody2D>().position = position;
-            worldCamera.transform.position = new Vector3(position.x, position.y + 1, -10);
+            worldCamera.transform.position = area==2?new Vector3(0,0,-10):new Vector3(position.x,position.y+1,-10);
         }
         public WorldPoint Nearest()
         {
@@ -85,11 +94,12 @@ namespace Wildfeast
             for(int i=0;i<5;i++)if(guestPresent[i]&&guests[i].gameObject.activeSelf)
             {
                 guestDelay[i]-=Time.deltaTime;
-                Vector2 destination=guestLeaving[i]?new Vector2(0,-5.1f):seats[i];
+                var route=GuestRoute(i,guestLeaving[i]);Vector2 destination=route[guestWaypoint[i]];
                 if(guestDelay[i]<=0)guests[i].position=Vector3.MoveTowards(guests[i].position,destination,2.4f*Time.deltaTime);
                 var sr=guests[i].GetComponentInChildren<SpriteRenderer>();sr.sortingOrder=1000-Mathf.RoundToInt(guests[i].position.y*32);
                 sr.sprite=Art("visitor-"+i+"-"+(Vector2.Distance(guests[i].position,destination)>.1f?((int)(Time.time*8)%4):0));
-                if(guestLeaving[i]&&Vector2.Distance(guests[i].position,destination)<.08f){guests[i].gameObject.SetActive(false);guestPresent[i]=false;}
+                if(Vector2.Distance(guests[i].position,destination)<.08f){if(guestWaypoint[i]<route.Length-1)guestWaypoint[i]++;else if(guestLeaving[i]){guests[i].gameObject.SetActive(false);guestPresent[i]=false;}}
+                if(orderIcons.Count>i){orderIcons[i].sortingOrder=sr.sortingOrder+3;orderIcons[i].enabled=guests[i].position.y>-4.5f&&guestDelay[i]<=0&&!guestLeaving[i];}
             }
             var staff=employee.GetComponent<SpriteRenderer>();staff.sortingOrder=1000-Mathf.RoundToInt(employee.transform.position.y*32);
         }
@@ -112,12 +122,12 @@ namespace Wildfeast
                 var order=model.State.orders.Find(o=>o.number==i);
                 if(model.State.phase=="service"&&order!=null&&!order.paid)
                 {
-                    if(!guestPresent[i]||newService){guests[i].position=new Vector2(0,-5);guestDelay[i]=i*.55f;guestPresent[i]=true;guestLeaving[i]=false;}
+                    if(!guestPresent[i]||newService){guests[i].position=new Vector2(0,-5.1f-i*.65f);guestWaypoint[i]=0;guestDelay[i]=i*.55f;guestPresent[i]=true;guestLeaving[i]=false;}
                     guests[i].gameObject.SetActive(true);
                 }
-                else if(guestPresent[i])guestLeaving[i]=true;
+                else if(guestPresent[i]&&!guestLeaving[i]){guestLeaving[i]=true;guestWaypoint[i]=0;}
                 else guests[i].gameObject.SetActive(false);
-                if(orderIcons.Count>i){orderIcons[i].sprite=order==null||order.paid?null:Art(model.Data.Dish(order.recipe).icon);orderIcons[i].color=order!=null&&order.cooked?new Color(.8f,1,.7f):Color.white;}
+                if(orderIcons.Count>i){orderIcons[i].sprite=order==null||order.paid?null:Art("held-"+model.Data.Dish(order.recipe).icon);orderIcons[i].color=order!=null&&order.cooked?new Color(.8f,1,.7f):Color.white;orderIcons[i].enabled=guestPresent[i]&&guests[i].position.y>-4.5f&&guestDelay[i]<=0&&!guestLeaving[i];}
             }
             for (int i = 0; i < cropArt.Count; i++)
             {
@@ -133,21 +143,44 @@ namespace Wildfeast
                 p.label=order==null?$"Table {p.index+1}":$"Table {p.index+1} · {model.Data.Dish(order.recipe).name}"+(order.cooked?" — dish ready":" — cook at the stove");
             }
             var ready=model.State.orders.Find(o=>o.cooked&&!o.paid);
-            carriedDish.sprite=ready!=null&&!model.Has("staff")?Art(model.Data.Dish(ready.recipe).icon):null;
+            carriedDish.sprite=ready!=null&&!model.Has("staff")?Art("held-"+model.Data.Dish(ready.recipe).icon):null;
             foreach(var p in points)if(p.action=="service"&&p.artwork)p.artwork.sprite=Art(model.State.phase=="service"?"sign-open":"sign-closed");
             previousPhase=model.State.phase;
         }
         public Vector2 GuestSeat(int index)=>seats[index];
-        public void StaffDish(string icon){if(staffDish)staffDish.sprite=icon==null?null:Art(icon);}
-        public void Tool(int slot,Vector2 direction,bool usingTool,string activity,string item=null)
+        public Vector2[] GuestRoute(int index,bool leaving=false)
+        {
+            var cached=leaving?guestDepartures:guestArrivals;if(cached!=null&&cached[index]!=null)return cached[index];
+            var seat=seats[index];var path=index<3?new[]{new Vector2(0,-4.6f),new Vector2(0,-1.25f),new Vector2(seat.x,-1.25f),seat}:new[]{new Vector2(0,-4.6f),new Vector2(seat.x,-4.6f),seat};
+            return leaving?path.Reverse().Concat(new[]{new Vector2(0,-5.6f)}).ToArray():path;
+        }
+        public static Vector2 StaffHome=>new Vector2(3.1f,2.3f);
+        public Vector2[] StaffRoute(int index,bool returning=false)
+        {
+            var target=seats[index]+new Vector2(.65f,0);
+            var path=index<3?new[]{StaffHome,new Vector2(3.1f,1.2f),new Vector2(2.2f,-1.25f),new Vector2(target.x,-1.25f),target}:new[]{StaffHome,new Vector2(3.1f,1.2f),new Vector2(2.2f,-1.25f),new Vector2(0,-1.25f),new Vector2(0,-4.3f),new Vector2(target.x,-4.3f),target};
+            return returning?path.Reverse().ToArray():path;
+        }
+        public void StaffDish(string icon){if(staffDish){staffDish.sprite=icon==null?null:Art("held-"+icon);staffDish.sortingOrder=employee.GetComponent<SpriteRenderer>().sortingOrder+2;}}
+        public void Tool(int slot,Vector2 direction,bool usingTool,string activity,string item=null,float poseProgress=0,int cookStep=0)
         {
             if(!heldTool)return;
             string[] icons=ItemInventory.Tools;
-            heldTool.sprite=slot>=0&&slot<10&&!string.IsNullOrEmpty(icons[slot])?Art(icons[slot]):null;
-            if(slot<0&&!string.IsNullOrEmpty(item))heldTool.sprite=Art(item);
-            heldTool.transform.localPosition=new Vector3(direction.x>=0?.43f:-.43f,.38f,0);
-            heldTool.flipX=direction.x<0;heldTool.sortingOrder=playerArt.sortingOrder+1;
-            heldTool.transform.localRotation=Quaternion.Euler(0,0,activity=="fish"?-25:usingTool?Mathf.Sin(Time.time*20)*30:0);
+            string id=slot>=0&&slot<10?icons[slot]:item;
+            heldTool.sprite=string.IsNullOrEmpty(id)?null:Art(id.StartsWith("tool-")?id.Replace("tool-","held-"):"held-"+id)??Art(id);
+            if(carriedDish.sprite)heldTool.sprite=null;
+            string kind=activity=="forage"?"pull":activity=="fish"?poseProgress<1?"cast":"pull":activity=="cook"?usingTool?cookStep==0?"swing":cookStep==1?"stir":"plant":null:usingTool?slot==2?"pour":slot==3||slot==4?"plant":slot==0||slot<0?"pull":"swing":null;
+            int d=Mathf.Abs(direction.x)>Mathf.Abs(direction.y)?direction.x<0?2:3:direction.y>0?1:0;
+            int frame=Mathf.Min(4,Mathf.FloorToInt(poseProgress*5));
+            if(activity=="fish"&&poseProgress>=1)frame=1+(int)(Time.time*5)%3;
+            PlayerPose=kind??"idle";
+            if(kind!=null){playerArt.sprite=actionFrames[kind][d][frame];if(activity=="forage")heldTool.sprite=null;if(activity=="cook")heldTool.sprite=cookStep==0?Art("held-knife"):null;}
+            float side=d==2?-1:1;
+            float handY=kind=="swing"||kind=="cast"?new[]{.6f,1.05f,.56f,.43f,.6f}[frame]:kind=="plant"||kind=="pull"?new[]{.56f,.4f,.28f,.64f,.56f}[frame]:.56f;
+            heldTool.transform.localPosition=new Vector3(side*.38f,handY,0);
+            heldTool.flipX=side<0;heldTool.sortingOrder=playerArt.sortingOrder+(d==1?-1:1);
+            float angle=kind=="swing"?new[]{-10f,35f,-65f,-85f,-10f}[frame]:kind=="pour"?-55f:activity=="fish"?-20f:0;
+            heldTool.transform.localRotation=Quaternion.Euler(0,0,angle*side);
         }
         public void Roam()
         {
@@ -164,11 +197,12 @@ namespace Wildfeast
             var start=player.position+new Vector3(facing.x>=0?.65f:-.65f,1.28f,0);fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*(.12f+(1-tension)*.45f),end});
         }
         public void CancelCast(){if(bobber)bobber.gameObject.SetActive(false);if(fishingLine)fishingLine.enabled=false;}
-        public void LandFish(string item){var fish=Add(transform,item,castPoint,1800);var motion=fish.gameObject.AddComponent<WorldMotion>();motion.mode=6;motion.destination=player.position+Vector3.up*.7f;Destroy(fish.gameObject,.7f);Burst(player.position+Vector3.up*.8f,"spark",0);}
+        public void LandFish(string item){var fish=Add(transform,item,castPoint,1800);transientEffects.Add(fish.gameObject);var motion=fish.gameObject.AddComponent<WorldMotion>();motion.mode=6;motion.destination=player.position+Vector3.up*.7f;Destroy(fish.gameObject,.7f);Burst(player.position+Vector3.up*.8f,"spark",0);}
         public void Burst(Vector3 position,string sprite,float cooldown=0)
         {
             if(cooldown>0&&Time.time<burstCooldown)return;if(cooldown>0)burstCooldown=Time.time+cooldown;
-            for(int i=0;i<(sprite=="steam"?1:5);i++){var sr=Add(transform,sprite,position+(Vector3)new Vector2(Random.Range(-.25f,.25f),Random.Range(0,.3f)),1800);sr.transform.localScale=Vector3.one;var motion=sr.gameObject.AddComponent<WorldMotion>();motion.mode=3;motion.speed=.7f+i*.1f;Destroy(sr.gameObject,.8f);}
+            var compact=Art("held-"+sprite);transientEffects.RemoveAll(effect=>!effect);
+            for(int i=0;i<(sprite=="steam"||compact?1:5);i++){var sr=Add(transform,sprite,position+(Vector3)new Vector2(Random.Range(-.25f,.25f),Random.Range(0,.3f)),1800);if(compact)sr.sprite=compact;transientEffects.Add(sr.gameObject);var motion=sr.gameObject.AddComponent<WorldMotion>();motion.mode=3;motion.speed=.7f+i*.1f;Destroy(sr.gameObject,.8f);}
         }
         // Shoreline polygon is shared with the authored collision and terrain generator.
         static readonly Vector2[] pixels={new Vector2(90,500),new Vector2(80,300),new Vector2(140,185),new Vector2(330,130),new Vector2(470,72),new Vector2(650,78),new Vector2(780,110),new Vector2(990,100),new Vector2(1140,230),new Vector2(1180,370),new Vector2(1140,590),new Vector2(1050,655),new Vector2(850,706),new Vector2(590,735),new Vector2(410,735),new Vector2(280,690),new Vector2(175,630)};
@@ -254,7 +288,7 @@ namespace Wildfeast
             Border(restaurant, 9.8f, 5.45f);
             Point(restaurant, "exit", "Return to the shore", new Vector2(0, -5));
             Point(restaurant, "pantry", "Pantry", new Vector2(-8, 2.7f), "", "", "pantry");
-            Point(restaurant, "kitchen", "Use the kitchen", new Vector2(0, 3.5f), "", "", "stove");
+            Point(restaurant, "kitchen", "Use the kitchen", new Vector2(0, 2.3f), "", "", "kitchen-worktop");
             Point(restaurant, "menu", "Menu board", new Vector2(-4, 3.2f), "", "", "menu-board");
             Point(restaurant, "service", "Open the restaurant", new Vector2(5, 3.2f), "", "", "sign-closed");
             Point(restaurant, "bed", "Rest until morning", new Vector2(8, 3), "", "", "bed");
@@ -265,15 +299,17 @@ namespace Wildfeast
                 if (i == 3) { terrace = new GameObject("RestoredTerrace"); terrace.transform.SetParent(restaurant); }
                 if (i >= 3) parent = terrace.transform;
                 var pos = seats[i]+Vector2.up;
-                Add(parent, "table", pos, 1000);
-                Add(parent,"table-number-"+i,pos+new Vector2(-.65f,.55f),1050);
+                var table=Add(parent,"table",pos,1000-Mathf.RoundToInt(pos.y*32));
+                var depth=table.gameObject.AddComponent<PropDepth>();depth.groundOffset=.25f;depth.Apply();
+                var number=Add(table.transform,"table-number-"+i,new Vector2(-.65f,.55f),table.sortingOrder+1);
+                var numberDepth=number.gameObject.AddComponent<PropDepth>();numberDepth.groundOffset=-.3f;numberDepth.bias=1;numberDepth.Apply();
                 var guest = Point(parent, "serve", "Serve this guest", pos + new Vector2(0, -1), "", "", "guest-"+i); guest.index = i; guests.Add(guest.transform);
             }
-            employee = Add(restaurant, "nori", new Vector2(2, 3), 1050).gameObject;
-            for(int n=0;n<4;n++){Add(restaurant,"hanging-herbs",new Vector2(-7+n*4,4.4f),900);var lamp=Add(restaurant,"lantern",new Vector2(-8+n*5,4.3f),1100);lamp.gameObject.AddComponent<WorldMotion>().mode=2;}
+            employee = Add(restaurant, "nori", StaffHome, 1050).gameObject;
+            for(int n=0;n<4;n++){Add(restaurant,"hanging-herbs",new Vector2(-7+n*4,3.75f),700);var lamp=Add(restaurant,"lantern",new Vector2(-8+n*5,3.7f),700);lamp.gameObject.AddComponent<WorldMotion>().mode=2;}
             var chef = new GameObject("Chef", typeof(SpriteRenderer), typeof(Rigidbody2D), typeof(CapsuleCollider2D)); player = chef.transform; player.SetParent(transform);
             playerArt = chef.GetComponent<SpriteRenderer>(); playerArt.sprite = Art("player-0");
-            carriedDish=Add(player,"dish-fish",new Vector2(.4f,.4f),1500);carriedDish.transform.localScale=Vector3.one;carriedDish.sprite=null;
+            carriedDish=Add(player,"held-dish-fish",new Vector2(.3f,.55f),1500);carriedDish.transform.localScale=Vector3.one;carriedDish.sprite=null;
             var body = chef.GetComponent<Rigidbody2D>(); body.gravityScale = 0; body.freezeRotation = true; body.interpolation = RigidbodyInterpolation2D.None;
             var collider = chef.GetComponent<CapsuleCollider2D>(); collider.size = new Vector2(.45f, .35f); collider.offset = new Vector2(0, .15f);
             foreach(var root in new[]{saltleaf,mistwake})
@@ -283,21 +319,28 @@ namespace Wildfeast
             foreach(var sr in GetComponentsInChildren<SpriteRenderer>(true))
             {
                 string name=sr.gameObject.name;
+                if(name=="lantern"&&sr.transform.IsChildOf(restaurant))continue;
                 if(sr.GetComponentsInChildren<Collider2D>().Length>0)continue;
                 Vector2 size=Vector2.zero, offset=Vector2.up*.25f;
                 if(name.StartsWith("tree"))size=new Vector2(.55f,.4f);
                 else if(name=="fountain")size=new Vector2(1.5f,.9f);
                 else if(name=="bench")size=new Vector2(1.8f,.5f);
                 else if(name=="mushroom-house"||name=="iona-house"){size=new Vector2(3,1.8f);offset=Vector2.up*1.2f;}
-                else if(name=="table")size=new Vector2(1.7f,.7f);
+                else if(name=="table")size=new Vector2(2.2f,.8f);
+                else if(name=="kitchen-worktop"){size=new Vector2(4.65f,.85f);offset=Vector2.up*.4f;}
+                else if(name=="bed"){size=new Vector2(2.1f,1.35f);offset=Vector2.up*.7f;}
+                else if(name=="saltstone"){size=new Vector2(1.45f,.65f);offset=Vector2.up*.3f;}
                 else if(name=="stove"||name=="pantry"||name=="bed"||name=="workshop")size=new Vector2(1.5f,.6f);
                 else if(name=="lantern"||name=="mailbox"||name=="saltstone")size=new Vector2(.45f,.4f);
-                if(size!=Vector2.zero)Block(sr.transform,size,offset);
+                if(size!=Vector2.zero){Block(sr.transform,size,offset);var depth=sr.GetComponent<PropDepth>()??sr.gameObject.AddComponent<PropDepth>();depth.groundOffset=offset.y;depth.Apply();}
             }
-            for(int i=0;i<3;i++){var plant=Add(restaurant,"flower-purple",new Vector2(-7+i*7,1.5f),960);plant.gameObject.AddComponent<WorldMotion>();}
-            Add(restaurant,"prep-board",new Vector2(-2,3.1f),925);Add(restaurant,"cook-pot",new Vector2(.4f,3.6f),910);
-            Add(restaurant,"cook-pan",new Vector2(-.4f,3.7f),905);
-            var kitchenSteam=Add(restaurant,"steam",new Vector2(0,4.6f),1200);kitchenSteam.gameObject.AddComponent<WorldMotion>();
+            for(int i=0;i<2;i++){var plant=Add(restaurant,"room-planter",new Vector2(-8.5f+i*17,1.3f),960);Block(plant.transform,new Vector2(.65f,.4f),Vector2.up*.15f);plant.gameObject.AddComponent<PropDepth>().Apply();}
+            var kitchenSteam=Add(restaurant,"steam",new Vector2(-.07f,3.95f),700);kitchenSteam.gameObject.AddComponent<WorldMotion>();
+            var backWall=new GameObject("Back wall footprint",typeof(BoxCollider2D));backWall.transform.SetParent(restaurant,false);backWall.transform.localPosition=new Vector2(0,4.6f);backWall.GetComponent<BoxCollider2D>().size=new Vector2(19,.7f);
+            for(int i=0;i<2;i++){var pot=new GameObject("Floor planter footprint "+i,typeof(BoxCollider2D));pot.transform.SetParent(restaurant,false);pot.transform.localPosition=new Vector2(i==0?-8.75f:8.75f,-3.7f);pot.GetComponent<BoxCollider2D>().size=new Vector2(.95f,.75f);}
+            foreach(var sr in GetComponentsInChildren<SpriteRenderer>(true))
+            {var foot=sr.GetComponentInChildren<Collider2D>(true);if(!foot||sr==playerArt||sr.transform.IsChildOf(player))continue;var depth=sr.GetComponent<PropDepth>()??sr.gameObject.AddComponent<PropDepth>();depth.groundOffset=foot.transform.TransformPoint(foot.offset).y-sr.transform.position.y;depth.Apply();}
+            foreach(var point in points)if(point.transform.IsChildOf(restaurant)&&point.artwork&&(point.action=="menu"||point.action=="service"))point.artwork.sortingOrder=700;
             SetArea(0, new Vector2(-6, -2.5f));
         }
         void Decorate(Transform parent,bool second)

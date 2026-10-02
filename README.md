@@ -2,19 +2,21 @@
 
 A free, offline single-player Unity game prototype for Windows. Explore strange islands, bring impossible ingredients home, and grow a harbor restaurant in modern top-down pixel art.
 
+The latest cozy polish adds consistent Pixelify typography, pixel menu borders, connected kitchen furniture, corrected prop depth/collision and customer/staff aisles. Tools and held ingredients use compact native sprites. Actual chef poses and a windup/contact/recovery cooldown prevent tool spam. See [the polish test guide](docs/COZY_POLISH_PASS.md).
+
 ## Play
 
 Open `Wildfeast.exe` from the Windows build folder. Keep its accompanying data folder and DLLs together. First launch shows the controls and daily loop.
 
 - WASD / arrows: walk.
 - Click hotbar, 1–0 or scroll: select an item/tool. The first inventory row is the hotbar.
-- Left click / Space: use a tool. Mouse targets must be within reach. Hold and release to reel.
+- Left click / Space: use a tool; allow its windup and recovery to finish. Mouse targets must be within reach. Hold and release to reel.
 - Right click / E: doors, signs, forage, guests and other world interactions.
 - Tab / B: inventory; drag or click two slots to rearrange. Includes Recipes, Journal, Requests and Options tabs.
 - M: island map with player and landmark markers.
 - Shovel: till clear land; seed packet: plant; can: water, holding 20 units. Refill beside water.
 - Axe: chop Cinnamonwood; scythe: sweep Noodlegrass; pickaxe: mine Saltstone. Trade materials at the workshop.
-- Cooking: alternating A/D cuts, A/D heat and Space stirring, then drag garnishes onto the plate (or 1/2/3).
+- Cooking: alternating A/D cuts at the chopping rhythm, A/D heat and Space stirring, then drag garnishes onto the plate (or 1/2/3).
 - Escape: close/cancel or open Options. Voyages finish at the destination dock.
 
 The player starts in borderless fullscreen; windowed mode is available in pause. Keyboard and mouse are the supported target for this pass. Complete gamepad tool selection and cooking controls remain future work.

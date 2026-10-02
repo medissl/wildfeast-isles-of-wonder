@@ -56,7 +56,7 @@ namespace Wildfeast
                 if(!harvested&&node.lastDay!=game.Model.State.day){node.damage=0;node.lastDay=game.Model.State.day;}
             }
         }
-        Vector2 Target(Vector2 facing)
+        public Vector2 Target(Vector2 facing)
         {
             Vector2 hero=game.world.player.position;var mouse=Mouse.current;
             if(mouse!=null&&mouse.leftButton.wasPressedThisFrame)
@@ -66,10 +66,10 @@ namespace Wildfeast
             }
             return hero+facing*.85f;
         }
-        public bool Use(int tool,Vector2 facing)
+        public bool Use(int tool,Vector2 facing,Vector2 target)
         {
             if(game.world.Area==2||game.Model.State.phase!="explore")return false;
-            Vector2 target=Target(facing),tile=new Vector2(Mathf.Round(target.x),Mathf.Round(target.y));
+            Vector2 tile=new Vector2(Mathf.Round(target.x),Mathf.Round(target.y));
             var model=game.Model;var f=ItemInventory.Plot(model.State,game.world.Area,tile);
             if(tool==6)
             {

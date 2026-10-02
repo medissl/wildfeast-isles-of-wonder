@@ -1,3 +1,11 @@
+# Current work-mode requirements: cozy polish
+
+Continue the actual checked-in Wildfeast Unity scene. Read COZY_POLISH_PASS.md, HANDOFF.md and VERIFICATION.md first. Preserve Pixelify Sans throughout game text, the pixel widget skins, compact native held props, furniture footprints and ground depth, centered restaurant camera and clear customer/staff aisles.
+
+Every tool must animate the chef's body and arms as well as its prop. Use ToolActionClock for windup, one contact and recovery; ignore spam, keep equipment stable and never grant a reward early or twice. Preserve separate forage/fishing/sailing activities, finite water/seeds, free island travel, inventory placement and the original food ecology. Do not reuse full-size cooking-panel images as world furniture, whole creatures as handheld ingredients, or arbitrary foreground sorting for wall decorations.
+
+Use supported Editor APIs and preserve manual scene work. Regenerate cozy_polish_art last, retain the font license, run rule/save/scene checks and the standalone journey with isolated saves, and inspect both restaurant depth captures and action frames. Report automated evidence honestly and leave ordinary player saves intact.
+
 # Current work-mode requirements
 
 Continue Wildfeast from its implemented island-life pass. Read AGENTS.md, ISLAND_LIFE_PASS.md, HANDOFF.md and VERIFICATION.md first. Preserve the original food-world creature direction, consistent 32 PPU art and the complete fishing/restaurant loop. Build around an actual ten-slot item hotbar plus backpack, runtime mouse callbacks, draggable placement, Tab menu categories and M map. Tools must keep behavior when rearranged. Gardening is spatial till → seed → finite water → watered nights → harvest. Ferry travel remains free and visibly carries the player along a sea route to a physically different island. Solid props must have appropriate footprints, without blocking doors and routes. Keep cuisine/ecology original; generate or properly license new assets and music.

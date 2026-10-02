@@ -16,8 +16,9 @@ Modern top-down pixel art. Offline single-player Windows game, free without ads 
 - Keep quantity changes, crop resets, payouts, and purchases atomic with respect to save checkpoints.
 - Use supported Editor tooling for scene/prefab/asset edits. Detect the pipeline before changing pixel rendering. Do not hand-edit scene YAML or the package manifest.
 - Ordinary scene edits should preserve manual work. `ProjectBuilder.Assemble` intentionally reconstructs the scene; do not invoke it on top of someone else's manual edits without first preserving them.
-- Regenerate original art/audio in order: `tools/make_art.py`, `tools/polish_art.py`, `tools/creature_art.py`, then `tools/island_life_art.py`, requiring Python, Pillow and numpy. Intentional scene assembly rebakes illustrated maps. Keep bundled TMP font license files.
-- Read docs/ISLAND_LIFE_PASS.md first. Preserve item hotbar/backpack placement, runtime pointer callbacks, Tab categories, M maps, spatial farming, finite water, resources, original music and continuous ship travel.
+- Regenerate original art/audio in order: `tools/make_art.py`, `tools/polish_art.py`, `tools/creature_art.py`, then `tools/island_life_art.py`, then `tools/cozy_polish_art.py` last, requiring Python, Pillow and numpy. Intentional scene assembly rebakes illustrated maps. Keep bundled TMP font license files.
+- Read docs/COZY_POLISH_PASS.md first. Preserve the Pixelify font/license, pixel widgets, compact held props, directional chef actions, contact/recovery cooldowns, furniture depth/collision and clear restaurant aisles.
+- Read docs/ISLAND_LIFE_PASS.md. Preserve item hotbar/backpack placement, runtime pointer callbacks, Tab categories, M maps, spatial farming, finite water, resources, original music and continuous ship travel.
 - Read docs/LIVING_WORLD_PASS.md. Preserve the creator's free ferry travel, visible tools, seed/can actions, quiet HUD, proximity creature behavior and distinct prep/cook/plate cooking. Do not revert to the initial prototype's modal activation interactions or travel purchase gates.
 - Do not present blockouts, automated test inputs, or offscreen performance samples as finished art, human playtesting, or actual display FPS.
 

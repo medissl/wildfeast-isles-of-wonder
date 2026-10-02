@@ -1,3 +1,9 @@
+# Latest decisions: cozy polish
+
+The creator explicitly prioritizes consistent cozy/pixel typography, furniture that belongs in the restaurant, correct collision/depth, compact distinct tools, actual chef action frames and animation cooldowns. Pixelify Sans Regular replaces Liberation Sans in visible game text. Its static atlas and matching HUD material avoid mixed fonts. Original native world furniture replaces reuse of large cooking-screen artwork. Pixel UI borders, 32 PPU props and body/arm action poses maintain the art direction.
+
+Ordinary tool actions last 0.65–0.8 seconds and apply once at contact; input during windup/recovery is ignored rather than queued. The feet and equipment are locked during that action. Cooking cuts/stirs follow the same timing. Original foraging, fishing and sailing retain their separate activity durations. Ground furniture sorts at its footprint; wall hangings stay behind actors. Customers and staff use aisle routes. No save or economy redesign was introduced.
+
 # Latest decisions: island life
 
 The creator asked for Stardew-like item/tool organization and reference-inspired UI, while retaining original food ecology. The hotbar now has ten numeric slots, with thirty backpack slots, and no journal/bag commands. Tools act by identity even after rearrangement. Food retains the existing portion-capacity upgrade economy; tools, seeds and resource stacks remain separate.

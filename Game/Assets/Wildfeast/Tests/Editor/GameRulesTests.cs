@@ -76,7 +76,7 @@ namespace Wildfeast.Tests
             var controller=UnityEngine.Object.FindFirstObjectByType<GameController>();Assert.IsNotNull(controller);Assert.IsNotNull(controller.world);Assert.IsNotNull(controller.ui);
             Assert.IsTrue(controller.world.points.All(p=>p&&UnityEditor.MonoScript.FromMonoBehaviour(p)!=null));
             Assert.AreEqual("enter",controller.world.Nearest().action);
-            Assert.IsNotNull(Resources.Load("TMP Settings"));Assert.IsNotNull(Resources.Load("Fonts & Materials/LiberationSans SDF"));
+            Assert.IsNotNull(Resources.Load("TMP Settings"));Assert.IsNotNull(Resources.Load("Fonts/Pixelify"));
         }
         [Test] public void NewServiceRestartsVisitorsWhoWereStillLeavingLastNight()
         {
@@ -84,7 +84,7 @@ namespace Wildfeast.Tests
             var world=UnityEngine.Object.FindFirstObjectByType<WorldView>();world.Init();Open();world.Refresh(game);
             foreach(var o in game.State.orders){game.Cook(o.number,1);game.Serve(o.number);}game.CloseService();world.Refresh(game);
             game.NextDay();world.Refresh(game);Open();world.Refresh(game);
-            Assert.AreEqual(new Vector3(0,-5,0),world.guests[0].position);Assert.IsTrue(world.guests[0].gameObject.activeSelf);
+            for(int i=0;i<game.State.orders.Count;i++){Assert.AreEqual(0,world.guests[i].position.x);Assert.LessOrEqual(world.guests[i].position.y,-5);Assert.IsTrue(world.guests[i].gameObject.activeSelf);if(i>0)Assert.Less(world.guests[i].position.y,world.guests[i-1].position.y,"Guests restart in a queue, without overlapping at the entrance.");}
         }
     }
 }
