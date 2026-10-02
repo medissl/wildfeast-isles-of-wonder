@@ -33,7 +33,21 @@ namespace Wildfeast.Tests
         [Test] public void UncookedOrderCannotPayAndServiceCannotBeAbandoned()
         {Open();Assert.IsFalse(game.Serve(0));Assert.IsFalse(game.NextDay());Assert.IsFalse(game.CloseService());Assert.IsFalse(game.Travel(1));Assert.IsFalse(game.Gather("leafgill"));}
         [Test] public void PurchasesChargeOnceAndRespectPrerequisites()
-        {game.State.coins=500;Assert.IsFalse(game.Buy("staff"));Assert.IsFalse(game.Buy("boat"));Assert.IsTrue(game.Buy("satchel"));int coins=game.State.coins;Assert.IsFalse(game.Buy("satchel"));Assert.AreEqual(coins,game.State.coins);Assert.AreEqual(16,game.Capacity);Assert.IsTrue(game.Buy("boat"));Assert.IsTrue(game.Travel(1));}
+        {game.State.coins=500;Assert.IsFalse(game.Buy("staff"));Assert.IsTrue(game.Buy("satchel"));int coins=game.State.coins;Assert.IsFalse(game.Buy("satchel"));Assert.AreEqual(coins,game.State.coins);Assert.AreEqual(16,game.Capacity);Assert.IsTrue(game.Buy("boat"));Assert.AreEqual(20,game.Capacity);Assert.IsTrue(game.Travel(1));}
+        [Test] public void IslandTravelIsFreeAndRejectsInvalidDestinations()
+        {Assert.IsTrue(game.Travel(1));Assert.IsFalse(game.Has("boat"));Assert.AreEqual(0,game.State.coins);Assert.IsFalse(game.Travel(2));Assert.AreEqual(1,game.State.island);Assert.IsTrue(game.Travel(0));}
+        [Test] public void PlantingConsumesOneSeedAndDoesNotWaterAutomatically()
+        {int seeds=game.State.pepperSeeds;Assert.IsTrue(game.Plant(0,"pepperbell"));Assert.AreEqual(seeds-1,game.State.pepperSeeds);Assert.AreEqual(-1,game.State.crops[0].wateredDay);Assert.IsFalse(game.Plant(0,"pepperbell"));Assert.AreEqual(seeds-1,game.State.pepperSeeds);game.NextDay();Assert.AreEqual(0,game.State.crops[0].growth);}
+        [Test] public void EmptySeedPacketCannotPlantOrChangeState()
+        {game.State.rootSeeds=0;Assert.IsFalse(game.Plant(1,"lanternroot"));Assert.IsFalse(game.State.crops[1].planted);Assert.IsFalse(game.Plant(1,"missing"));Assert.IsFalse(game.Water(1));}
+        [Test] public void WateredNightsAndHarvestAreSeparateAtomicActions()
+        {game.Plant(0,"pepperbell");Assert.IsTrue(game.Water(0));Assert.IsFalse(game.Water(0));game.NextDay();Assert.IsFalse(game.Harvest(0));game.Water(0);game.NextDay();int changes=0;game.Changed+=()=>{changes++;Assert.AreEqual(0,game.State.crops[0].growth);Assert.AreEqual(-1,game.State.crops[0].wateredDay);Assert.AreEqual(3,game.Count("pepperbell",true));};Assert.IsTrue(game.Harvest(0));Assert.AreEqual(1,changes);Assert.IsFalse(game.Harvest(0));}
+        [Test] public void SeedRewardsCannotBeDuplicatedAtDepletedWildSource()
+        {int seeds=game.State.pepperSeeds;Assert.IsTrue(game.Gather("pepperbell",2,"plant"));Assert.IsFalse(game.Gather("pepperbell",2,"plant"));Assert.AreEqual(seeds+1,game.State.pepperSeeds);}
+        [Test] public void SavesPreserveEquipmentSeedCountsAndSeparateWatering()
+        {game.Plant(0,"pepperbell");game.State.equipped=2;var store=new SaveStore(Path.Combine(temporary,"equipment.json"));store.Write(game.State);var loaded=store.Read(game.Data);Assert.AreEqual(4,loaded.pepperSeeds);Assert.AreEqual(2,loaded.equipped);Assert.IsTrue(loaded.crops[0].planted);Assert.AreEqual(-1,loaded.crops[0].wateredDay);}
+        [Test] public void LegacySaveReceivesStarterSeedPacketWithoutLosingProgress()
+        {game.State.coins=73;string json=JsonUtility.ToJson(game.State).Replace("\"pepperSeeds\":5,","").Replace("\"rootSeeds\":0,","").Replace("\"equipped\":0", "\"legacy\":0");var store=new SaveStore(Path.Combine(temporary,"legacy.json"));File.WriteAllText(store.Path,json);var loaded=store.Read(game.Data);Assert.AreEqual(73,loaded.coins);Assert.AreEqual(5,loaded.pepperSeeds);Assert.IsNull(store.Warning);}
         [Test] public void DiscoveryUnlocksRecipeAndCultivationNeedsWateredNights()
         {game.Gather("lanternroot");Assert.Contains("lantern",game.State.recipes);Assert.IsTrue(game.Tend(0,"lanternroot"));game.NextDay();game.NextDay();Assert.AreEqual(1,game.State.crops[0].growth);Assert.IsTrue(game.Tend(0));game.NextDay();Assert.AreEqual(2,game.State.crops[0].growth);Assert.IsTrue(game.Tend(0));Assert.AreEqual(4,game.Count("lanternroot",true));}
         [Test] public void FullBagDoesNotEraseMatureCrop()
@@ -63,6 +77,14 @@ namespace Wildfeast.Tests
             Assert.IsTrue(controller.world.points.All(p=>p&&UnityEditor.MonoScript.FromMonoBehaviour(p)!=null));
             Assert.AreEqual("enter",controller.world.Nearest().action);
             Assert.IsNotNull(Resources.Load("TMP Settings"));Assert.IsNotNull(Resources.Load("Fonts & Materials/LiberationSans SDF"));
+        }
+        [Test] public void NewServiceRestartsVisitorsWhoWereStillLeavingLastNight()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Wildfeast/Scenes/Wildfeast.unity");
+            var world=UnityEngine.Object.FindFirstObjectByType<WorldView>();world.Init();Open();world.Refresh(game);
+            foreach(var o in game.State.orders){game.Cook(o.number,1);game.Serve(o.number);}game.CloseService();world.Refresh(game);
+            game.NextDay();world.Refresh(game);Open();world.Refresh(game);
+            Assert.AreEqual(new Vector3(0,-5,0),world.guests[0].position);Assert.IsTrue(world.guests[0].gameObject.activeSelf);
         }
     }
 }

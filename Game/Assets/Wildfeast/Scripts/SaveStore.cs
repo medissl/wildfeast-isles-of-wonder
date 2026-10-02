@@ -34,8 +34,10 @@ namespace Wildfeast
         static Progress Validate(string text, Content data)
         {
             var p = JsonUtility.FromJson<Progress>(text);
+            if(p!=null&&!text.Contains("\"pepperSeeds\"")){p.pepperSeeds=5;p.rootSeeds=0;p.equipped=0;}
             if (p == null || p.version != 1 || p.day < 1 || p.coins < 0 || p.bag == null || p.pantry == null || p.orders == null || p.crops == null || p.crops.Length != 3 || p.discovered == null || p.upgrades == null || p.recipes == null || p.menu == null || p.harvested == null) throw new InvalidDataException();
             if (p.phase != "explore" && p.phase != "service" && p.phase != "closing") throw new InvalidDataException();
+            if(p.pepperSeeds<0||p.rootSeeds<0||p.equipped<0||p.equipped>7)throw new InvalidDataException();
             foreach (var list in new[] { p.bag, p.pantry })
                 if (list.Any(a => a == null || a.count < 1 || !data.ingredients.Any(i => i.id == a.id)) || list.Select(a => a.id).Distinct().Count() != list.Count) throw new InvalidDataException();
             if (p.orders.Any(o => o == null || !data.recipes.Any(r => r.id == o.recipe) || (o.paid && !o.cooked)) || p.orders.Select(o => o.number).Distinct().Count() != p.orders.Count) throw new InvalidDataException();

@@ -16,6 +16,10 @@ Dave the Diver, fishing games, and Toriko are inspirations for the sense of adve
 
 ## Start by establishing the real project state
 
+The repository now contains a working two-island game and the creator-requested living-world pass. Read docs/LIVING_WORLD_PASS.md, HANDOFF.md and VERIFICATION.md before continuing. Preserve existing progress and integrations. The confirmed platform is offline single-player Windows PC, and the game is free without ads or purchases. The original first-supper checklist below is historical setup context, not an instruction to rebuild or revert the current game.
+
+The current priority is game feel and coherent original pixel art: lush fantasy habitats, visible tools, animation, recognizable world interactions, and a quiet HUD. Explore freely with a destination-selecting ferry. Do not reintroduce purchase gates for islands, modal activation menus for creatures, instant menu-based gardening, or the same timing meter for fishing and cooking. Seed/plant/water/harvest actions and prep/cook/plate stages must remain distinct. Complete and visually verify the actual player journey, including opening service and delivering the correct dish, before adding more features.
+
 Read applicable AGENTS.md files and the development plan. Inspect the working directory, Git state, existing assets, Unity version, package configuration, scenes, and available Editor tooling before making changes. Preserve unrelated work. Confirm you are operating on the intended repository rather than a temporary chat directory.
 
 If an existing Unity project is present, build on it and preserve its version and conventions. If this is an empty repository, settle only the setup decisions needed now: target platform, single-player scope, Editor version, and template/render pipeline. Recommended planning defaults are offline single-player and Windows PC first; monetization is undecided. Do not treat these recommendations as my confirmed choices. Do not install monetization or online services during the prototype.

@@ -1,5 +1,36 @@
 # Verification — 2 October 2026
 
+## Living-world pass: current evidence
+
+- Unity 6000.3.7f1 compiled and built the revised Windows x64 player. Final build report: 113,360,335 bytes.
+- **29 EditMode tests passed, none failed or skipped.** New checks cover free travel, finite seed consumption, dry planting, separate watering/harvest checkpoints, forage seed uniqueness, seed/tool persistence, legacy saves and restarting visitors across consecutive services.
+- **47 integrated checks passed at 1920×1080 and 1366×768**, exit 0, no recorded runtime errors/exceptions. The current journey adds number-key equipment, mouse-wheel selection, full camera viewport, actual outdoor sign/OPEN-button service flow, separate seed and watering-can input, chopping/heat/plating, pointer dragging, proximity-triggered Brothback, walking delivery, free travel and upgraded fruit yield.
+- The opt-in journey creates virtual keyboard and mouse devices. It exercises the actual Input System/UI events, while setup positions and repeated earning cycles remain scripted. It does not constitute a human playthrough.
+- Offscreen Unity frames of both resolutions were inspected: village, shoreline casting, garden watering, restaurant, stove and plating. The ordinary window and welcome screen were also inspected through Windows Computer Use. Physical keyboard usability and an uninterrupted manual loop are not claimed from that inspection.
+- Original artwork now contains 133 PNGs, including chef/visitor/creature animation, held tools, richer foliage/architecture, distinct interaction props, water effects and cooking visuals. Sprite imports remain point-filtered, uncompressed, without mipmaps, at 32 PPU.
+- The native borderless fullscreen launch was inspected through Windows Computer Use, with no window titlebar or boxed viewport. An isolated save was used for this display check.
+- The pre-pass scene was backed up before supported Editor authoring reconstructed the clean tracked scene. Scene references and font resources were reopened and checked. Source/document diffs have no whitespace errors; Unity-generated scene whitespace is retained as emitted by its serializer.
+
+## Bugs found and corrected in this pass
+
+- A reel input could be reused as a cast on the same frame that a catch resolved. Busy-frame input is now consumed once.
+- The initial diagnostic mouse could retain an unrelated physical click. Verification now uses its own virtual mouse.
+- Garden beds initially competed with the doorway prompt. They were moved clear of the entrance.
+- Pixel frame borders were initially oversized in Canvas units; their border scale was corrected.
+- Consecutive services now restart guests who had not finished walking out the previous night.
+- Legacy tool/seed fields, separate watering, and changed upgrade effects preserve the existing save/economy.
+- Replaced an unsupported checkmark glyph and corrected the final food icons to show cooked dishes rather than the raw Leafgill.
+
+## Current performance observation and remaining checks
+
+Concurrent hidden-window diagnostic samples on Intel Iris Xe, 180 stationary Mistwake frames with forced offscreen rendering: 1080p mean 2.14ms / P95 2.78ms; 1366×768 mean 2.72ms / P95 4.29ms; about 98.5 MiB Unity allocated. These are diagnostic intervals, **not display FPS**, and concurrent execution makes them unsuitable for a hardware claim.
+
+Still needs creator review: whether the original visual treatment is close enough to the desired direction, manual navigation and comprehension, cooking enjoyment after repeated services, fishing feel, guest pacing, long sessions, audio, physical controller completeness, minimum hardware and another-machine import. The knife is visual only, NPC routes are simple, cooking remains order-based, and the world remains two authored islands.
+
+## Historical first-prototype evidence
+
+The evidence below concerns the preceding build and its superseded interactions/travel gates.
+
 ## Final evidence
 
 - Unity 6000.3.7f1 compiled the game and built a Windows x64 Mono player successfully. Final build report: 111,868,995 bytes.

@@ -2,7 +2,7 @@
 
 ## Custom assets
 
-The PNGs in `Game/Assets/Wildfeast/Resources/Art/` and four WAV clips in `Resources/Audio/` were created specifically for Wildfeast by the project's deterministic `tools/make_art.py` source. No image-generation service, paid asset provider, external texture, or sampled recording was used.
+The PNGs in `Game/Assets/Wildfeast/Resources/Art/` and four WAV clips in `Resources/Audio/` were created specifically for Wildfeast by deterministic project sources. Regenerate in this order: `tools/make_art.py`, `tools/polish_art.py`, `tools/creature_art.py`. Later scripts intentionally replace initial prototype assets. No image-generation service, paid asset provider, external texture, sampled reference pixels, or sampled recording was used.
 
 The source draws deliberate pixel shapes, layered color clusters, and deterministic background detail with Pillow. Audio is original synthesized PCM. The custom assets can be regenerated with Python and Pillow; the Unity game itself does not need Python. Imported textures use point filtering, no mipmaps, no texture compression, and 32 PPU. The project creator may use and edit these project-specific assets.
 
@@ -32,4 +32,4 @@ TextMesh Pro Essential Resources supply Liberation Sans and its SDF font. The fo
 
 ## Production art work
 
-Future work should add directional character poses, bespoke customer portraits, stronger walk/idle cycles, richer shoreline motion, creature animation frames, island-specific architecture, and individually drawn food presentation. Preserve the palette and silhouettes while evaluating more detailed modern pixel treatment with the creator.
+The living-world pass adds four-direction chef frames, four-frame visitors and Brothback, textured multicolor foliage, new architecture, water ripples, seed/sprout states, held tools, and cooking art. Future work should add bespoke portraits, expressive action animation, more hand-authored terrain/foliage clusters, rich lighting/audio, and recipe-specific presentation. The creator's reference guides density, color, and garden composition; these original procedural drawings do not reproduce its finished detail.

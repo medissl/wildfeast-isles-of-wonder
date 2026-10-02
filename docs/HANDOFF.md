@@ -1,5 +1,23 @@
 # Development handoff
 
+## Current version: living-world pass
+
+The creator's feedback supersedes the first prototype's presentation and interaction choices. Read LIVING_WORLD_PASS.md and the updated README first. The existing Unity scene is still the play scene; a separate Windows build contains the revised game.
+
+The world now has textured multicolor foliage, fantasy buildings and planted borders, ambient motion, four-direction chef frames, visitor and creature frames, visible held tools, and a quiet eight-slot HUD. The ordinary player defaults to borderless fullscreen on the first launch of this pass, including when Unity retained the earlier prototype's window preference. Pause switches fullscreen/windowed.
+
+Fishing uses a rod at shoreline/pond geometry with a cast, line, float and landing animation. Gardening spends finite seeds, then separately waters and harvests staged crops. Cooking uses alternating cuts, heat/stirring and drag/keyboard plating with recipe-appropriate pans, pots or bowls. Brothback roams and detects proximity. Recognizable opening signs, pantry, menu board, stove, bed, letters, workshop and ferry replace ambiguous repeated props. Customers walk to numbered tables and display dish icons; Nori physically carries deliveries.
+
+Both islands and Cloudfruit are accessible immediately. Saved upgrade IDs remain valid: `boat` is now a provision locker (+4 carrying slots); `reach` is botanical gloves (three fruit per source). Existing progress is preserved; saves missing the new seed/tool fields receive a starter Pepperbell packet. Current saves persist seed quantities, selected tools and dry/watered crops.
+
+For artwork, run make_art.py, polish_art.py, creature_art.py in order. Scene authoring remains supported Editor C# tooling. A backup of the pre-pass scene was preserved locally before reconstructing the clean, tracked scene. The pre-existing untracked PackageManagerSettings.asset was left outside this change.
+
+The next priority is creator playtesting of visual direction and game feel. The current art is substantially richer but does not claim the reference's finished detail. The knife has a visible swing but no extra combat effect. Cooking remains order-based with a shared three-stage structure; controller completeness, deeper recipe mechanics, obstacle-aware NPC routes, rich sound/music, broader farming/combat, and larger worlds remain future work.
+
+## Historical initial prototype handoff
+
+The sections below record the first prototype before the living-world pass. Travel gates, instant gardening, timing-only cooking, placed guests and art limitations described there have been superseded as stated above.
+
 ## What exists
 
 A playable Unity two-island prototype with an integrated serialized scene at `Game/Assets/Wildfeast/Scenes/Wildfeast.unity`. The project opens in Unity 6000.3.7f1. All initial plan milestones have implementations within the small-world scope:

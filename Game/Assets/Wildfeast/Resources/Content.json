@@ -5,7 +5,7 @@
     {"id":"pepperbell","name":"Pepperbell","icon":"pepperbell","habitat":"Sunlit shore","description":"Rattling orange pods hide a warm, peppery seed. Harvest once a day, then cultivate its seeds in your garden."},
     {"id":"brothback","name":"Brothback stock","icon":"brothback","habitat":"Steamstone springs","description":"This kettle-shelled creature vents steam before charging. Step aside and collect the stock it sheds while cooling."},
     {"id":"lanternroot","name":"Lanternroot","icon":"lanternroot","habitat":"Glowgrove","description":"A luminous tuber sheltered beneath dark trees. The tender root becomes sweet when simmered. It can be grown at home."},
-    {"id":"cloudfruit","name":"Cloudfruit","icon":"cloudfruit","habitat":"Mistwake Isle","description":"Buoyant fruit floats above the mistwood canopy. An upgraded reach tool brings its stem within grasp. Whisk it into an airy dessert."},
+    {"id":"cloudfruit","name":"Cloudfruit","icon":"cloudfruit","habitat":"Mistwake Isle","description":"Buoyant fruit floats above the mistwood canopy. Gather gently from its low branches. Botanical gloves let you take a larger harvest. Whisk it into an airy dessert."},
     {"id":"grain","name":"Harbor grain","icon":"grain","habitat":"Community pantry","description":"The harbor keeps a small free grain allowance. Three portions are restored each morning so a hungry kitchen can always recover."}
   ],
   "recipes": [
@@ -17,10 +17,10 @@
     {"id":"cloud","name":"Cloudfruit Soufflé","description":"A little island sky, served warm.","flavor":"sweet","icon":"dish-cloud","price":46,"ingredients":[{"id":"cloudfruit","count":1},{"id":"grain","count":1}]}
   ],
   "upgrades": [
-    {"id":"satchel","name":"Forager's satchel","cost":35,"description":"Carry 16 ingredients instead of 8. Opens the boat restoration."},
+    {"id":"satchel","name":"Forager's satchel","cost":35,"description":"Carry eight additional ingredients on each outing."},
     {"id":"room","name":"A bigger table","cost":65,"description":"Restore the terrace and welcome five guests each evening."},
     {"id":"staff","name":"Hire Nori","cost":85,"description":"Nori delivers cooked dishes, leaving you free to work at the stove. Requires a restored terrace."},
-    {"id":"boat","name":"Restore the skiff","cost":95,"description":"Sail to Mistwake Isle. Requires the forager's satchel."},
-    {"id":"reach","name":"Mistwood reach tool","cost":55,"description":"Harvest floating Cloudfruit on Mistwake Isle."}
+    {"id":"boat","name":"Expedition provision locker","cost":95,"description":"Carry four additional ingredients. The ferry is already free."},
+    {"id":"reach","name":"Botanical gloves","cost":55,"description":"Gather three Cloudfruit instead of two from each tree."}
   ]
 }

@@ -16,7 +16,8 @@ Modern top-down pixel art. Offline single-player Windows game, free without ads 
 - Keep quantity changes, crop resets, payouts, and purchases atomic with respect to save checkpoints.
 - Use supported Editor tooling for scene/prefab/asset edits. Detect the pipeline before changing pixel rendering. Do not hand-edit scene YAML or the package manifest.
 - Ordinary scene edits should preserve manual work. `ProjectBuilder.Assemble` intentionally reconstructs the scene; do not invoke it on top of someone else's manual edits without first preserving them.
-- Custom art/audio source: `tools/make_art.py`, requiring Python and Pillow. Keep bundled TMP font license files.
+- Regenerate original art/audio in order: `tools/make_art.py`, `tools/polish_art.py`, `tools/creature_art.py`, requiring Python and Pillow. Keep bundled TMP font license files.
+- Read docs/LIVING_WORLD_PASS.md. Preserve the creator's free ferry travel, visible tools, seed/can actions, quiet HUD, proximity creature behavior and distinct prep/cook/plate cooking. Do not revert to the initial prototype's modal activation interactions or travel purchase gates.
 - Do not present blockouts, automated test inputs, or offscreen performance samples as finished art, human playtesting, or actual display FPS.
 
 ## Checks

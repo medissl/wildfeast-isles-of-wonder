@@ -17,11 +17,13 @@ namespace Wildfeast
         int checks;
         bool runtimeError;
         Keyboard keyboard;
+        Mouse testMouse;
         public IEnumerator Start()
         {
             game=GetComponent<GameController>();
             InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             keyboard=InputSystem.AddDevice<Keyboard>("Wildfeast verification keyboard");
+            testMouse=InputSystem.AddDevice<Mouse>("Wildfeast verification mouse");InputSystem.QueueStateEvent(testMouse,new MouseState{position=new Vector2(0,0)});
             InputSystem.onAfterUpdate+=MakeKeyboardCurrent;
             string[] args=Environment.GetCommandLineArgs();int i=Array.IndexOf(args,"--test-output");
             output=i>=0?args[i+1]:Application.persistentDataPath;
@@ -41,10 +43,18 @@ namespace Wildfeast
             yield return new WaitForSeconds(.2f);
             Capture("01-saltleaf.png");
             var fish=game.world.points.First(p=>p.action=="fish"&&p.transform.IsChildOf(game.world.saltleaf));
+            Check(game.Model.Travel(1)&&!game.Model.Has("boat"),"Island travel is available without purchases");game.Model.Travel(0);
+            yield return Tap(Key.Digit2);
+            Check(game.Model.State.equipped==1,"Tool belt selects the fishing rod with number input");
+            InputSystem.QueueStateEvent(testMouse,new MouseState{scroll=new Vector2(0,-120)});yield return null;yield return null;
+            Check(game.Model.State.equipped==2,"Mouse wheel scrolls to the watering can");
+            InputSystem.QueueStateEvent(testMouse,new MouseState());yield return null;yield return Tap(Key.Digit2);
+            Check(game.world.worldCamera.rect==new Rect(0,0,1,1),"Camera uses the full viewport instead of a windowboxed world");
             for(int n=0;n<3;n++)
             {
                 game.world.SetArea(0,(Vector2)fish.transform.position+Vector2.left*.5f);
-                game.Interact(fish);
+                if(n==0){yield return Tap(Key.Space);Check(game.ActiveActivity=="fish","Equipped rod casts into nearby water without a fish activation menu");Capture("06-fishing.png");}
+                else game.Interact(fish);
                 float deadline=Time.time+25;
                 while(game.ActiveActivity=="fish" && Time.time<deadline)
                 {
@@ -52,6 +62,7 @@ namespace Wildfeast
                     yield return null;
                 }
                 InputSystem.QueueStateEvent(keyboard,new KeyboardState());
+                Debug.Log($"FISH END activity={game.ActiveActivity} tension={game.FishingTension} bag={game.Model.Count("leafgill",true)} time={Time.time}");
                 Check(game.Model.Count("leafgill",true)==n+1,"Fishing grants exactly one ingredient");
                 yield return null;
             }
@@ -61,18 +72,39 @@ namespace Wildfeast
             game.Interact(game.world.points.First(p=>p.action=="enter"));
             Check(game.Model.BagCount==0&&game.Model.Count("leafgill")==3,"Entering home deposits the catch");
             game.Model.State.menu.Clear();game.Model.State.menu.Add("seared");
-            Check(game.Model.StartService(),"Stocked menu opens service");
+            game.Interact(game.world.points.First(p=>p.action=="service"&&p.transform.IsChildOf(game.world.saltleaf)));
+            Check(game.ui.PageOpen&&game.ui.title.text=="Open the Harbor Table","Outdoor opening sign leads directly to the restaurant");
+            var openButton=game.ui.rows.GetComponentInChildren<UnityEngine.UI.Button>();
+            yield return Click(RectTransformUtility.WorldToScreenPoint(null,openButton.transform.position));
+            Check(game.Model.State.phase=="service"&&!game.ui.PageOpen,"Clicking the OPEN button starts stocked service");
             yield return new WaitForSeconds(.2f);
             Capture("02-restaurant.png");
             for(int n=0;n<3;n++)
             {
-                game.StartCooking(n);float deadline=Time.time+10;
-                yield return new WaitForSeconds(1.05f);
+                game.StartCooking(n);
+                for(int cut=0;cut<6;cut++)yield return Tap(cut%2==0?Key.A:Key.D);
+                Check(game.CookingStep==1,"Alternating chopping prepares the ingredients");
                 if(n==0)Capture("04-cooking.png");
-                InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.Space));
-                yield return null;yield return null;
-                InputSystem.QueueStateEvent(keyboard,new KeyboardState());
-                while(game.ActiveActivity=="cook"&&Time.time<deadline)yield return null;
+                float deadline=Time.time+10;float nextTurn=Time.time;
+                while(game.CookingStep==1&&Time.time<deadline)
+                {
+                    if(game.CookingHeat>.6f)yield return Tap(Key.A);
+                    else if(Time.time>nextTurn){yield return Tap(Key.Space);nextTurn=Time.time+1.2f;}
+                    else yield return null;
+                }
+                Check(game.CookingStep==2,"Managing stove heat leads to plating");
+                if(n==0)Capture("07-plating.png");
+                if(n==0)
+                {
+                    for(int garnish=0;garnish<3;garnish++)
+                    {
+                        var source=game.ui.cookingBoard.Find("Garnish "+garnish).GetComponent<RectTransform>();
+                        var target=game.ui.cookingBoard.Find("Ingredient").GetComponent<RectTransform>();
+                        yield return Drag(RectTransformUtility.WorldToScreenPoint(null,source.position),RectTransformUtility.WorldToScreenPoint(null,target.position));
+                    }
+                    Check(game.ActiveActivity!="cook","Pointer drag places all garnishes onto the plate");
+                }
+                else {yield return Tap(Key.Digit1);yield return Tap(Key.Digit2);yield return Tap(Key.Digit3);}
                 Check(game.Model.State.orders[n].cooked,"Cooking interaction resolves an order");
                 game.Interact(game.world.points.First(p=>p.action=="serve"&&p.index==n));game.ui.Hide();
                 Check(game.Model.State.orders[n].paid,"Delivering the dish pays its order");
@@ -83,9 +115,14 @@ namespace Wildfeast
             Check(game.Model.ClaimRequest(),"First request reward is claimable");
             Check(!game.Model.ClaimRequest(),"Request rewards cannot be duplicated");
             game.Model.NextDay();game.world.SetArea(0,new Vector2(-6,-2.5f));
-            Check(game.Model.Tend(0),"Discovered Pepperbell can be planted");
-            game.Model.NextDay();Check(game.Model.Tend(0),"Growing plant can be watered next day");
-            game.Model.NextDay();Check(game.Model.Tend(0),"Two watered nights mature a crop");
+            var plot=game.world.points.First(p=>p.action=="crop"&&p.index==0);
+            game.world.SetArea(0,(Vector2)plot.transform.position+Vector2.down*.45f);
+            yield return Tap(Key.Digit4);yield return Tap(Key.Space);
+            Check(game.Model.State.crops[0].planted&&game.Model.State.crops[0].wateredDay==-1,"Held seed plants visibly and leaves watering separate");
+            yield return Tap(Key.Digit3);yield return Tap(Key.Space);
+            Check(game.Model.State.crops[0].wateredDay==game.Model.State.day,"Watering can waters the planted bed through tool input");
+            Capture("08-gardening.png");
+            game.Model.NextDay();game.Model.Water(0);game.Model.NextDay();game.Model.Harvest(0);
             Check(game.Model.Count("pepperbell",true)==3,"Crop harvest yields three portions");
             // Domain progression is exercised in the player's real model; later content is not unlocked by editing the save.
             game.Model.Deposit();
@@ -93,11 +130,11 @@ namespace Wildfeast
             game.world.SetArea(0,(Vector2)hunt.transform.position+new Vector2(-1,-1));
             yield return new WaitForFixedUpdate();yield return null;
             Debug.Log($"SMOKE HUNT START: chef={game.world.player.position} creature={hunt.transform.position} area={game.world.Area} phase={game.Model.State.phase} bag={game.Model.BagCount} page={game.ui.PageOpen}");
-            game.Interact(hunt);float huntDeadline=Time.time+10;
+            yield return null;float huntDeadline=Time.time+10;
             Debug.Log($"SMOKE HUNT ACTIVE: {game.HuntingPoint!=null}");
             while(game.HuntingPoint!=null&&game.HuntingPhase!=2&&Time.time<huntDeadline)yield return null;
             Debug.Log($"SMOKE HUNT END: active={game.HuntingPoint!=null} phase={game.HuntingPhase} chef={game.world.player.position}");
-            Check(game.HuntingPoint!=null&&game.HuntingPhase==2,"Brothback telegraphs and charges before cooling");
+            Check(game.HuntingPoint!=null&&game.HuntingPhase==2,"Brothback detects proximity, telegraphs and charges naturally");
             Check(Vector2.Distance(game.world.player.position,new Vector2(7,3))<2,"Charge contact applies one bounded push instead of repeated frame-based knockback");
             game.world.player.position=(Vector2)hunt.transform.position+Vector2.left*.5f;
             game.world.player.GetComponent<Rigidbody2D>().position=game.world.player.position;
@@ -118,7 +155,7 @@ namespace Wildfeast
             game.Model.Gather("leafgill",5);game.Model.Deposit();game.world.SetArea(2,new Vector2(0,-3));game.Model.StartService();
             Check(game.Model.State.orders.Count==5&&game.world.terrace.activeInHierarchy&&game.world.employee.activeInHierarchy,"Restored terrace adds two guests and a visible employee");
             Capture("05-expanded-restaurant.png");game.Model.Cook(0,2);
-            yield return new WaitForSeconds(1.6f);
+            float staffDeadline=Time.time+12;while(!game.Model.State.orders[0].paid&&Time.time<staffDeadline)yield return null;
             Check(game.Model.State.orders[0].paid,"Nori automatically delivers a finished dish");
             foreach(var order in game.Model.State.orders.Where(o=>!o.paid)){game.Model.Cook(order.number,1);game.Model.Serve(order.number);}
             game.Model.CloseService();game.Model.NextDay();game.ui.Hide();
@@ -126,7 +163,7 @@ namespace Wildfeast
             game.world.SetArea(1,new Vector2(-6,-2.5f));game.Interact(game.world.points.First(p=>p.action=="story"));game.ui.Hide();
             Check(game.Model.State.storySeen,"Mistwake has a persisted local story");
             game.Interact(game.world.points.First(p=>p.action=="fruit"));
-            Check(game.Model.Count("cloudfruit",true)==2&&game.Model.State.recipes.Contains("cloud"),"Reach tool unlocks floating fruit and its recipe");
+            Check(game.Model.Count("cloudfruit",true)==3&&game.Model.State.recipes.Contains("cloud"),"Botanical gloves increase fruit yield and discovery unlocks its recipe");
             yield return new WaitForSeconds(.5f);Capture("03-mistwake.png");
             var loaded=game.Saves.Read(game.Model.Data);
             Check(loaded.upgrades.Count==5&&loaded.storySeen&&loaded.bag.Any(a=>a.id=="cloudfruit"),"Player saves survive a disk round trip");
@@ -141,7 +178,22 @@ namespace Wildfeast
             InputSystem.onAfterUpdate-=MakeKeyboardCurrent;
             Application.Quit(0);
         }
-        void MakeKeyboardCurrent(){keyboard?.MakeCurrent();}
+        void MakeKeyboardCurrent(){keyboard?.MakeCurrent();testMouse?.MakeCurrent();}
+        IEnumerator Tap(Key key)
+        {InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;yield return null;}
+        IEnumerator Drag(Vector2 start,Vector2 end)
+        {
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=start});yield return null;yield return null;
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=start}.WithButton(MouseButton.Left));yield return null;yield return null;
+            for(int i=1;i<=8;i++){InputSystem.QueueStateEvent(testMouse,new MouseState{position=Vector2.Lerp(start,end,i/8f)}.WithButton(MouseButton.Left));yield return null;}
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=end});yield return null;yield return null;yield return null;
+        }
+        IEnumerator Click(Vector2 position)
+        {
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=position}.WithButton(MouseButton.Left));yield return null;yield return null;
+            InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;yield return null;
+        }
         RenderTexture captureTarget;
         void RenderFrame()
         {

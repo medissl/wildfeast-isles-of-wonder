@@ -2,6 +2,8 @@
 
 Planning draft · 2 October 2026
 
+Creator playtest feedback now drives the living-world pass documented in LIVING_WORLD_PASS.md. Its full-screen presentation, eight-slot tools, separate seed/water actions, natural creature behavior, prep/cook/plate cooking and free destination-selecting ferry supersede the initial prototype's interaction and travel assumptions below. Follow those accepted changes in future development.
+
 ## Confirmed direction
 
 - Title: Wildfeast: Isles of Wonder.

@@ -38,19 +38,19 @@ namespace Wildfeast.Editor
             {
                 var importer=(TextureImporter)AssetImporter.GetAtPath(path.Replace('\\','/'));
                 importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.spritePixelsPerUnit=32;
-                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;settings.spritePivot=new Vector2(.5f,0);importer.SetTextureSettings(settings);importer.maxTextureSize=2048;importer.SaveAndReimport();
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;settings.spritePivot=new Vector2(.5f,0);importer.SetTextureSettings(settings);if(path.EndsWith("ui-frame.png")||path.EndsWith("ui-board.png"))importer.spriteBorder=new Vector4(6,6,6,6);importer.maxTextureSize=2048;importer.SaveAndReimport();
             }
             var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             var cameraObject=new GameObject("WorldCamera",typeof(Camera),typeof(AudioListener),typeof(UniversalAdditionalCameraData));
             var camera=cameraObject.GetComponent<Camera>();cameraObject.tag="MainCamera";camera.orthographic=true;camera.orthographicSize=5.625f;camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=GameUI.C("17383d");camera.allowHDR=camera.allowMSAA=camera.allowDynamicResolution=false;
-            var pp=cameraObject.AddComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();pp.assetsPPU=32;pp.refResolutionX=640;pp.refResolutionY=360;pp.gridSnapping=UnityEngine.Rendering.Universal.PixelPerfectCamera.GridSnapping.PixelSnapping;pp.cropFrame=UnityEngine.Rendering.Universal.PixelPerfectCamera.CropFrame.Windowbox;
+            var pp=cameraObject.AddComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();pp.assetsPPU=32;pp.refResolutionX=640;pp.refResolutionY=360;pp.gridSnapping=UnityEngine.Rendering.Universal.PixelPerfectCamera.GridSnapping.PixelSnapping;pp.cropFrame=UnityEngine.Rendering.Universal.PixelPerfectCamera.CropFrame.None;
             var light=new GameObject("Daylight",typeof(Light2D));light.GetComponent<Light2D>().lightType=Light2D.LightType.Global;light.GetComponent<Light2D>().intensity=1;
             var world=new GameObject("Archipelago",typeof(WorldView)).GetComponent<WorldView>();world.worldCamera=camera;world.AuthorWorlds();
             var ui=new GameObject("Interface",typeof(RectTransform),typeof(GameUI)).GetComponent<GameUI>();ui.AuthorUI();
             var events=new GameObject("EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));events.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
             var controller=new GameObject("Wildfeast",typeof(GameController)).GetComponent<GameController>();controller.world=world;controller.ui=ui;
             QualitySettings.antiAliasing=0;QualitySettings.anisotropicFiltering=AnisotropicFiltering.Disable;QualitySettings.vSyncCount=1;
-            PlayerSettings.companyName="Wildfeast";PlayerSettings.productName="Wildfeast - Isles of Wonder";PlayerSettings.defaultScreenWidth=1280;PlayerSettings.defaultScreenHeight=720;PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.runInBackground=true;
+            PlayerSettings.companyName="Wildfeast";PlayerSettings.productName="Wildfeast - Isles of Wonder";PlayerSettings.defaultScreenWidth=1920;PlayerSettings.defaultScreenHeight=1080;PlayerSettings.fullScreenMode=FullScreenMode.FullScreenWindow;PlayerSettings.runInBackground=true;
             PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Standalone,ScriptingImplementation.Mono2x);
             PlayerSettings.resizableWindow=true;PlayerSettings.SplashScreen.show=false;
             EditorSettings.serializationMode=SerializationMode.ForceText;

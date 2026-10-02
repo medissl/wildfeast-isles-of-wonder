@@ -32,6 +32,7 @@ namespace Wildfeast
         public Crop[] crops = { new Crop(), new Crop(), new Crop() };
         public bool relaxed = true, muted, storySeen;
         public float volume = 0.35f;
+        public int pepperSeeds = 5, rootSeeds, equipped;
         public static Progress New()
         {
             var p = new Progress(); p.pantry.Add(new Amount("grain", 6)); p.discovered.Add("grain");
@@ -47,7 +48,7 @@ namespace Wildfeast
         public Progress State { get; private set; }
         public event Action Changed;
         public GameModel(Content data, Progress state) { Data = data; State = state; }
-        public int Capacity => Data.bagCapacity + (Has("satchel") ? 8 : 0);
+        public int Capacity => Data.bagCapacity + (Has("satchel") ? 8 : 0) + (Has("boat") ? 4 : 0);
         public int BagCount => State.bag.Sum(a => a.count);
         public bool Has(string id) => State.upgrades.Contains(id);
         public int Count(string id, bool bag = false) => (bag ? State.bag : State.pantry).Where(a => a.id == id).Sum(a => a.count);
@@ -66,6 +67,8 @@ namespace Wildfeast
             if (source != null && State.harvested.Contains(source)) return false;
             Adjust(State.bag, id, count);
             if (source != null) State.harvested.Add(source);
+            if (source != null && id == "pepperbell") State.pepperSeeds++;
+            if (source != null && id == "lanternroot") State.rootSeeds++;
             if (!State.discovered.Contains(id)) State.discovered.Add(id);
             if (id == "brothback") Learn("broth");
             if (id == "lanternroot") Learn("lantern");
@@ -82,7 +85,6 @@ namespace Wildfeast
         {
             var u = Data.upgrades.FirstOrDefault(x => x.id == id);
             if (u == null || Has(id) || State.coins < u.cost || State.phase == "service") return false;
-            if (id == "boat" && !Has("satchel")) return false;
             if (id == "staff" && !Has("room")) return false;
             State.coins -= u.cost; State.upgrades.Add(id); Notify(); return true;
         }
@@ -162,8 +164,28 @@ namespace Wildfeast
         }
         public bool Travel(int island)
         {
-            if (State.phase != "explore" || island < 0 || island > 1 || (island == 1 && !Has("boat"))) return false;
+            if (State.phase != "explore" || island < 0 || island > 1) return false;
             State.island = island; Notify(); return true;
+        }
+        public int Seeds(string item) => item == "pepperbell" ? State.pepperSeeds : item == "lanternroot" ? State.rootSeeds : 0;
+        public bool Plant(int index, string item)
+        {
+            if (State.phase != "explore" || index < 0 || index >= State.crops.Length || State.crops[index].planted || Seeds(item) < 1) return false;
+            if(item == "pepperbell") State.pepperSeeds--; else State.rootSeeds--;
+            var crop=State.crops[index]; crop.planted=true;crop.item=item;crop.growth=0;crop.wateredDay=-1;
+            Notify();return true;
+        }
+        public bool Water(int index)
+        {
+            if(State.phase != "explore" || index<0 || index>=State.crops.Length)return false;
+            var crop=State.crops[index];if(!crop.planted || crop.wateredDay==State.day || crop.growth>=Data.cropDays)return false;
+            crop.wateredDay=State.day;Notify();return true;
+        }
+        public bool Harvest(int index)
+        {
+            if(State.phase != "explore" || index<0 || index>=State.crops.Length)return false;
+            var crop=State.crops[index];if(!crop.planted || crop.growth<Data.cropDays || !GatherInternal(crop.item,3,null,false))return false;
+            crop.growth=0;crop.wateredDay=-1;Notify();return true;
         }
         public bool ClaimRequest()
         {
