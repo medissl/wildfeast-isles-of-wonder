@@ -42,6 +42,38 @@ namespace Wildfeast
             Check(game.world.player.position.x>before.x+.4f,$"Input System movement ({before.x:F2} to {game.world.player.position.x:F2})");
             yield return new WaitForSeconds(.2f);
             Capture("01-saltleaf.png");
+            // Exercise pointer selection on the serialized hotbar, not a direct Equip call.
+            yield return Hotbar(6);Check(game.Model.State.equipped==6,"Serialized hotbar accepts pointer clicks");
+            yield return Tap(Key.Tab);Check(game.ui.PageOpen&&game.ui.title.text=="Your satchel","Tab opens the inventory grid");Capture("09-inventory.png");
+            var from=game.ui.rows.Find("Inventory slot 7").GetComponent<RectTransform>();var to=game.ui.rows.Find("Inventory slot 20").GetComponent<RectTransform>();
+            yield return Drag(Center(from),Center(to));Check(game.Model.State.slots[20].id=="tool-axe","Dragging moves a tool into the backpack");
+            from=game.ui.rows.Find("Inventory slot 20").GetComponent<RectTransform>();to=game.ui.rows.Find("Inventory slot 7").GetComponent<RectTransform>();
+            yield return Drag(Center(from),Center(to));Check(game.Model.State.slots[7].id=="tool-axe","Dragging restores a tool to the hotbar");
+            yield return Tap(Key.Tab);yield return Tap(Key.M);Check(game.ui.PageOpen&&game.ui.rows.Find("Island chart/You are here"),"M shows the island chart and live player marker");Capture("10-map.png");yield return Tap(Key.M);
+            game.world.SetArea(0,new Vector2(-5,-4.8f));yield return new WaitForSeconds(.2f);
+            yield return Hotbar(6);yield return ClickWorld(new Vector2(-5,-4));
+            var field=ItemInventory.Plot(game.Model.State,0,new Vector2(-5,-4));Check(field!=null,"Mouse-aimed shovel creates a persistent plot on clear land");
+            yield return Hotbar(3);yield return ClickWorld(new Vector2(-5,-4));Check(field.crop.planted&&field.crop.wateredDay==-1,"Seed packet plants the newly tilled tile");
+            yield return Hotbar(2);yield return ClickWorld(new Vector2(-5,-4));Check(field.crop.wateredDay==game.Model.State.day&&game.Model.State.water==19,"Watering consumes one unit from the can");Capture("11-free-garden.png");
+            game.Model.State.water=0;game.Model.Notify();game.world.SetArea(0,new Vector2(8,-8.6f));yield return new WaitForSeconds(.2f);yield return Tap(Key.Space);
+            Check(game.Model.State.water==20,"Empty watering can refills beside a water source");
+            foreach(var entry in new[]{new[]{"wood","7"},new[]{"stone","9"},new[]{"fiber","8"}})
+            {
+                var node=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item==entry[0]&&n.transform.IsChildOf(game.world.saltleaf));
+                game.world.SetArea(0,(Vector2)node.transform.position+Vector2.down*.9f);yield return new WaitForSeconds(.2f);yield return Hotbar(int.Parse(entry[1]));
+                for(int hit=0;hit<node.hits;hit++){yield return ClickWorld(node.transform.position);yield return new WaitForSeconds(.35f);}
+                Check(game.Model.State.resources.Any(a=>a.id==entry[0]&&a.count>0),"Tool harvest yields "+entry[0]+" into the item inventory");
+            }
+            game.world.SetArea(0,new Vector2(-1,1.4f));yield return new WaitForSeconds(.15f);
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.D));yield return new WaitForSeconds(1);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
+            Check(game.world.player.position.x<.6f,"Solid fountain footprint blocks walking through the prop");
+            game.world.SetArea(0,new Vector2(-10,-6));game.Sail(1);yield return new WaitForSeconds(.6f);
+            Check(game.Sailing&&game.world.transform.Find("Sailing skiff").position.y<-7.2f,"Ship visibly leaves its dock with player aboard");Capture("12-sailing.png");
+            float sailDeadline=Time.time+12;while(game.Sailing&&Time.time<sailDeadline)yield return null;
+            Check(!game.Sailing&&game.world.Area==1&&game.Model.State.island==1,"Ship docks at the distinct destination island");Capture("13-mistwake-arrival.png");
+            game.Sail(0);sailDeadline=Time.time+12;while(game.Sailing&&Time.time<sailDeadline)yield return null;
+            Check(game.world.Area==0&&game.Model.State.island==0,"Return voyage docks at home");
+            Check(new[]{"saltleaf","mistwake","restaurant"}.All(id=>Resources.Load<AudioClip>("Audio/music-"+id)?.length>30),"Three original soundtrack loops are included");
             var fish=game.world.points.First(p=>p.action=="fish"&&p.transform.IsChildOf(game.world.saltleaf));
             Check(game.Model.Travel(1)&&!game.Model.Has("boat"),"Island travel is available without purchases");game.Model.Travel(0);
             yield return Tap(Key.Digit2);
@@ -53,6 +85,13 @@ namespace Wildfeast
             for(int n=0;n<3;n++)
             {
                 game.world.SetArea(0,(Vector2)fish.transform.position+Vector2.left*.5f);
+                if(n==0)
+                {
+                    InputSystem.QueueStateEvent(testMouse,new MouseState{position=Center(game.ui.toolFrames[7].rectTransform)}.WithButton(MouseButton.Left));yield return null;yield return null;
+                    InputSystem.QueueStateEvent(testMouse,new MouseState{position=Center(game.ui.toolFrames[7].rectTransform)});yield return null;yield return null;yield return null;
+                    Check(game.Model.State.equipped==7&&game.ActiveActivity==null,"Fast hotbar pointer click selects equipment without casting the old rod");
+                    InputSystem.QueueStateEvent(testMouse,new MouseState());yield return null;yield return Hotbar(1);
+                }
                 if(n==0){yield return Tap(Key.Space);Check(game.ActiveActivity=="fish","Equipped rod casts into nearby water without a fish activation menu");Capture("06-fishing.png");}
                 else game.Interact(fish);
                 float deadline=Time.time+25;
@@ -67,6 +106,7 @@ namespace Wildfeast
                 yield return null;
             }
             var pepper=game.world.points.First(p=>p.source=="pepper-east");game.Interact(pepper);
+            Check(game.ActiveActivity=="forage"&&game.Model.Count("pepperbell",true)==0,"Forage reward waits for the pull-out animation");yield return new WaitForSeconds(1.1f);
             Check(game.Model.Count("pepperbell",true)==2,"Foraging grants two portions");game.Interact(pepper);
             Check(game.Model.Count("pepperbell",true)==2,"Harvest cannot be repeated the same day");
             game.Interact(game.world.points.First(p=>p.action=="enter"));
@@ -141,7 +181,7 @@ namespace Wildfeast
             yield return new WaitForFixedUpdate();
             InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.E));yield return null;yield return null;
             InputSystem.QueueStateEvent(keyboard,new KeyboardState());
-            Check(game.Model.Count("brothback",true)==2,"Cooling hunt rewards stock through real interaction input");
+            yield return new WaitForSeconds(1.1f);Check(game.Model.Count("brothback",true)==2,"Cooling hunt rewards stock through real interaction input");
             game.Model.Gather("lanternroot",2,"smoke-grove");game.Model.Deposit();
             Check(game.Model.State.recipes.Contains("broth")&&game.Model.State.recipes.Contains("lantern"),"Discoveries unlock recipes");
             for(int day=0;day<8;day++)
@@ -162,7 +202,7 @@ namespace Wildfeast
             Check(game.Model.Travel(1),"Restored boat opens the second island");
             game.world.SetArea(1,new Vector2(-6,-2.5f));game.Interact(game.world.points.First(p=>p.action=="story"));game.ui.Hide();
             Check(game.Model.State.storySeen,"Mistwake has a persisted local story");
-            game.Interact(game.world.points.First(p=>p.action=="fruit"));
+            game.Interact(game.world.points.First(p=>p.action=="fruit"));yield return new WaitForSeconds(1.1f);
             Check(game.Model.Count("cloudfruit",true)==3&&game.Model.State.recipes.Contains("cloud"),"Botanical gloves increase fruit yield and discovery unlocks its recipe");
             yield return new WaitForSeconds(.5f);Capture("03-mistwake.png");
             var loaded=game.Saves.Read(game.Model.Data);
@@ -179,6 +219,9 @@ namespace Wildfeast
             Application.Quit(0);
         }
         void MakeKeyboardCurrent(){keyboard?.MakeCurrent();testMouse?.MakeCurrent();}
+        static Vector2 Center(RectTransform rect)=>RectTransformUtility.WorldToScreenPoint(null,rect.TransformPoint(rect.rect.center));
+        IEnumerator Hotbar(int index){yield return Click(Center(game.ui.toolFrames[index].rectTransform));}
+        IEnumerator ClickWorld(Vector2 target){yield return Click(game.world.worldCamera.WorldToScreenPoint(target));}
         IEnumerator Tap(Key key)
         {InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;yield return null;}
         IEnumerator Drag(Vector2 start,Vector2 end)

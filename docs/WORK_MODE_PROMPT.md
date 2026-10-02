@@ -1,3 +1,10 @@
+# Current work-mode requirements
+
+Continue Wildfeast from its implemented island-life pass. Read AGENTS.md, ISLAND_LIFE_PASS.md, HANDOFF.md and VERIFICATION.md first. Preserve the original food-world creature direction, consistent 32 PPU art and the complete fishing/restaurant loop. Build around an actual ten-slot item hotbar plus backpack, runtime mouse callbacks, draggable placement, Tab menu categories and M map. Tools must keep behavior when rearranged. Gardening is spatial till → seed → finite water → watered nights → harvest. Ferry travel remains free and visibly carries the player along a sea route to a physically different island. Solid props must have appropriate footprints, without blocking doors and routes. Keep cuisine/ecology original; generate or properly license new assets and music.
+
+Finish changes in the actual Unity scene and Windows player. Verify mouse actions, collisions, inventory persistence, existing saves and the complete gather/cook/serve progression with isolated saves. Inspect captured screens at multiple display sizes. Record actual checks and limitations; automated input is not human playtesting. Do not hand-edit scene YAML or regenerate over unpreserved manual work. Earlier first-prototype instructions below are historical context where they conflict.
+
+
 # Wildfeast: Isles of Wonder — Work Mode Prompt
 
 Paste the text below into a Codex Work chat attached to the local wildfeast-isles-of-wonder repository. Supply WILDFEAST_PLAN.md alongside it or place the plan in docs/WILDFEAST_PLAN.md first.

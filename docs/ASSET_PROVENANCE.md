@@ -1,3 +1,12 @@
+# Island-life additions
+
+tools/island_life_art.py creates original shovel/axe/scythe/pickaxe, Cinnamonwood/Saltstone/Noodlegrass resources, soil/stump/particles, map markers, a parchment frame, detailed dining table, distinct Mistwake terrain and ocean tiles. Original artwork uses Pillow drawing primitives with a fixed seed; reference screenshots supply layout/art-direction inspiration only.
+
+Three original music WAVs (Saltleaf, Mistwake, restaurant) are forty-second stereo 22050 Hz compositions generated from sine harmonics, note envelopes and circular echo using numpy. No sampled sounds, downloaded music, commercial songs or external asset licenses. The preexisting original four ambient/effect files remain.
+
+map-saltleaf.png and map-mistwake.png are baked from this game's original Unity scenery through supported URP render requests in ProjectBuilder.Assemble. All world PNGs import at 32 PPU with point filtering. Different source dimensions express physical object size. Asset generation order: make_art.py → polish_art.py → creature_art.py → island_life_art.py → Unity scene/map assembly. Retain all .meta files and the existing TMP font license.
+
+
 # Asset provenance and art direction
 
 ## Custom assets

@@ -1,3 +1,30 @@
+# Current verification — island-life pass, 2 October 2026
+
+- Unity 6000.3.7f1 compiled and built the Windows x64 delivery player successfully: **124,483,503 bytes** in the build report.
+- **39 EditMode tests passed**, none failed/skipped. Existing economy, crops, service, saving and scene checks remain; new cases cover hotbar overflow, rearranged tool identity, material persistence/trading, free plots, finite water, watered-night growth, atomic field harvest, invalid actions, state round trips, different shorelines and malformed tool-stack backup recovery.
+- **66 integrated checks passed at both 1920×1080 and 1366×768**, exit 0. No recorded runtime errors/exceptions. Separate diagnostic saves were used; ordinary progress files were not modified.
+- Actual Input System/UI events exercise serialized hotbar clicks, rapid clicks without old-tool casting, mouse-wheel and number selection, Tab inventory, M map, dragging tools to/from the backpack, mouse-aimed till/seed/water, empty-can refill, axe/scythe/pickaxe rewards, fountain collision, ship departure/docking/return, fishing, chopping, heat/stirring, pointer plating and hunt collection. Domain setup/progression and scripted positioning are explicitly part of the harness.
+- The same journey verifies opening service, all payouts, garden growth, upgrades, five-table expansion, walking Nori delivery, second-island story, fruit discovery/yield, soundtrack inclusion and save reload. It does not constitute an uninterrupted human playthrough.
+- Engine-rendered captures were inspected for inventory, illustrated map at the smaller resolution, gardening, destination arrival, restaurant and cooking. The modal's pale-tab contrast and stale navigation-bar issue were corrected before the delivery build. Final cooking hides menu tabs and previous HUD notifications.
+- Original asset set: **151 PNGs and 7 WAVs**, including three forty-second original music compositions. World sprites use 32 PPU, point filtering, no mipmaps/compression; fractional scaling on carried dishes, order icons, butterflies and particles was removed.
+- Scene reconstruction was preceded by a backup of the clean tracked scene. Supported Editor authoring saved/reopened serialized references and baked the island maps. Source/document diffs pass whitespace checks; Unity's generated scene formatting is retained.
+
+## Bugs addressed and evidence limits
+
+The previous hotbar stored Editor-created runtime lambdas which did not survive scene serialization. Init now binds the actual button callbacks at runtime. UI pointer hit-testing uses the mouse's current position, avoiding old-tool activation when clicking rapidly. The first rapid-click test asserted before mouse release; that harness error was corrected, and the complete-click regression passes in both delivery runs.
+
+New saves retain schema 1 through additive fields. Existing money, orders, ingredients, upgrades, seed counters and three legacy beds remain. The food pouch retains its portion limit (8 initially, up to 20); tools, seed packets and material stacks occupy their own slots. The first ordinary launch of this pass restores native fullscreen so diagnostic window preferences do not dictate presentation; Options then allows windowed/fullscreen choice.
+
+The diagnostic player's shutdown still reports the existing URP ComputeBuffer disposal warning. Neither run logged game errors or exceptions. Editor licensing/cloud-configuration messages do not represent a game failure; compilation, test results and build completion were checked directly.
+
+Concurrent hidden-window, forced-render diagnostic samples on Intel Iris Xe: 1080p mean 1.75ms / P95 2.22ms, 107.8 MiB Unity allocated; 1366×768 mean 1.70ms / P95 2.03ms, 107.5 MiB. These are **not displayed FPS or minimum-hardware measurements**.
+
+Still requires creator/human review: control comfort, travel pacing, whether terrain/props feel integrated, restaurant comprehension, music preference, long sessions and another-machine import. Physical gamepad completeness is not claimed. Two authored islands, basic NPC routes, material trading and a visual-only knife remain the bounded prototype scope. Packaging CRC and source/remote status are checked separately at delivery.
+
+## Historical verification below
+
+Earlier counts and interactions refer to preceding builds.
+
 # Verification — 2 October 2026
 
 ## Living-world pass: current evidence

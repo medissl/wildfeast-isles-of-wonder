@@ -33,6 +33,10 @@ namespace Wildfeast
         public bool relaxed = true, muted, storySeen;
         public float volume = 0.35f;
         public int pepperSeeds = 5, rootSeeds, equipped;
+        public ItemSlot[] slots;
+        public List<FieldPlot> fields = new List<FieldPlot>();
+        public List<ResourceStock> resources = new List<ResourceStock>();
+        public int water=20;
         public static Progress New()
         {
             var p = new Progress(); p.pantry.Add(new Amount("grain", 6)); p.discovered.Add("grain");
@@ -47,12 +51,12 @@ namespace Wildfeast
         public Content Data { get; }
         public Progress State { get; private set; }
         public event Action Changed;
-        public GameModel(Content data, Progress state) { Data = data; State = state; }
+        public GameModel(Content data, Progress state) { Data = data; State = state; ItemInventory.Sync(State); }
         public int Capacity => Data.bagCapacity + (Has("satchel") ? 8 : 0) + (Has("boat") ? 4 : 0);
         public int BagCount => State.bag.Sum(a => a.count);
         public bool Has(string id) => State.upgrades.Contains(id);
         public int Count(string id, bool bag = false) => (bag ? State.bag : State.pantry).Where(a => a.id == id).Sum(a => a.count);
-        public void Notify() => Changed?.Invoke();
+        public void Notify() { ItemInventory.Sync(State); Changed?.Invoke(); }
         static void Adjust(List<Amount> list, string id, int value)
         {
             var a = list.FirstOrDefault(x => x.id == id);
@@ -61,7 +65,7 @@ namespace Wildfeast
         }
         public bool Gather(string id, int count = 1, string source = null)
             => GatherInternal(id, count, source, true);
-        bool GatherInternal(string id, int count, string source, bool notify)
+        internal bool GatherInternal(string id, int count, string source, bool notify)
         {
             if (State.phase != "explore" || count < 1 || BagCount + count > Capacity || !Data.ingredients.Any(i => i.id == id)) return false;
             if (source != null && State.harvested.Contains(source)) return false;
@@ -140,6 +144,7 @@ namespace Wildfeast
         public bool NextDay()
         {
             if (State.phase == "service" && State.orders.Any(o => !o.paid)) return false;
+            foreach(var f in State.fields)if(f.crop.planted&&f.crop.wateredDay==State.day)f.crop.growth++;
             State.day++; State.phase = "explore"; State.island = 0; State.harvested.Clear(); State.orders.Clear();
             for (int i = 0; i < State.crops.Length; i++) if (State.crops[i].planted && State.crops[i].wateredDay == State.day - 1) State.crops[i].growth++;
             if (Count("grain") < 3) Adjust(State.pantry, "grain", 3 - Count("grain"));

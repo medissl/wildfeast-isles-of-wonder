@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,19 +17,66 @@ namespace Wildfeast
         public bool PageOpen => overlay.gameObject.activeSelf;
         public bool MiniOpen { get; private set; }
         public RectTransform toolBelt, activityPanel, cookingBoard;
-        public UnityEngine.UI.Image[] toolIcons = new UnityEngine.UI.Image[8];
-        public TMP_Text[] toolCounts = new TMP_Text[8];
-        public UnityEngine.UI.Image[] toolFrames = new UnityEngine.UI.Image[8];
+        public UnityEngine.UI.Image[] toolIcons = new UnityEngine.UI.Image[10];
+        public TMP_Text[] toolCounts = new TMP_Text[10];
+        public UnityEngine.UI.Image[] toolFrames = new UnityEngine.UI.Image[10];
         public TMP_Text equippedLabel, activityText, orderText;
         public int CookingAction = -1;
         public Action<int> SelectTool;
         public Action Closed;
-        static readonly Color Ink = C("152f36"), Panel = C("203e43"), Gold = C("e8bc74"), Cream = C("f6e7bf"), Dim = C("abc0ad");
+        public Action[] MenuActions;
+        int inventorySelected=-1;
+        RectTransform menuTabs;
+        public void Tabs(string active,string[] labels,Action[] actions)
+        {
+            if(menuTabs){menuTabs.gameObject.SetActive(false);Destroy(menuTabs.gameObject);}
+            var bar=Rect(page,"Menu tabs",new Vector2(0,42),new Vector2(800,38),new Vector2(0,1));
+            menuTabs=bar;
+            for(int i=0;i<labels.Length;i++){int index=i;var b=Button(bar,labels[i],new Vector2(i*133,0),new Vector2(128,38),()=>actions[index](),new Vector2(0,1));b.GetComponent<UnityEngine.UI.Image>().color=labels[i]==active?C("b0713f"):C("873e36");}
+        }
+        public void Inventory(GameModel model,Action redraw)
+        {
+            ItemInventory.Sync(model.State);
+            Show("Your satchel","Drag between slots, or click an item then its destination. The first row is your hotbar.");
+            for(int i=0;i<ItemInventory.Size;i++)
+            {
+                int index=i;var item=model.State.slots[i];
+                var b=Button(rows,"",new Vector2(12+(i%10)*72,-12-(i/10)*78),new Vector2(66,68),()=>{if(inventorySelected<0){inventorySelected=index;redraw();}else{ItemInventory.Swap(model.State,inventorySelected,index);inventorySelected=-1;redraw();}},new Vector2(0,1));
+                b.gameObject.name="Inventory slot "+i;
+                b.GetComponent<UnityEngine.UI.Image>().color=inventorySelected==i?C("edbd67"):i<10?C("c59662"):C("dfc394");
+                var drag=b.gameObject.AddComponent<InventoryDrag>();drag.index=index;drag.ui=this;drag.move=(from,to)=>{ItemInventory.Swap(model.State,from,to);inventorySelected=-1;redraw();};
+                if(item.count>0){var img=Box(b.transform,"Item",new Vector2(11,-5),new Vector2(44,44),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.Art(item.id);img.preserveAspect=true;img.raycastTarget=false;Text(b.transform,item.id=="tool-can"?model.State.water+"/20":item.count>1?item.count.ToString():"",new Vector2(6,-48),new Vector2(55,17),13,Cream);}
+                Text(b.transform,i<10?((i+1)%10).ToString():"",new Vector2(4,-3),new Vector2(14,18),12,Cream);
+            }
+            string selected=inventorySelected<0?"Hotbar above · Backpack below":ItemInventory.Name(model.State.slots[inventorySelected].id,model.Data)+" · Choose a destination slot";
+            Text(rows,selected,new Vector2(12,-326),new Vector2(720,28),18,Gold);
+            Text(rows,$"Food: {model.BagCount}/{model.Capacity} portions · Enter home to store ingredients in the pantry.",new Vector2(12,-365),new Vector2(720,36),16,Cream);
+        }
+        public void Map(WorldView world)
+        {
+            Show("Isles of Wonder",world.Area==1?"Mistwake · Cloudfruit conservatory and saltstone gardens":"Saltleaf · Your restaurant, wild gardens and Steamstone springs");
+            var map=Box(rows,"Island chart",new Vector2(0,-12),new Vector2(520,338),new Vector2(0,1),Color.white);
+            map.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art(world.Area==1?"map-mistwake":"map-saltleaf");
+            Vector2 position=world.Area==2?new Vector2(-6,-1):world.player.position;
+            var pin=Box(map,"You are here",new Vector2((position.x+20)/40*520,-(13-position.y)/26*338),new Vector2(16,16),new Vector2(0,1),Color.white);
+            pin.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-player");
+            Text(rows,"YOU · Gold diamond",new Vector2(12,-361),new Vector2(320,28),18,Gold);
+            var locations=world.points.Where(p=>p.transform.IsChildOf(world.Area==1?world.mistwake:world.saltleaf)&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit"}.Contains(p.action)).ToArray();
+            for(int i=0;i<locations.Length;i++)
+            {
+                var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+20)/40*520,-(13-p.transform.position.y)/26*338),new Vector2(12,12),new Vector2(0,1),Color.white);
+                marker.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-landmark");
+                Text(rows,p.label,new Vector2(538,-16-i*38),new Vector2(200,35),16,Cream);
+            }
+        }
+        static readonly Color Ink = C("ead2a1"), Panel = C("b68b5b"), Gold = C("7b302e"), Cream = C("493326"), Dim = C("705440");
         public static Color C(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var c); return c; }
         public void Init(Action journal, Action bag, Action pause)
         {
             journalButton.onClick.AddListener(() => journal()); bagButton.onClick.AddListener(() => bag()); pauseButton.onClick.AddListener(() => pause());
-            closeButton.onClick.AddListener(Hide); Hide();
+            closeButton.onClick.AddListener(Hide);
+            for(int i=0;i<toolFrames.Length;i++){int slot=i;var b=toolFrames[i].GetComponent<UnityEngine.UI.Button>();b.onClick.RemoveAllListeners();b.onClick.AddListener(()=>SelectTool?.Invoke(slot));}
+            Hide();
         }
         public void AuthorUI()
         {
@@ -44,20 +92,22 @@ namespace Wildfeast
             journalButton = Button(transform,"",Vector2.zero,new Vector2(1,1),()=>{},new Vector2(0,0));journalButton.gameObject.SetActive(false);
             bagButton = Button(transform,"",Vector2.zero,new Vector2(1,1),()=>{},new Vector2(0,0));bagButton.gameObject.SetActive(false);
             pauseButton = Button(status,"II",new Vector2(-8,-10),new Vector2(30,26),()=>{},new Vector2(1,1));
-            toolBelt = Box(transform,"Tool belt",new Vector2(0,18),new Vector2(560,66),new Vector2(.5f,0),Ink);Frame(toolBelt);
-            string[] icons={"tool-hand","tool-rod","tool-can","seed-pepper","seed-root","tool-knife","tool-journal","tool-bag"};
-            for(int i=0;i<8;i++)
+            toolBelt = Box(transform,"Tool belt",new Vector2(0,18),new Vector2(698,66),new Vector2(.5f,0),Ink);Frame(toolBelt);
+            string[] icons=ItemInventory.Tools;
+            for(int i=0;i<10;i++)
             {
                 int slot=i;var b=Button(toolBelt,"",new Vector2(7+i*69,-7),new Vector2(62,52),()=>SelectTool?.Invoke(slot),new Vector2(0,1));
                 toolFrames[i]=b.GetComponent<UnityEngine.UI.Image>();
-                var icon=Box(b.transform,"Tool",new Vector2(17,-5),new Vector2(30,34),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=WorldView.Art(icons[i]);icon.preserveAspect=true;icon.raycastTarget=false;toolIcons[i]=icon;
-                Text(b.transform,(i+1).ToString(),new Vector2(5,-3),new Vector2(14,18),12,Dim);
+                var icon=Box(b.transform,"Tool",new Vector2(17,-5),new Vector2(30,34),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=string.IsNullOrEmpty(icons[i])?null:WorldView.Art(icons[i]);icon.preserveAspect=true;icon.raycastTarget=false;toolIcons[i]=icon;
+                Text(b.transform,((i+1)%10).ToString(),new Vector2(5,-3),new Vector2(14,18),12,Dim);
                 toolCounts[i]=Text(b.transform,"",new Vector2(-4,2),new Vector2(48,18),12,Cream,new Vector2(1,0));toolCounts[i].alignment=TextAlignmentOptions.Right;
             }
             equippedLabel=Text(transform,"",new Vector2(0,86),new Vector2(560,24),16,Gold,new Vector2(.5f,0));equippedLabel.alignment=TextAlignmentOptions.Center;
             prompt = Text(transform,"",new Vector2(0,122),new Vector2(690,38),22,Cream,new Vector2(.5f,0)); prompt.alignment = TextAlignmentOptions.Center;
             prompt.outlineWidth=.2f;prompt.outlineColor=Ink;
+            prompt.color=C("fff0c9");prompt.outlineColor=C("40372e");equippedLabel.color=C("fff0c9");equippedLabel.outlineWidth=.2f;equippedLabel.outlineColor=C("40372e");
             orderText=Text(transform,"",new Vector2(22,-67),new Vector2(240,60),17,Gold);
+            orderText.color=C("fff0c9");orderText.outlineWidth=.2f;orderText.outlineColor=C("40372e");
             var message = Box(transform,"Toast",new Vector2(0,-20),new Vector2(560,42),new Vector2(.5f,1),new Color(Ink.r,Ink.g,Ink.b,.92f));
             toast = Text(message,"",new Vector2(12,-8),new Vector2(536,30),18,Cream);toast.alignment = TextAlignmentOptions.Center;message.gameObject.SetActive(false);
             overlay = Box(transform,"Overlay",Vector2.zero,Vector2.zero,new Vector2(.5f,.5f),new Color(.04f,.10f,.12f,.76f));
@@ -82,6 +132,9 @@ namespace Wildfeast
         public void Show(string heading,string description)
         {
             ClearRows(); title.text=heading;subtitle.text=description;overlay.gameObject.SetActive(true);MiniOpen=false;
+            toast.transform.parent.gameObject.SetActive(false);
+            string active=heading=="Tonight's menu"?"Recipes":heading=="The forager's journal"?"Journal":heading=="Harbor requests"?"Requests":heading=="Take a breath"?"Options":heading;
+            if(MenuActions!=null)Tabs(active,new[]{"Inventory","Map","Recipes","Journal","Requests","Options"},MenuActions);
             if (EventSystem.current) EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
         }
         public void Hide()
@@ -108,6 +161,19 @@ namespace Wildfeast
             }
         }
         public void Paragraph(string text) { Text(rows,text,new Vector2(8,-4),new Vector2(718,380),22,Cream); }
+        public void RecipeCard(int index,Recipe recipe,GameModel model,bool known,bool selected,Action choose)
+        {
+            var row=Box(rows,"Recipe "+recipe.id,new Vector2(0,-index*65),new Vector2(744,59),new Vector2(0,1),Ink);
+            var image=Box(row,"Dish",new Vector2(12,-7),new Vector2(46,46),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art(known?recipe.icon:"spark");image.preserveAspect=true;image.raycastTarget=false;
+            Text(row,known?recipe.name+$" · {recipe.price} shells":"Undiscovered recipe",new Vector2(72,-5),new Vector2(470,25),20,Cream);
+            if(known)for(int i=0;i<recipe.ingredients.Length;i++)
+            {
+                var ingredient=recipe.ingredients[i];var icon=Box(row,"Ingredient",new Vector2(72+i*145,-32),new Vector2(22,22),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=WorldView.Art(model.Data.Item(ingredient.id).icon);icon.preserveAspect=true;icon.raycastTarget=false;
+                Text(row,$"{model.Count(ingredient.id)}/{ingredient.count} in pantry",new Vector2(98+i*145,-34),new Vector2(118,22),13,model.Count(ingredient.id)>=ingredient.count?Cream:C("ae4337"));
+            }
+            else Text(row,"Discover its main ingredient",new Vector2(72,-33),new Vector2(430,22),14,Dim);
+            var button=Button(row,selected?"On the menu":"Add to menu",new Vector2(-10,-10),new Vector2(180,39),choose,new Vector2(1,1));button.interactable=known&&model.State.phase=="explore";
+        }
         public void FooterButton(string caption,Action action)
         { Button(rows,caption,new Vector2(0,-350),new Vector2(744,48),action,new Vector2(0,1)); }
         public void StartMini(string heading,string description,string instruction,bool tension)
@@ -133,14 +199,20 @@ namespace Wildfeast
         { overlay.gameObject.SetActive(false);activityPanel.gameObject.SetActive(true);MiniOpen=true; }
         public void Belt(GameModel model)
         {
-            string[] names={"Hands","Fishing rod","Watering can","Pepperbell seeds","Lanternroot seeds","Field knife","Journal · Tab","Satchel · B"};
-            for(int i=0;i<8;i++)toolFrames[i].color=i==model.State.equipped?C("ab7847"):C("355349");
-            toolCounts[3].text=model.State.pepperSeeds.ToString();toolCounts[4].text=model.State.rootSeeds.ToString();toolCounts[7].text=$"{model.BagCount}/{model.Capacity}";
-            equippedLabel.text=names[model.State.equipped]+"   ·   1–8 / scroll";
+            ItemInventory.Sync(model.State);
+            for(int i=0;i<10;i++)
+            {
+                var slot=model.State.slots[i];toolFrames[i].color=i==model.State.equipped?C("d8a049"):C("ead2a1");
+                toolIcons[i].sprite=string.IsNullOrEmpty(slot.id)?null:WorldView.Art(slot.id);toolIcons[i].enabled=slot.count>0;
+                toolCounts[i].text=slot.id=="tool-can"?model.State.water+"/20":slot.count>1?slot.count.ToString():"";
+            }
+            equippedLabel.text=ItemInventory.Name(model.State.slots[model.State.equipped].id,model.Data)+"   ·   Click / 1–0 / scroll";
+
         }
         public void CookStage(int step,string dish,string icon,string[] ingredients,string cookingArt)
         {
             Show(dish,step==0?"1  PREPARE     ·     2  COOK     ·     3  PLATE":step==1?"PREPARED     ·     2  COOK     ·     3  PLATE":"PREPARED     ·     COOKED     ·     3  PLATE");
+            if(menuTabs)menuTabs.gameObject.SetActive(false);
             cookingBoard=Box(rows,"Cooking bench",new Vector2(12,-10),new Vector2(720,240),new Vector2(0,1),C("9b704b"));Frame(cookingBoard);
             cookingBoard.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("ui-board");
             var food=Box(cookingBoard,"Ingredient",new Vector2(278,-42),new Vector2(164,136),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();food.sprite=WorldView.Art(step==0?"prep-board":step==1?cookingArt:icon);food.preserveAspect=true;food.raycastTarget=false;
@@ -172,26 +244,26 @@ namespace Wildfeast
             }
         }
         public static void Frame(RectTransform r)
-        {var image=r.GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art("ui-frame");image.color=Color.white;image.type=UnityEngine.UI.Image.Type.Sliced;image.pixelsPerUnitMultiplier=3.125f;}
+        {var image=r.GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art("ui-frame");image.color=Color.white;image.type=UnityEngine.UI.Image.Type.Sliced;image.pixelsPerUnitMultiplier=2f;}
         public void Message(string text) { toast.text=text;toast.transform.parent.gameObject.SetActive(!string.IsNullOrEmpty(text));if(!string.IsNullOrEmpty(text))toast.transform.parent.SetAsLastSibling(); }
         public static RectTransform Rect(Transform parent,string name,Vector2 pos,Vector2 size,Vector2 anchor)
         {
             var go=new GameObject(name,typeof(RectTransform));go.transform.SetParent(parent,false);var r=go.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=anchor;
             r.pivot=new Vector2(anchor.x,anchor.y==0?0:anchor.y==.5f?.5f:1);r.anchoredPosition=pos;r.sizeDelta=size;return r;
         }
-        static RectTransform Box(Transform parent,string name,Vector2 pos,Vector2 size,Vector2 anchor,Color color)
+        public static RectTransform Box(Transform parent,string name,Vector2 pos,Vector2 size,Vector2 anchor,Color color)
         {
             var r=Rect(parent,name,pos,size,anchor);var img=r.gameObject.AddComponent<UnityEngine.UI.Image>();img.color=color;return r;
         }
-        static TMP_Text Text(Transform parent,string text,Vector2 pos,Vector2 size,int fontSize,Color color,Vector2? anchor=null)
+        public static TMP_Text Text(Transform parent,string text,Vector2 pos,Vector2 size,int fontSize,Color color,Vector2? anchor=null)
         {
             var r=Rect(parent,"Text",pos,size,anchor??new Vector2(0,1));var t=r.gameObject.AddComponent<TextMeshProUGUI>();t.text=text;t.fontSize=fontSize;t.color=color;
             t.font=Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");t.textWrappingMode=TextWrappingModes.Normal;t.overflowMode=TextOverflowModes.Ellipsis;t.raycastTarget=false;return t;
         }
-        static UnityEngine.UI.Button Button(Transform parent,string caption,Vector2 pos,Vector2 size,Action action,Vector2 anchor)
+        public static UnityEngine.UI.Button Button(Transform parent,string caption,Vector2 pos,Vector2 size,Action action,Vector2 anchor)
         {
-            var r=Box(parent,caption,pos,size,anchor,C("35585a"));var b=r.gameObject.AddComponent<UnityEngine.UI.Button>();var c=b.colors;c.normalColor=Color.white;c.highlightedColor=Gold;c.selectedColor=Gold;c.pressedColor=C("adbc90");c.disabledColor=new Color(.45f,.5f,.48f,1);b.colors=c;
-            var t=Text(r,caption,new Vector2(0,0),size,18,Cream);t.rectTransform.anchorMin=Vector2.zero;t.rectTransform.anchorMax=Vector2.one;t.rectTransform.offsetMin=Vector2.zero;t.rectTransform.offsetMax=Vector2.zero;t.alignment=TextAlignmentOptions.Center;
+            var r=Box(parent,caption,pos,size,anchor,C("873e36"));var b=r.gameObject.AddComponent<UnityEngine.UI.Button>();var c=b.colors;c.normalColor=Color.white;c.highlightedColor=Gold;c.selectedColor=Gold;c.pressedColor=C("adbc90");c.disabledColor=new Color(.45f,.5f,.48f,1);b.colors=c;
+            var t=Text(r,caption,new Vector2(0,0),size,18,C("f6e7bf"));t.rectTransform.anchorMin=Vector2.zero;t.rectTransform.anchorMax=Vector2.one;t.rectTransform.offsetMin=Vector2.zero;t.rectTransform.offsetMax=Vector2.zero;t.alignment=TextAlignmentOptions.Center;
             b.onClick.AddListener(()=>action());return b;
         }
     }

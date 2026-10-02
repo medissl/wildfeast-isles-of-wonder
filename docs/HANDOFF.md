@@ -1,3 +1,18 @@
+# Current handoff: island-life pass
+
+Read ISLAND_LIFE_PASS.md and the current section of VERIFICATION.md first. The entries below describe earlier builds where they differ.
+
+New runtime modules: ItemInventory.cs owns item layout, resources and persistent field transactions; IslandLife.cs handles spatial tools, forage animation, continuous sailing and resource presentation; InventoryDrag.cs supplies actual pointer dragging; HarvestNode.cs tracks visible tool-hit state. GameUI restores serialized hotbar button listeners during Init — Editor-created runtime lambdas were not persisted, which caused the old click bug.
+
+Progress schema 1 is extended additively with slots[40], fields, resources and water. Existing bag/pantry, seed counts, legacy three beds, orders, upgrades and money remain authoritative and preserved. Slots synchronize quantities while retaining placement. Do not create a second inventory economy or replace existing save files during tests. Food capacity still counts portions (8 initially, up to 20); tools/seeds/materials use their own slots.
+
+ProjectBuilder.Assemble now also bakes scenery maps through URP into map-saltleaf/map-mistwake textures. It reconstructs the scene; preserve manual scene work first. Normal Build uses the checked-in scene. Regenerate art in order make_art → polish_art → creature_art → island_life_art, then intentionally assemble to rebake maps. island_life_art additionally requires numpy for original music synthesis.
+
+Sailing temporarily places the destination root at (40,-35), enables both islands and ocean tiles, disables player physics, carries the player aboard, docks, restores root coordinates and resumes normal camera/physics. Keep inventory and escape input locked during a voyage. Never award travel or forage halfway through an animation.
+
+Latest delivery: outputs/Wildfeast-Island-Life-Windows.zip; source archive and verification captures accompany it. Older Living-World archives remain historical.
+
+
 # Development handoff
 
 ## Current version: living-world pass

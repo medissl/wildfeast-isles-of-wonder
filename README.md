@@ -6,15 +6,16 @@ A free, offline single-player Unity game prototype for Windows. Explore strange 
 
 Open `Wildfeast.exe` from the Windows build folder. Keep its accompanying data folder and DLLs together. First launch shows the controls and daily loop.
 
-- WASD or arrow keys: move.
-- E: doors, opening signs, menu boards, plants, guests, and harvesting.
-- 1–8 or mouse wheel: tool belt (hands, rod, watering can, Pepperbell seeds, Lanternroot seeds, field knife, journal, bag). Click a slot to select it.
-- Space or left click: use the held tool. At a bank, the rod casts into water. Hold Space or the mouse to reel; release for slack.
-- Cooking: alternate A/D to chop; adjust heat with A/D and stir with Space; drag ingredients onto the plate or place them with 1/2/3.
-- Gardening: equip a seed packet and use it at a bed; then equip the watering can and water separately. Foraging supplies more seeds.
-- Tab: ingredient journal.
-- Escape: close a panel, cancel a challenge, or open pause.
-- B: bag and pantry. Escape opens settings, including the fullscreen/windowed toggle.
+- WASD / arrows: walk.
+- Click hotbar, 1–0 or scroll: select an item/tool. The first inventory row is the hotbar.
+- Left click / Space: use a tool. Mouse targets must be within reach. Hold and release to reel.
+- Right click / E: doors, signs, forage, guests and other world interactions.
+- Tab / B: inventory; drag or click two slots to rearrange. Includes Recipes, Journal, Requests and Options tabs.
+- M: island map with player and landmark markers.
+- Shovel: till clear land; seed packet: plant; can: water, holding 20 units. Refill beside water.
+- Axe: chop Cinnamonwood; scythe: sweep Noodlegrass; pickaxe: mine Saltstone. Trade materials at the workshop.
+- Cooking: alternating A/D cuts, A/D heat and Space stirring, then drag garnishes onto the plate (or 1/2/3).
+- Escape: close/cancel or open Options. Voyages finish at the destination dock.
 
 The player starts in borderless fullscreen; windowed mode is available in pause. Keyboard and mouse are the supported target for this pass. Complete gamepad tool selection and cooking controls remain future work.
 
@@ -26,7 +27,7 @@ If ingredients run out, add Harbor Porridge to the menu. The pantry restores thr
 
 ## Beyond the first supper
 
-Brothback patrols the northeast springs and reacts when you approach. Dodge its steam charge and collect stock with E while it cools. Search the northwest grove for Lanternroot and its seeds. Plant seeds at the beds and water on successive days. The ferry sails to either island from the start; no equipment purchase unlocks exploration or Cloudfruit. Restore the terrace and hire Nori, who walks cooked meals to guests. The provision locker increases bag capacity, and botanical gloves increase fruit yield. Four harbor letters connect discoveries to served dishes.
+Brothback patrols the northeast springs and reacts when you approach. Dodge its steam charge and collect stock with E while it cools. Search the northwest grove for Lanternroot and its seeds. Till clear ground on either island, plant seeds and water on successive days. The ferry visibly carries you along a sea route to either island from the start; no equipment purchase unlocks exploration or Cloudfruit. Restore the terrace and hire Nori, who walks cooked meals to guests. The provision locker increases bag capacity, and botanical gloves increase fruit yield. Four harbor letters connect discoveries to served dishes.
 
 ## Open the Unity project
 
@@ -45,6 +46,7 @@ Editor and standalone saves use separate files. See `docs/HANDOFF.md` for their 
 - `docs/VERIFICATION.md`: actual checks and limitations.
 - `docs/HANDOFF.md`: implementation status and next work.
 - `docs/ASSET_PROVENANCE.md`: original artwork and audio sources.
+- `docs/ISLAND_LIFE_PASS.md`: current tools, item inventory, menus, map, sailing and audio.
 - `docs/LIVING_WORLD_PASS.md`: creator feedback, interaction redesign, controls, and remaining polish targets.
 
 This is an implemented small-world prototype, not a finished commercial-scale game. Human playtesting should establish whether the loop and art direction warrant a larger production.

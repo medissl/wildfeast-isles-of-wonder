@@ -1,3 +1,8 @@
+# Current implemented refinement: island-life pass
+
+The creator's latest feedback prioritizes a clickable item hotbar/backpack, Tab categories, an M map with player/landmarks, keyboard/mouse actions, free-ground till/seed/water flow, finite refillable can, axe/scythe/pickaxe resources, forage pull-out animation, continuous sailing to a distinct island, prop collision, a livelier restaurant and original music. See ISLAND_LIFE_PASS.md for the actual scope and VERIFICATION.md for evidence. Preserve these refinements over the historical fixed-tool and instant-travel designs below.
+
+
 # Wildfeast: Isles of Wonder — Development Plan
 
 Planning draft · 2 October 2026

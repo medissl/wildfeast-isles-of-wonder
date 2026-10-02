@@ -46,6 +46,7 @@ namespace Wildfeast.Editor
             var pp=cameraObject.AddComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();pp.assetsPPU=32;pp.refResolutionX=640;pp.refResolutionY=360;pp.gridSnapping=UnityEngine.Rendering.Universal.PixelPerfectCamera.GridSnapping.PixelSnapping;pp.cropFrame=UnityEngine.Rendering.Universal.PixelPerfectCamera.CropFrame.None;
             var light=new GameObject("Daylight",typeof(Light2D));light.GetComponent<Light2D>().lightType=Light2D.LightType.Global;light.GetComponent<Light2D>().intensity=1;
             var world=new GameObject("Archipelago",typeof(WorldView)).GetComponent<WorldView>();world.worldCamera=camera;world.AuthorWorlds();
+            BakeIslandMaps(world,camera,pp);
             var ui=new GameObject("Interface",typeof(RectTransform),typeof(GameUI)).GetComponent<GameUI>();ui.AuthorUI();
             var events=new GameObject("EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));events.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
             var controller=new GameObject("Wildfeast",typeof(GameController)).GetComponent<GameController>();controller.world=world;controller.ui=ui;
@@ -76,5 +77,26 @@ namespace Wildfeast.Editor
             Debug.Log("WILDFEAST BUILD SUCCESS: "+report.summary.totalSize+" bytes, "+report.summary.totalTime);
         }
         public static void AssembleAndBuild(){Assemble();Build();}
+        static void BakeIslandMaps(WorldView world,Camera camera,PixelPerfectCamera pixelCamera)
+        {
+            pixelCamera.enabled=false;world.player.gameObject.SetActive(false);camera.orthographicSize=13;camera.aspect=1280f/832;
+            var target=new RenderTexture(1280,832,24,RenderTextureFormat.ARGB32);target.Create();
+            try
+            {
+                for(int area=0;area<2;area++)
+                {
+                    world.saltleaf.gameObject.SetActive(area==0);world.mistwake.gameObject.SetActive(area==1);world.restaurant.gameObject.SetActive(false);
+                    camera.transform.position=new Vector3(0,0,-10);
+                    RenderPipeline.SubmitRenderRequest(camera,new UniversalRenderPipeline.SingleCameraRequest{destination=target});
+                    var previous=RenderTexture.active;RenderTexture.active=target;
+                    var texture=new Texture2D(1280,832,TextureFormat.RGB24,false);texture.ReadPixels(new Rect(0,0,1280,832),0,0);texture.Apply();
+                    string path="Assets/Wildfeast/Resources/Art/map-"+(area==0?"saltleaf":"mistwake")+".png";
+                    File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);RenderTexture.active=previous;
+                    AssetDatabase.ImportAsset(path);
+                    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=2048;importer.SaveAndReimport();
+                }
+            }
+            finally{target.Release();UnityEngine.Object.DestroyImmediate(target);world.player.gameObject.SetActive(true);pixelCamera.enabled=true;camera.orthographicSize=5.625f;camera.ResetAspect();world.SetArea(0,new Vector2(-6,-2.5f));}
+        }
     }
 }

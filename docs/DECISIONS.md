@@ -1,3 +1,12 @@
+# Latest decisions: island life
+
+The creator asked for Stardew-like item/tool organization and reference-inspired UI, while retaining original food ecology. The hotbar now has ten numeric slots, with thirty backpack slots, and no journal/bag commands. Tools act by identity even after rearrangement. Food retains the existing portion-capacity upgrade economy; tools, seeds and resource stacks remain separate.
+
+Both islands permit spatial gardening on unobstructed land. Water is finite. Resource tools harvest original Cinnamonwood, Saltstone and Noodlegrass; materials can be traded at the workshop. Free ferry access now uses continuous ship movement between distinct island scenery, not immediate area switching. Original synthesized music replaces the ambient drone as the musical layer. All original world sprites retain 32 PPU; native image dimensions vary by object size.
+
+Earlier decisions below remain applicable except where explicitly superseded here.
+
+
 # Decisions
 
 ## Confirmed by the creator
