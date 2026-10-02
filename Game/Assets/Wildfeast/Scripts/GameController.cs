@@ -80,11 +80,14 @@ namespace Wildfeast
         void Refresh()
         {
             ui.wallet.text=$"Day {Model.State.day}  ·  {Model.State.coins} shells";
-            ui.location.text=world.Area==2 ? "THE HARBOR TABLE" : Model.State.island==1 ? "MISTWAKE ISLE" : "SALTLEAF SHORE";
+            ui.location.text=world.Area==2?"THE HARBOR TABLE":Archipelago.Get(world.Area).name.ToUpperInvariant();
             ui.objective.text="";world.Refresh(Model);
             ui.Belt(Model);
-            var music=Resources.Load<AudioClip>("Audio/music-"+(world.Area==2?"restaurant":world.Area==1?"mistwake":"saltleaf"));if(ambience.clip!=music){ambience.clip=music;ambience.Play();}
-            ambience.volume=Model.State.muted?0:Model.State.volume*.6f;effects.volume=Model.State.muted?0:Model.State.volume;
+            var music=Resources.Load<AudioClip>("Audio/music-"+(world.Area==2?"restaurant":Archipelago.Get(world.Area).key));if(ambience.clip!=music){ambience.clip=music;ambience.Play();}
+            ambience.volume=Model.State.muted?0:Model.State.musicVolume*.6f;effects.volume=Model.State.muted?0:Model.State.effectsVolume;
+            world.ApplyZoom(Model.State.zoom);
+            foreach(var motion in world.GetComponentsInChildren<VegetationMotion>(true))motion.enabled=!Model.State.reducedMotion;
+            foreach(var motion in world.GetComponentsInChildren<WorldMotion>(true))if(motion.mode==0||motion.mode==1||motion.mode==5)motion.enabled=!Model.State.reducedMotion;
         }
         string Objective()
         {
@@ -147,6 +150,7 @@ namespace Wildfeast
             if(activity!=null||ToolBusy)return;
             switch(p.action)
             {
+                case "creature": case "bud": case "tap": p.GetComponent<FoodEcology>().Collect();break;
                 case "enter": Model.Deposit();world.SetArea(2,new Vector2(0,-3.5f));Refresh();Say("Ingredients stored in the pantry.");break;
                 case "exit":
                     if(Model.State.phase=="service")Say("Finish tonight's orders before leaving.");
@@ -181,6 +185,7 @@ namespace Wildfeast
             if(activity==null&& !Model.State.harvested.Contains(p.source) && Model.State.phase=="explore" && Model.BagCount+quantity<=Model.Capacity){activity="forage";activityStarted=Time.time;Vector2 aim=(Vector2)p.transform.position-(Vector2)world.player.position;if(aim.sqrMagnitude>.01f){facing=aim.normalized;world.Face(facing);}life.Pull(p,quantity,()=>{activity=null;AwardGather(p,quantity);});return;}
             AwardGather(p,quantity);
         }
+        public void HarvestEcology(WorldPoint p,int quantity)=>Gather(p,quantity);
         void AwardGather(WorldPoint p,int quantity)
         {
             if(Model.Gather(p.item,quantity,p.source)) { Sound("chime");world.Burst(p.transform.position,p.item);Say("+"+quantity+" "+Model.Data.Item(p.item).name+(p.item=="pepperbell"||p.item=="lanternroot"?"  ·  +1 seed":"")); }
@@ -190,7 +195,7 @@ namespace Wildfeast
         {
             if(Model.State.phase!="explore" || Model.BagCount>=Model.Capacity){Say("Make room in your satchel before casting.");return;}
             var water=world.WaterAt(world.player.position,facing);if(world.Area==2||!water.HasValue){Say("Cast beside water.");return;}
-            if(!WorldView.Water(p.transform.position))p.transform.position=water.Value;
+            if(!WorldView.Water(p.transform.position,world.Area))p.transform.position=water.Value;
             fishingSpot=p;elapsed=0;tension=.4f;progress=0;danger=0;
             ui.Fishing();activity="fish";world.Cast(p.transform.position);Sound("splash");
         }
@@ -207,7 +212,7 @@ namespace Wildfeast
             if(danger>(Model.State.relaxed?2f:.65f) || elapsed>45)
             {Debug.Log($"Fishing escaped at {elapsed:F2}s tension={tension:F2} progress={progress:F2}");activity=null;ui.Hide();Say("The Leafgill slipped away. You can cast again.");return;}
             if(progress>=1)
-            {var spot=fishingSpot;world.LandFish(spot.item);activity=null;ui.Hide();if(Model.Gather(spot.item)){Sound("chime");Say("+1 Leafgill");}}
+            {var spot=fishingSpot;world.LandFish(spot.item);activity=null;ui.Hide();if(Model.Gather(spot.item)){Sound("chime");Say("+1 "+Model.Data.Item(spot.item).name);}}
         }
         public void StartCooking(int order)
         {
@@ -306,24 +311,27 @@ namespace Wildfeast
         public void ShowBag(){ui.Inventory(Model,()=>{Model.Notify();ShowBag();});MenuTabs("Inventory");}
         public void ShowMap(){ui.Map(world);MenuTabs("Map");}
         void MenuTabs(string active){ui.Tabs(active,new[]{"Inventory","Map","Recipes","Journal","Requests","Options"},new Action[]{ShowBag,ShowMap,ShowMenu,ShowJournal,ShowRequests,ShowPause});}
+        int journalPage,recipePage;
         public void ShowJournal()
         {
             ui.Show("The forager's journal","Every ingredient tells a story. Discover it in the wild to learn its behavior and recipes.");
-            for(int i=0;i<Model.Data.ingredients.Length;i++)
+            for(int i=journalPage*5;i<Mathf.Min(Model.Data.ingredients.Length,journalPage*5+5);i++)
             {
                 var item=Model.Data.ingredients[i];bool known=Model.State.discovered.Contains(item.id);
-                ui.Row(i,known?item.name:"Unrecorded discovery",known?item.habitat:"Explore the islands to fill this page.",known?item.icon:"spark",known?"Read notes":"Unknown",()=>ShowItem(item),known);
+                ui.Row(i-journalPage*5,known?item.name:"Unrecorded discovery",known?item.habitat:"Explore the islands to fill this page.",known?item.icon:"spark",known?"Read notes":"Unknown",()=>ShowItem(item),known);
             }
+            ui.Pagination(journalPage,Model.Data.ingredients.Length,5,p=>{journalPage=p;ShowJournal();});
         }
         void ShowItem(Ingredient item){ui.Show(item.name,item.habitat);ui.Paragraph(item.description);ui.FooterButton("Back to journal",ShowJournal);}
         public void ShowMenu()
         {
             ui.Show("Tonight's menu","Pick the dishes you want to offer. Guests order from stocked recipes; matching their taste earns a tip.");
-            for(int i=0;i<Model.Data.recipes.Length;i++)
+            for(int i=recipePage*5;i<Mathf.Min(Model.Data.recipes.Length,recipePage*5+5);i++)
             {
                 var recipe=Model.Data.recipes[i];bool known=Model.State.recipes.Contains(recipe.id),selected=Model.State.menu.Contains(recipe.id);
-                ui.RecipeCard(i,recipe,Model,known,selected,()=>{if(selected)Model.State.menu.Remove(recipe.id);else Model.State.menu.Add(recipe.id);Model.Notify();ShowMenu();});
+                ui.RecipeCard(i-recipePage*5,recipe,Model,known,selected,()=>{if(selected)Model.State.menu.Remove(recipe.id);else Model.State.menu.Add(recipe.id);Model.Notify();ShowMenu();});
             }
+            ui.Pagination(recipePage,Model.Data.recipes.Length,5,p=>{recipePage=p;ShowMenu();});
         }
         void ShowOpening()
         {
@@ -374,11 +382,12 @@ namespace Wildfeast
         }
         void ShowTravel()
         {
-            ui.Show("Chart a course","The harbor ferry sails freely. Choose an island.");
-            ui.Row(0,"Saltleaf Shore","Home · garden · Steamstone springs","restaurant","Sail",()=>Sail(0),Model.State.phase=="explore");
-            ui.Row(1,"Mistwake Isle","Cloudfruit orchard · tidekeeper's garden","cloudfruit","Sail",()=>Sail(1),Model.State.phase=="explore");
+            ui.Show("Chart a course","Five food ecosystems · free passage · all islands open from the start.");
+            for(int n=0;n<Archipelago.Islands.Length;n++)
+            {var i=Archipelago.Islands[n];int destination=i.id;ui.Row(n,i.name,i.subtitle,i.id==0?"restaurant":i.points.First(p=>p.item!="").art,"Sail",()=>Sail(destination),Model.State.phase=="explore"&&world.Area!=i.id);}
         }
-        public void Sail(int island){if(activity!=null||ToolBusy||Model.State.phase!="explore")return;if(island==Model.State.island){ui.Hide();Say("Already docked at this island.");return;}ui.Hide();EndHunt();activity="sail";life.Sail(island,()=>{activity=null;Model.Travel(island);Refresh();Say(island==0?"Docked at Saltleaf Harbor":"Docked at Mistwake Isle");});}
+
+        public void Sail(int island){if(activity!=null||ToolBusy||Model.State.phase!="explore"||!Archipelago.Valid(island)||world.Area==2)return;if(island==Model.State.island){ui.Hide();Say("Already docked at this island.");return;}ui.Hide();EndHunt();activity="sail";life.Sail(island,()=>{activity=null;Model.Travel(island);Refresh();Say("Docked at "+Archipelago.Get(island).name);});}
         public void Equip(int slot)
         {
             if(activity!=null||ToolBusy||slot<0||slot>9)return;
@@ -387,6 +396,7 @@ namespace Wildfeast
         }
         string Prompt(WorldPoint p)
         {
+            var ecology=p.GetComponent<FoodEcology>();if(ecology)return ecology.Hint;
             if(p.action=="fish")return ItemInventory.EquippedTool(Model.State)==1?"Space · Cast into water":"Select your fishing rod";
             if(p.action=="crop")
             {
@@ -408,7 +418,7 @@ namespace Wildfeast
                 var water=world.WaterAt(world.player.position,facing);
                 if(water.HasValue)
                 {
-                    var spot=world.points.First(x=>x.action=="fish"&&x.transform.IsChildOf(world.Area==0?world.saltleaf:world.mistwake));
+                    var spot=world.points.First(x=>x.action=="fish"&&x.transform.IsChildOf(world.IslandRoot(world.Area)));
                     spot.transform.position=water.Value;StartFishing(spot);
                 }
                 else Say("Stand beside the shore or pond to cast.");
@@ -430,7 +440,7 @@ namespace Wildfeast
         {
             var c=Model.State.crops[p.index];bool changed=false;
             if(c.planted&&c.growth>=Model.Data.cropDays)changed=Model.Harvest(p.index);
-            else if(!c.planted&&(ItemInventory.EquippedTool(Model.State)==3||ItemInventory.EquippedTool(Model.State)==4))changed=Model.Plant(p.index,ItemInventory.EquippedTool(Model.State)==3?"pepperbell":"lanternroot");
+            else if(!c.planted&&(Model.State.slots[Model.State.equipped].id=="seed-pepper"||Model.State.slots[Model.State.equipped].id=="seed-root"))changed=Model.Plant(p.index,ItemInventory.EquippedTool(Model.State)==3?"pepperbell":"lanternroot");
             else if(c.planted&&ItemInventory.EquippedTool(Model.State)==2&&Model.State.water>0){changed=Model.Water(p.index);if(changed){Model.State.water--;Model.Notify();}}
             if(changed){world.Burst(p.transform.position,ItemInventory.EquippedTool(Model.State)==2?"splash":"spark");Sound(ItemInventory.EquippedTool(Model.State)==2?"splash":"chime");}
             else Say(Prompt(p).Replace("Space · ",""));
@@ -468,7 +478,7 @@ namespace Wildfeast
             string[] goals={"seared","broth","lantern","cloud"};string[] names={"A first taste of the shore","Something for the ferryman","Light for the seed keeper","A taste of Iona's island"};
             int index=Model.State.requestIndex;
             ui.Show("Harbor requests","Fulfill a request during service, then collect its reward before beginning the next day.");
-            if(index>=goals.Length){ui.Paragraph("All four harbor requests are complete. Your table has brought a little of every habitat home. There are still gardens to tend and menus to try.");return;}
+            if(index>=goals.Length){ui.Paragraph("The first four harbor requests are complete. The new islands still have food to discover. There are still gardens to tend and menus to try.");return;}
             var r=Model.Data.Dish(goals[index]);ui.Row(0,names[index],$"Serve {r.name} · reward {18+6*index} shells",r.icon,"Claim reward",()=>{if(Model.ClaimRequest()){Sound("chime");ShowRequests();}else Say("Serve the requested dish before collecting this reward.");});
         }
         public void ShowClosing()
@@ -480,16 +490,28 @@ namespace Wildfeast
             ui.Row(2,"The kitchen garden","Watered plants grow overnight. Wild sources recover each morning.","pepperbell",null,null);
             ui.FooterButton("Begin the next day",()=>{if(Model.NextDay()){ui.Hide();world.SetArea(0,new Vector2(-6,-2.5f));Refresh();Say("A fresh morning. Your journal is waiting.");}});
         }
+        public float MusicLevel=>ambience.volume;
+        public float EffectsLevel=>effects.volume;
         public void ShowPause()
         {
             if(ToolBusy)return;
-            ui.Show("Take a breath","Progress saves after discoveries, cooking, serving, upgrades, and day changes. Relaxed timing is on by default.");
-            ui.Row(0,"Challenge",Model.State.relaxed?"More time to recover fishing tension and collect Brothback stock.":"Firmer fishing tension and shorter Brothback openings.",null,Model.State.relaxed?"Relaxed":"Standard",()=>{Model.State.relaxed=!Model.State.relaxed;Model.Notify();ShowPause();});
-            ui.Row(1,"Sound","Three original island and kitchen compositions. Quiet interaction cues.",null,Model.State.muted?"Muted":"Sound on",()=>{Model.State.muted=!Model.State.muted;Model.Notify();ShowPause();});
-            ui.Row(2,"Volume",$"Music and effects: {Mathf.RoundToInt(Model.State.volume*100)}%",null,"Change",()=>{Model.State.volume=Model.State.volume>=.75f?.15f:Model.State.volume+.2f;Model.Notify();ShowPause();});
-            ui.Row(3,"Display",Screen.fullScreen?"Fills your display":"Resizable window",null,Screen.fullScreen?"Windowed":"Fullscreen",()=>{if(Screen.fullScreen)Screen.SetResolution(Mathf.Min(1280,Display.main.systemWidth-80),Mathf.Min(720,Display.main.systemHeight-80),FullScreenMode.Windowed);else Screen.SetResolution(Display.main.systemWidth,Display.main.systemHeight,FullScreenMode.FullScreenWindow);ShowPause();});
-            ui.Row(4,"Start a new journey","Your previous save is archived before resetting.",null,"New journey",ShowReset);
-            ui.Row(5,"Leave the table","Save and close the game.",null,"Quit",()=>{Save();Application.Quit();});
+            ui.Show("Take a breath","Sound, camera and comfort · Changes save immediately. Menus keep their own size when zooming.");
+            ui.SliderRow(0,"Music volume",Model.State.musicVolume,v=>{Model.State.musicVolume=v;Model.Notify();});
+            ui.SliderRow(1,"Sound effects",Model.State.effectsVolume,v=>{Model.State.effectsVolume=v;Model.Notify();});
+            ui.Row(2,"Sound", "Mute both layers without losing your chosen levels.",null,Model.State.muted?"Muted":"Sound on",()=>{Model.State.muted=!Model.State.muted;Model.Notify();ShowPause();});
+            ui.Row(3,"World zoom","Native pixel steps · HUD size stays consistent.",null,new[]{"Wide","Comfort","Close"}[Model.State.zoom],()=>{Model.State.zoom=(Model.State.zoom+1)%3;Model.Notify();ShowPause();});
+            ui.Row(4,"Ambient motion","Quiet foliage and water · action animations remain readable.",null,Model.State.reducedMotion?"Reduced":"Full motion",()=>{Model.State.reducedMotion=!Model.State.reducedMotion;Model.Notify();ShowPause();});
+            ui.FooterButton("Display, controls and journey",ShowMoreOptions);
+        }
+        void ShowMoreOptions()
+        {
+            ui.Show("Take a breath","Display and gameplay · Your progress saves after each completed action.");
+            ui.Row(0,"Challenge","Fishing tension and Brothback recovery windows.",null,Model.State.relaxed?"Relaxed":"Standard",()=>{Model.State.relaxed=!Model.State.relaxed;Model.Notify();ShowMoreOptions();});
+            ui.Row(1,"Display",Screen.fullScreen?"Fills your display":"Resizable window",null,Screen.fullScreen?"Windowed":"Fullscreen",()=>{if(Screen.fullScreen)Screen.SetResolution(Mathf.Min(1280,Display.main.systemWidth-80),Mathf.Min(720,Display.main.systemHeight-80),FullScreenMode.Windowed);else Screen.SetResolution(Display.main.systemWidth,Display.main.systemHeight,FullScreenMode.FullScreenWindow);ShowMoreOptions();});
+            ui.Row(2,"Controls","Mouse / keyboard · WASD, E, Space, Tab, M, 1–0 and scroll.",null,"Read",()=>{ui.Show("Controls","Choose tools with the mouse, numbers or wheel.");ui.Paragraph("WASD · Walk\nLeft click / Space · Use held tool\nRight click / E · Interact\nTab · Inventory and journal tabs\nM · Current island map\nEsc · Close a page / Options\n\nShovel: green ground only. Paths cannot be planted.\nWatering can: refill by any shore or pond.\nHold a food ingredient to attract food creatures.");ui.FooterButton("Back to Options",ShowMoreOptions);});
+            ui.Row(3,"Start a new journey","Your previous save is archived before resetting.",null,"New journey",ShowReset);
+            ui.Row(4,"Leave the table","Save and close the game.",null,"Quit",()=>{Save();Application.Quit();});
+            ui.FooterButton("Back to sound and camera",ShowPause);
         }
         void ShowReset()
         {

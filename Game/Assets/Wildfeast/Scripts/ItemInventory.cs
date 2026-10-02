@@ -12,12 +12,15 @@ namespace Wildfeast
     {
         public const int Hotbar=10, Size=40;
         public static readonly string[] Tools={"", "tool-rod","tool-can","seed-pepper","seed-root","tool-knife","tool-shovel","tool-axe","tool-scythe","tool-pickaxe"};
+        public static bool Growable(string id)=>new[]{"pepperbell","lanternroot","custardpetal","emberbulb","mooncap","pearlsprout"}.Contains(id);
+        public static string SeedItem(string id)=>id=="seed-pepper"?"pepperbell":id=="seed-root"?"lanternroot":id.StartsWith("seed-")?id.Substring(5):"";
         public static string Name(string id,Content data)
         {
+            string seed=SeedItem(id);if(Growable(seed))return data.Item(seed).name+" seeds";
             var food=data.ingredients.FirstOrDefault(i=>i.id==id);if(food!=null)return food.name;
             switch(id){case "tool-rod":return "Fishing rod";case "tool-can":return "Watering can";case "tool-knife":return "Field knife";case "tool-shovel":return "Shovel";case "tool-axe":return "Axe";case "tool-scythe":return "Scythe";case "tool-pickaxe":return "Pickaxe";case "seed-pepper":return "Pepperbell seeds";case "seed-root":return "Lanternroot seeds";case "wood":return "Cinnamonwood";case "stone":return "Saltstone";case "fiber":return "Noodlegrass fiber";default:return "Empty slot";}
         }
-        public static bool Valid(string id,Content data)=>string.IsNullOrEmpty(id)||Tools.Contains(id)||data.ingredients.Any(i=>i.id==id)||id=="wood"||id=="stone"||id=="fiber";
+        public static bool Valid(string id,Content data)=>string.IsNullOrEmpty(id)||Tools.Contains(id)||Growable(SeedItem(id))||data.ingredients.Any(i=>i.id==id)||id=="wood"||id=="stone"||id=="fiber";
         public static void Ensure(Progress p)
         {
             if(p.slots!=null&&p.slots.Length==Size)return;
@@ -32,6 +35,8 @@ namespace Wildfeast
             Ensure(p);if(p.resources==null)p.resources=new List<ResourceStock>();if(p.fields==null)p.fields=new List<FieldPlot>();
             var quantities=p.bag.ToDictionary(a=>a.id,a=>a.count);
             quantities["seed-pepper"]=p.pepperSeeds;quantities["seed-root"]=p.rootSeeds;
+            if(p.seeds==null)p.seeds=new List<ResourceStock>();if(p.ecology==null)p.ecology=new List<EcologyProgress>();
+            foreach(var seed in p.seeds)quantities["seed-"+seed.id]=seed.count;
             foreach(var a in p.resources)quantities[a.id]=a.count;
             foreach(var slot in p.slots)
             {
@@ -46,7 +51,20 @@ namespace Wildfeast
             Ensure(p);if(from<0||to<0||from>=Size||to>=Size||from==to)return false;
             var a=p.slots[from];p.slots[from]=p.slots[to];p.slots[to]=a;return true;
         }
-        public static int EquippedTool(Progress p){Ensure(p);return Array.IndexOf(Tools,p.slots[p.equipped].id);}
+        public static bool EcologyAction(GameModel model,string source,string kind,int tool)
+        {
+            var p=model.State;
+            if(p.phase!="explore"||p.harvested.Contains(source)||!Archipelago.Islands.SelectMany(i=>i.points).Any(x=>x.source==source))return false;
+            bool crack=kind=="crab"&&tool==9,water=(kind=="snail"||kind=="bud")&&tool==2;
+            if(!crack&&!water)return false;
+            var condition=p.ecology.FirstOrDefault(e=>e.source==source);
+            if(condition!=null&&condition.ready||water&&p.water<1)return false;
+            if(condition==null){condition=new EcologyProgress{source=source};p.ecology.Add(condition);}
+            if(crack){condition.contacts++;condition.ready=condition.contacts>=3;}
+            else {p.water--;condition.ready=true;}
+            model.Notify();return true;
+        }
+        public static int EquippedTool(Progress p){Ensure(p);string id=p.slots[p.equipped].id;return Growable(SeedItem(id))&&id!="seed-root"?3:Array.IndexOf(Tools,id);}
         public static bool Resource(GameModel model,string id,int quantity,string source)
         {
             var p=model.State;Sync(p);if(p.phase!="explore"||quantity<1||string.IsNullOrEmpty(source)||p.harvested.Contains(source)||(id!="wood"&&id!="stone"&&id!="fiber")||(!p.slots.Any(s=>s.id==id)&&!p.slots.Any(s=>s.count==0)))return false;
@@ -55,13 +73,13 @@ namespace Wildfeast
         public static FieldPlot Plot(Progress p,int island,Vector2 target)=>p.fields.FirstOrDefault(f=>f.island==island&&f.x==Mathf.RoundToInt(target.x)&&f.y==Mathf.RoundToInt(target.y));
         public static bool Till(GameModel model,int island,Vector2 target)
         {
-            var p=model.State;if(p.phase!="explore"||island<0||island>1||float.IsNaN(target.x)||float.IsNaN(target.y)||Mathf.Abs(target.x)>18||Mathf.Abs(target.y)>11||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
+            var p=model.State;if(p.phase!="explore"||!Archipelago.Valid(island)||float.IsNaN(target.x)||float.IsNaN(target.y)||Mathf.Abs(target.x)>18||Mathf.Abs(target.y)>11||!Archipelago.Tillable(new Vector2(Mathf.Round(target.x),Mathf.Round(target.y)),island)||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
             p.fields.Add(new FieldPlot{island=island,x=Mathf.RoundToInt(target.x),y=Mathf.RoundToInt(target.y)});model.Notify();return true;
         }
         public static bool Plant(GameModel model,FieldPlot plot,string item)
         {
             if(plot==null||!model.State.fields.Contains(plot)||plot.crop.planted||model.State.phase!="explore"||model.Seeds(item)<1)return false;
-            if(item=="pepperbell")model.State.pepperSeeds--;else if(item=="lanternroot")model.State.rootSeeds--;else return false;
+            if(item=="pepperbell")model.State.pepperSeeds--;else if(item=="lanternroot")model.State.rootSeeds--;else if(Growable(item))model.State.seeds.First(s=>s.id==item).count--;else return false;
             plot.crop=new Crop{item=item,planted=true};model.Notify();return true;
         }
         public static bool Water(GameModel model,FieldPlot plot)

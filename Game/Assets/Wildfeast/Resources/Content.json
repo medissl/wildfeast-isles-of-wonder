@@ -1,26 +1,521 @@
 {
-  "bagCapacity": 8, "cropDays": 2, "guests": 3, "moveSpeed": 3.8, "fishDuration": 5, "cookDuration": 7,
+  "bagCapacity": 8,
+  "cropDays": 2,
+  "guests": 3,
+  "moveSpeed": 3.8,
+  "fishDuration": 5,
+  "cookDuration": 7,
   "ingredients": [
-    {"id":"leafgill","name":"Leafgill","icon":"leafgill","habitat":"Saltleaf shallows","description":"A cabbage-finned fish that folds its leaves when startled. Give the line slack when it struggles; its layers turn buttery in a pan."},
-    {"id":"pepperbell","name":"Pepperbell","icon":"pepperbell","habitat":"Sunlit shore","description":"Rattling orange pods hide a warm, peppery seed. Harvest once a day, then cultivate its seeds in your garden."},
-    {"id":"brothback","name":"Brothback stock","icon":"brothback","habitat":"Steamstone springs","description":"This kettle-shelled creature vents steam before charging. Step aside and collect the stock it sheds while cooling."},
-    {"id":"lanternroot","name":"Lanternroot","icon":"lanternroot","habitat":"Glowgrove","description":"A luminous tuber sheltered beneath dark trees. The tender root becomes sweet when simmered. It can be grown at home."},
-    {"id":"cloudfruit","name":"Cloudfruit","icon":"cloudfruit","habitat":"Mistwake Isle","description":"Buoyant fruit floats above the mistwood canopy. Gather gently from its low branches. Botanical gloves let you take a larger harvest. Whisk it into an airy dessert."},
-    {"id":"grain","name":"Harbor grain","icon":"grain","habitat":"Community pantry","description":"The harbor keeps a small free grain allowance. Three portions are restored each morning so a hungry kitchen can always recover."}
+    {
+      "id": "leafgill",
+      "name": "Leafgill",
+      "icon": "leafgill",
+      "habitat": "Saltleaf shallows",
+      "description": "A cabbage-finned fish that folds its leaves when startled. Give the line slack when it struggles; its layers turn buttery in a pan."
+    },
+    {
+      "id": "pepperbell",
+      "name": "Pepperbell",
+      "icon": "pepperbell",
+      "habitat": "Sunlit shore",
+      "description": "Rattling orange pods hide a warm, peppery seed. Harvest once a day, then cultivate its seeds in your garden."
+    },
+    {
+      "id": "brothback",
+      "name": "Brothback stock",
+      "icon": "brothback",
+      "habitat": "Steamstone springs",
+      "description": "This kettle-shelled creature vents steam before charging. Step aside and collect the stock it sheds while cooling."
+    },
+    {
+      "id": "lanternroot",
+      "name": "Lanternroot",
+      "icon": "lanternroot",
+      "habitat": "Glowgrove",
+      "description": "A luminous tuber sheltered beneath dark trees. The tender root becomes sweet when simmered. It can be grown at home."
+    },
+    {
+      "id": "cloudfruit",
+      "name": "Cloudfruit",
+      "icon": "cloudfruit",
+      "habitat": "Mistwake Isle",
+      "description": "Buoyant fruit floats above the mistwood canopy. Gather gently from its low branches. Botanical gloves let you take a larger harvest. Whisk it into an airy dessert."
+    },
+    {
+      "id": "grain",
+      "name": "Harbor grain",
+      "icon": "grain",
+      "habitat": "Community pantry",
+      "description": "The harbor keeps a small free grain allowance. Three portions are restored each morning so a hungry kitchen can always recover."
+    },
+    {
+      "id": "custardpetal",
+      "name": "Custardpetal",
+      "icon": "custardpetal",
+      "habitat": "Mistwake meadow",
+      "description": "A flower full of golden custard. Pull gently from its rooted meadow patch."
+    },
+    {
+      "id": "emberbulb",
+      "name": "Emberbulb",
+      "icon": "emberbulb",
+      "habitat": "Emberfold terraces",
+      "description": "A warm bulb that grows beside mineral shelves; roasting releases its smoky sweetness."
+    },
+    {
+      "id": "mooncap",
+      "name": "Mooncap",
+      "icon": "mooncap",
+      "habitat": "Moonfen grove",
+      "description": "A soft luminous mushroom. Gather from the glade without disturbing its tree roots."
+    },
+    {
+      "id": "pearlsprout",
+      "name": "Pearlsprout",
+      "icon": "pearlsprout",
+      "habitat": "Pearltide orchard",
+      "description": "A crunchy vegetable with pearl-like kernels nestled in pale sea leaves."
+    },
+    {
+      "id": "bubblecarp",
+      "name": "Bubblecarp",
+      "icon": "bubblecarp",
+      "habitat": "Mistwake shallows",
+      "description": "A dumpling-shaped fish with bubbly fins. Use your rod and give slack when it pulls."
+    },
+    {
+      "id": "lavafin",
+      "name": "Lavafin",
+      "icon": "lavafin",
+      "habitat": "Emberfold warm banks",
+      "description": "A toasted fish with a glowing spice sail. It lives in warm water, never in lava."
+    },
+    {
+      "id": "jellyray",
+      "name": "Jellyray",
+      "icon": "jellyray",
+      "habitat": "Moonfen / Pearltide coast",
+      "description": "A gelatinous ray with mint-colored wings. Fish from moonwater or reef banks."
+    },
+    {
+      "id": "ramcream",
+      "name": "Custardram cream",
+      "icon": "ramcream",
+      "habitat": "Mistwake custard meadow",
+      "description": "Custardrams startle at footsteps. Stand still nearby for two seconds, then collect a dollop of cream while the ram is calm."
+    },
+    {
+      "id": "spiceclaw",
+      "name": "Spiceclaw spice",
+      "icon": "spiceclaw",
+      "habitat": "Emberfold quarry",
+      "description": "A Spicecrab retreats from your approach. Three careful pickaxe contacts crack its spice shell; collect the shed spice without harming the crab."
+    },
+    {
+      "id": "mochipollen",
+      "name": "Mochimoth pollen",
+      "icon": "mochipollen",
+      "habitat": "Moonfen pollen glade",
+      "description": "Mochimoths follow Lanternroot light. Hold a Lanternroot ingredient in your hotbar to lure one close, then gently collect its pollen."
+    },
+    {
+      "id": "kelpjelly",
+      "name": "Kelp jelly",
+      "icon": "kelpjelly",
+      "habitat": "Pearltide pools",
+      "description": "A Kelpsnail curls up when dry. Water it once with your can, then collect the jelly it sheds. This uses one unit of water."
+    },
+    {
+      "id": "dewnectar",
+      "name": "Dew nectar",
+      "icon": "dewnectar",
+      "habitat": "Moonfen dewblossom",
+      "description": "Water a closed Dewblossom with your can to open its petals, then harvest the dew nectar. One bloom per day."
+    },
+    {
+      "id": "syrup",
+      "name": "Cinnamon sap",
+      "icon": "syrup",
+      "habitat": "Emberfold sap stand",
+      "description": "Use your field knife on the Cinnamon sap tap. Each tree gives two portions each morning."
+    }
   ],
   "recipes": [
-    {"id":"seared","name":"Seared Leafgill","description":"Golden edges, tender leafy layers.","flavor":"fresh","icon":"dish-fish","price":18,"ingredients":[{"id":"leafgill","count":1}]},
-    {"id":"wrap","name":"Pepperbell Leaf Wrap","description":"Warm seeds tucked in a cabbage-fish leaf.","flavor":"spiced","icon":"dish-wrap","price":26,"ingredients":[{"id":"leafgill","count":1},{"id":"pepperbell","count":1}]},
-    {"id":"porridge","name":"Harbor Porridge","description":"A simple, comforting way to keep the doors open.","flavor":"warm","icon":"dish-porridge","price":9,"ingredients":[{"id":"grain","count":1}]},
-    {"id":"broth","name":"Steamstone Broth","description":"A deep spring stock with toasted Pepperbell.","flavor":"warm","icon":"dish-broth","price":35,"ingredients":[{"id":"brothback","count":1},{"id":"pepperbell","count":1}]},
-    {"id":"lantern","name":"Lanternroot Congee","description":"A glowing bowl for the long way home.","flavor":"sweet","icon":"dish-lantern","price":30,"ingredients":[{"id":"lanternroot","count":1},{"id":"grain","count":1}]},
-    {"id":"cloud","name":"Cloudfruit Soufflé","description":"A little island sky, served warm.","flavor":"sweet","icon":"dish-cloud","price":46,"ingredients":[{"id":"cloudfruit","count":1},{"id":"grain","count":1}]}
+    {
+      "id": "seared",
+      "name": "Seared Leafgill",
+      "description": "Golden edges, tender leafy layers.",
+      "flavor": "fresh",
+      "icon": "dish-fish",
+      "price": 18,
+      "ingredients": [
+        {
+          "id": "leafgill",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "wrap",
+      "name": "Pepperbell Leaf Wrap",
+      "description": "Warm seeds tucked in a cabbage-fish leaf.",
+      "flavor": "spiced",
+      "icon": "dish-wrap",
+      "price": 26,
+      "ingredients": [
+        {
+          "id": "leafgill",
+          "count": 1
+        },
+        {
+          "id": "pepperbell",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "porridge",
+      "name": "Harbor Porridge",
+      "description": "A simple, comforting way to keep the doors open.",
+      "flavor": "warm",
+      "icon": "dish-porridge",
+      "price": 9,
+      "ingredients": [
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "broth",
+      "name": "Steamstone Broth",
+      "description": "A deep spring stock with toasted Pepperbell.",
+      "flavor": "warm",
+      "icon": "dish-broth",
+      "price": 35,
+      "ingredients": [
+        {
+          "id": "brothback",
+          "count": 1
+        },
+        {
+          "id": "pepperbell",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "lantern",
+      "name": "Lanternroot Congee",
+      "description": "A glowing bowl for the long way home.",
+      "flavor": "sweet",
+      "icon": "dish-lantern",
+      "price": 30,
+      "ingredients": [
+        {
+          "id": "lanternroot",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cloud",
+      "name": "Cloudfruit Soufflé",
+      "description": "A little island sky, served warm.",
+      "flavor": "sweet",
+      "icon": "dish-cloud",
+      "price": 46,
+      "ingredients": [
+        {
+          "id": "cloudfruit",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "custard",
+      "name": "Custardpetal Tart",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 31,
+      "icon": "dish-custard",
+      "ingredients": [
+        {
+          "id": "custardpetal",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "carp",
+      "name": "Bubblecarp Dumplings",
+      "description": "A taste of the wild islands.",
+      "flavor": "fresh",
+      "price": 32,
+      "icon": "dish-carp",
+      "ingredients": [
+        {
+          "id": "bubblecarp",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cream",
+      "name": "Cloud Cream Pavlova",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 54,
+      "icon": "dish-cream",
+      "ingredients": [
+        {
+          "id": "ramcream",
+          "count": 1
+        },
+        {
+          "id": "cloudfruit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "bulb",
+      "name": "Emberbulb Roast",
+      "description": "A taste of the wild islands.",
+      "flavor": "spiced",
+      "price": 34,
+      "icon": "dish-bulb",
+      "ingredients": [
+        {
+          "id": "emberbulb",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "lava",
+      "name": "Lavafin Skillet",
+      "description": "A taste of the wild islands.",
+      "flavor": "spiced",
+      "price": 39,
+      "icon": "dish-lava",
+      "ingredients": [
+        {
+          "id": "lavafin",
+          "count": 1
+        },
+        {
+          "id": "pepperbell",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "claw",
+      "name": "Spiceclaw Bisque",
+      "description": "A taste of the wild islands.",
+      "flavor": "warm",
+      "price": 55,
+      "icon": "dish-claw",
+      "ingredients": [
+        {
+          "id": "spiceclaw",
+          "count": 1
+        },
+        {
+          "id": "emberbulb",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "sap",
+      "name": "Cinnamon Sap Pancakes",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 32,
+      "icon": "dish-sap",
+      "ingredients": [
+        {
+          "id": "syrup",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cap",
+      "name": "Mooncap Risotto",
+      "description": "A taste of the wild islands.",
+      "flavor": "warm",
+      "price": 38,
+      "icon": "dish-cap",
+      "ingredients": [
+        {
+          "id": "mooncap",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "pollen",
+      "name": "Mochi Mooncakes",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 49,
+      "icon": "dish-pollen",
+      "ingredients": [
+        {
+          "id": "mochipollen",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "dew",
+      "name": "Dewblossom Custard",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 44,
+      "icon": "dish-dew",
+      "ingredients": [
+        {
+          "id": "dewnectar",
+          "count": 1
+        },
+        {
+          "id": "custardpetal",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "ray",
+      "name": "Moonwater Jellyray",
+      "description": "A taste of the wild islands.",
+      "flavor": "fresh",
+      "price": 36,
+      "icon": "dish-ray",
+      "ingredients": [
+        {
+          "id": "jellyray",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "pearl",
+      "name": "Pearlsprout Tempura",
+      "description": "A taste of the wild islands.",
+      "flavor": "fresh",
+      "price": 38,
+      "icon": "dish-pearl",
+      "ingredients": [
+        {
+          "id": "pearlsprout",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "kelp",
+      "name": "Kelp Jelly Parfait",
+      "description": "A taste of the wild islands.",
+      "flavor": "sweet",
+      "price": 52,
+      "icon": "dish-kelp",
+      "ingredients": [
+        {
+          "id": "kelpjelly",
+          "count": 1
+        },
+        {
+          "id": "cloudfruit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "feast",
+      "name": "Archipelago Hotpot",
+      "description": "A taste of the wild islands.",
+      "flavor": "warm",
+      "price": 70,
+      "icon": "dish-feast",
+      "ingredients": [
+        {
+          "id": "spiceclaw",
+          "count": 1
+        },
+        {
+          "id": "mooncap",
+          "count": 1
+        },
+        {
+          "id": "pearlsprout",
+          "count": 1
+        }
+      ]
+    }
   ],
   "upgrades": [
-    {"id":"satchel","name":"Forager's satchel","cost":35,"description":"Carry eight additional ingredients on each outing."},
-    {"id":"room","name":"A bigger table","cost":65,"description":"Restore the terrace and welcome five guests each evening."},
-    {"id":"staff","name":"Hire Nori","cost":85,"description":"Nori delivers cooked dishes, leaving you free to work at the stove. Requires a restored terrace."},
-    {"id":"boat","name":"Expedition provision locker","cost":95,"description":"Carry four additional ingredients. The ferry is already free."},
-    {"id":"reach","name":"Botanical gloves","cost":55,"description":"Gather three Cloudfruit instead of two from each tree."}
+    {
+      "id": "satchel",
+      "name": "Forager's satchel",
+      "cost": 35,
+      "description": "Carry eight additional ingredients on each outing."
+    },
+    {
+      "id": "room",
+      "name": "A bigger table",
+      "cost": 65,
+      "description": "Restore the terrace and welcome five guests each evening."
+    },
+    {
+      "id": "staff",
+      "name": "Hire Nori",
+      "cost": 85,
+      "description": "Nori delivers cooked dishes, leaving you free to work at the stove. Requires a restored terrace."
+    },
+    {
+      "id": "boat",
+      "name": "Expedition provision locker",
+      "cost": 95,
+      "description": "Carry four additional ingredients. The ferry is already free."
+    },
+    {
+      "id": "reach",
+      "name": "Botanical gloves",
+      "cost": 55,
+      "description": "Gather three Cloudfruit instead of two from each tree."
+    }
   ]
 }

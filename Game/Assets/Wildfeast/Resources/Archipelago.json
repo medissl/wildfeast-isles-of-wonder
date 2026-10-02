@@ -1,0 +1,3755 @@
+{
+  "islands": [
+    {
+      "id": 0,
+      "key": "saltleaf",
+      "name": "Saltleaf Shore",
+      "subtitle": "Harbor village / kitchen garden / Steamstone spring",
+      "ground": "#64885c",
+      "path": "#c5ac78",
+      "tree": "cinnamon",
+      "coast": [
+        {
+          "x": -15.7552,
+          "y": -2.4167
+        },
+        {
+          "x": -16.0417,
+          "y": 3.3125
+        },
+        {
+          "x": -14.3229,
+          "y": 6.6068
+        },
+        {
+          "x": -8.8802,
+          "y": 8.1823
+        },
+        {
+          "x": -4.8698,
+          "y": 9.8438
+        },
+        {
+          "x": 0.2865,
+          "y": 9.6719
+        },
+        {
+          "x": 4.0104,
+          "y": 8.7552
+        },
+        {
+          "x": 10.026,
+          "y": 9.0417
+        },
+        {
+          "x": 14.3229,
+          "y": 5.3177
+        },
+        {
+          "x": 15.4688,
+          "y": 1.3073
+        },
+        {
+          "x": 14.3229,
+          "y": -4.9948
+        },
+        {
+          "x": 11.7448,
+          "y": -6.8568
+        },
+        {
+          "x": 6.0156,
+          "y": -8.3177
+        },
+        {
+          "x": -1.4323,
+          "y": -9.1484
+        },
+        {
+          "x": -6.5885,
+          "y": -9.1484
+        },
+        {
+          "x": -10.3125,
+          "y": -7.8594
+        },
+        {
+          "x": -13.3203,
+          "y": -6.1406
+        }
+      ],
+      "pond": {
+        "x": 10.3,
+        "y": 5.95
+      },
+      "pondSize": {
+        "x": 3.35,
+        "y": 1.9
+      },
+      "roads": [
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": -6
+            },
+            {
+              "x": -11,
+              "y": -5.8
+            },
+            {
+              "x": -6,
+              "y": -5.8
+            },
+            {
+              "x": -6,
+              "y": -2.5
+            },
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 7,
+              "y": 3
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": 1,
+              "y": -4
+            },
+            {
+              "x": 4,
+              "y": -6
+            },
+            {
+              "x": 7.6,
+              "y": -7.8
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": -2,
+              "y": -3.1
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -6,
+              "y": -2.5
+            },
+            {
+              "x": -10,
+              "y": -1.8
+            },
+            {
+              "x": -12,
+              "y": 2
+            },
+            {
+              "x": -9,
+              "y": 4.1
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 3.2,
+              "y": -1.3
+            },
+            {
+              "x": 4.8,
+              "y": -3.4
+            }
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": -8,
+            "y": -4
+          },
+          "size": {
+            "x": 9,
+            "y": 3
+          },
+          "label": "Kitchen garden"
+        },
+        {
+          "center": {
+            "x": -10,
+            "y": 4
+          },
+          "size": {
+            "x": 7,
+            "y": 7
+          },
+          "label": "Glowgrove"
+        },
+        {
+          "center": {
+            "x": 7,
+            "y": 3
+          },
+          "size": {
+            "x": 8,
+            "y": 6
+          },
+          "label": "Steamstone habitat"
+        }
+      ],
+      "points": [
+        {
+          "action": "enter",
+          "label": "Harbor Table",
+          "position": {
+            "x": -6,
+            "y": -1.15
+          },
+          "item": "",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "service",
+          "label": "Open the restaurant",
+          "position": {
+            "x": -3.6,
+            "y": -1.2
+          },
+          "item": "",
+          "source": "",
+          "art": "sign-closed",
+          "kind": ""
+        },
+        {
+          "action": "fish",
+          "label": "Leafgill fishing bank",
+          "position": {
+            "x": 8,
+            "y": -8.6
+          },
+          "item": "leafgill",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Pepperbell patch",
+          "position": {
+            "x": 4.5,
+            "y": -1.3
+          },
+          "item": "pepperbell",
+          "source": "pepper-east",
+          "art": "pepperbell",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Pepperbell garden",
+          "position": {
+            "x": 6,
+            "y": -3.4
+          },
+          "item": "pepperbell",
+          "source": "pepper-south",
+          "art": "pepperbell",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Glowgrove roots",
+          "position": {
+            "x": -9,
+            "y": 5.3
+          },
+          "item": "lanternroot",
+          "source": "root-grove",
+          "art": "lanternroot",
+          "kind": ""
+        },
+        {
+          "action": "hunt",
+          "label": "Steamstone spring",
+          "position": {
+            "x": 8,
+            "y": 4
+          },
+          "item": "brothback",
+          "source": "broth-spring",
+          "art": "brothback",
+          "kind": ""
+        },
+        {
+          "action": "boat",
+          "label": "Harbor skiff",
+          "position": {
+            "x": -11,
+            "y": -7.2
+          },
+          "item": "",
+          "source": "",
+          "art": "boat",
+          "kind": ""
+        },
+        {
+          "action": "upgrades",
+          "label": "Harbor workshop",
+          "position": {
+            "x": -2,
+            "y": -3.8
+          },
+          "item": "",
+          "source": "",
+          "art": "workshop",
+          "kind": ""
+        }
+      ],
+      "props": [
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -13.0,
+            "y": 6.35
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -11.138,
+            "y": 5.92
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -12.14,
+            "y": 4.539
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -13.233,
+            "y": 2.554
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -5.0,
+            "y": 8.35
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -3.138,
+            "y": 7.92
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -1.894,
+            "y": 7.686
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 0.469,
+            "y": 8.222
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 1.427,
+            "y": 8.213
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 3.805,
+            "y": 7.681
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -4.14,
+            "y": 6.539
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -3.178,
+            "y": 6.02
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -0.777,
+            "y": 6.311
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 0.393,
+            "y": 6.698
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 2.351,
+            "y": 6.231
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 4.115,
+            "y": 6.056
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 4.0,
+            "y": 8.35
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 5.862,
+            "y": 7.92
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 7.106,
+            "y": 7.686
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 9.469,
+            "y": 8.222
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 10.427,
+            "y": 8.213
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 4.86,
+            "y": 6.539
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 5.822,
+            "y": 6.02
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 12.0,
+            "y": -1.65
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 13.862,
+            "y": -2.08
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 12.86,
+            "y": -3.461
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 13.822,
+            "y": -3.98
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": 11.767,
+            "y": -5.446
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -14.0,
+            "y": -0.65
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -12.138,
+            "y": -1.08
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -13.14,
+            "y": -2.461
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cinnamon",
+          "position": {
+            "x": -12.178,
+            "y": -2.98
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": -4.7,
+            "y": 7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": -4,
+            "y": 7.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": -3.4,
+            "y": 6.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": -4.3,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": -3.2,
+            "y": 7.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 3.3,
+            "y": 6
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 4,
+            "y": 6.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 4.6,
+            "y": 5.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 3.7,
+            "y": 5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 4.8,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 10.3,
+            "y": -3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 11,
+            "y": -2.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 11.6,
+            "y": -3.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 10.7,
+            "y": -3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 11.8,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "rock-saltleaf",
+          "position": {
+            "x": 7,
+            "y": -5
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-saltleaf",
+          "position": {
+            "x": 8.5,
+            "y": -5
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-saltleaf",
+          "position": {
+            "x": 10,
+            "y": -4
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-saltleaf",
+          "position": {
+            "x": 11,
+            "y": 1
+          },
+          "role": "stone"
+        },
+        {
+          "art": "landmark-saltleaf",
+          "position": {
+            "x": -4,
+            "y": 3
+          },
+          "role": "landmark"
+        },
+        {
+          "art": "trail-post",
+          "position": {
+            "x": 3,
+            "y": 1.7
+          },
+          "role": "landmark"
+        }
+      ],
+      "pools": []
+    },
+    {
+      "id": 1,
+      "key": "mistwake",
+      "name": "Mistwake Isle",
+      "subtitle": "Terraced orchard / custard meadow / tidekeeper cottage",
+      "ground": "#718b81",
+      "path": "#bcb6a0",
+      "tree": "cloud",
+      "coast": [
+        {
+          "x": -14.3229,
+          "y": -3.276
+        },
+        {
+          "x": -15.4688,
+          "y": -0.125
+        },
+        {
+          "x": -13.75,
+          "y": 4.7448
+        },
+        {
+          "x": -10.8854,
+          "y": 6.4635
+        },
+        {
+          "x": -9.7396,
+          "y": 9.4714
+        },
+        {
+          "x": -3.724,
+          "y": 9.0417
+        },
+        {
+          "x": -1.4323,
+          "y": 7.6094
+        },
+        {
+          "x": 3.4375,
+          "y": 8.612
+        },
+        {
+          "x": 8.5938,
+          "y": 7.6094
+        },
+        {
+          "x": 12.8906,
+          "y": 4.1719
+        },
+        {
+          "x": 14.6094,
+          "y": -0.9844
+        },
+        {
+          "x": 12.3177,
+          "y": -3.849
+        },
+        {
+          "x": 10.3125,
+          "y": -6.2839
+        },
+        {
+          "x": 5.4427,
+          "y": -7.7161
+        },
+        {
+          "x": 1.4323,
+          "y": -7.0
+        },
+        {
+          "x": -2.2917,
+          "y": -8.862
+        },
+        {
+          "x": -7.4479,
+          "y": -8.862
+        },
+        {
+          "x": -11.4583,
+          "y": -6.5703
+        }
+      ],
+      "pond": {
+        "x": 10.3,
+        "y": 5.95
+      },
+      "pondSize": {
+        "x": 3.35,
+        "y": 1.9
+      },
+      "roads": [
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": -6
+            },
+            {
+              "x": -11,
+              "y": -5.8
+            },
+            {
+              "x": -5,
+              "y": -5.8
+            },
+            {
+              "x": -2,
+              "y": -3
+            },
+            {
+              "x": 3,
+              "y": 0
+            },
+            {
+              "x": 3,
+              "y": 2
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -2,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": 1
+            },
+            {
+              "x": -9.3,
+              "y": 2.6
+            },
+            {
+              "x": -8,
+              "y": 4.2
+            },
+            {
+              "x": -3.2,
+              "y": 4.2
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 3,
+              "y": 0
+            },
+            {
+              "x": 6,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": -4
+            },
+            {
+              "x": 7,
+              "y": -6
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 3,
+              "y": 2
+            },
+            {
+              "x": 5,
+              "y": 2
+            },
+            {
+              "x": 6.5,
+              "y": 2.7
+            }
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": -7,
+            "y": 4
+          },
+          "size": {
+            "x": 10,
+            "y": 6
+          },
+          "label": "Cloudfruit terraces"
+        },
+        {
+          "center": {
+            "x": 5,
+            "y": 4
+          },
+          "size": {
+            "x": 8,
+            "y": 5
+          },
+          "label": "Custard meadow"
+        },
+        {
+          "center": {
+            "x": 2,
+            "y": -3
+          },
+          "size": {
+            "x": 8,
+            "y": 4
+          },
+          "label": "Seedkeeper garden"
+        }
+      ],
+      "points": [
+        {
+          "action": "boat",
+          "label": "Mistwake landing",
+          "position": {
+            "x": -11,
+            "y": -7.2
+          },
+          "item": "",
+          "source": "",
+          "art": "boat",
+          "kind": ""
+        },
+        {
+          "action": "story",
+          "label": "Iona's cottage",
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "item": "",
+          "source": "",
+          "art": "mailbox",
+          "kind": ""
+        },
+        {
+          "action": "fruit",
+          "label": "Cloudfruit terraces",
+          "position": {
+            "x": -2,
+            "y": 4
+          },
+          "item": "cloudfruit",
+          "source": "fruit-mist",
+          "art": "cloudfruit",
+          "kind": ""
+        },
+        {
+          "action": "fruit",
+          "label": "Cloudfruit bough",
+          "position": {
+            "x": 6,
+            "y": 0
+          },
+          "item": "cloudfruit",
+          "source": "fruit-east",
+          "art": "cloudfruit",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Lanternroot beds",
+          "position": {
+            "x": -8,
+            "y": 3
+          },
+          "item": "lanternroot",
+          "source": "root-mist",
+          "art": "lanternroot",
+          "kind": ""
+        },
+        {
+          "action": "fish",
+          "label": "Bubblecarp bank",
+          "position": {
+            "x": 7,
+            "y": -6
+          },
+          "item": "bubblecarp",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Custardpetal flowers",
+          "position": {
+            "x": -4,
+            "y": 6
+          },
+          "item": "custardpetal",
+          "source": "petal-mist",
+          "art": "custardpetal",
+          "kind": ""
+        },
+        {
+          "action": "creature",
+          "label": "Custardram meadow",
+          "position": {
+            "x": 7,
+            "y": 4
+          },
+          "item": "ramcream",
+          "source": "ram-mist",
+          "art": "custardram",
+          "kind": "ram"
+        }
+      ],
+      "props": [
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -12.68,
+            "y": 4.189
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -11.501,
+            "y": 3.67
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -12.409,
+            "y": 2.204
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -11.04,
+            "y": 2.073
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -13.379,
+            "y": 0.354
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -10.944,
+            "y": 0.731
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -9.866,
+            "y": 1.033
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -5.68,
+            "y": 8.189
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -2.556,
+            "y": 7.961
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 0.536,
+            "y": 7.881
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -1.757,
+            "y": 6.621
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -0.78,
+            "y": 6.503
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 1.644,
+            "y": 6.009
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 5.32,
+            "y": 8.189
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 6.499,
+            "y": 7.67
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 5.591,
+            "y": 6.204
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 13.32,
+            "y": 0.189
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": 13.591,
+            "y": -1.796
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -1.68,
+            "y": 2.189
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -0.501,
+            "y": 1.67
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -1.409,
+            "y": 0.204
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-cloud",
+          "position": {
+            "x": -0.04,
+            "y": 0.073
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -12.7,
+            "y": 3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -12,
+            "y": 3.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -11.4,
+            "y": 2.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -12.3,
+            "y": 2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -11.2,
+            "y": 3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3.3,
+            "y": 6
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 4,
+            "y": 6.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 4.6,
+            "y": 5.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3.7,
+            "y": 5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 4.8,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 10.3,
+            "y": -3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 11,
+            "y": -2.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 11.6,
+            "y": -3.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 10.7,
+            "y": -3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 11.8,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -8.7,
+            "y": -2
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -8,
+            "y": -1.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -7.4,
+            "y": -2.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -8.3,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -7.2,
+            "y": -1.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 2.3,
+            "y": -5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3,
+            "y": -4.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3.6,
+            "y": -5.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 2.7,
+            "y": -5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3.8,
+            "y": -4.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "rock-mistwake",
+          "position": {
+            "x": 10,
+            "y": -4
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-mistwake",
+          "position": {
+            "x": 11,
+            "y": -2
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-mistwake",
+          "position": {
+            "x": 12,
+            "y": 0
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-mistwake",
+          "position": {
+            "x": -12,
+            "y": 2
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-mistwake",
+          "position": {
+            "x": -10,
+            "y": 1
+          },
+          "role": "stone"
+        },
+        {
+          "art": "landmark-mistwake",
+          "position": {
+            "x": -1,
+            "y": -5.5
+          },
+          "role": "landmark"
+        }
+      ],
+      "pools": [
+        {
+          "center": {
+            "x": -12,
+            "y": 0
+          },
+          "size": {
+            "x": 1.2,
+            "y": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "key": "emberfold",
+      "name": "Emberfold Cay",
+      "subtitle": "Toasted woodland / spice terraces / warm mineral pools",
+      "ground": "#96805b",
+      "path": "#d6ad72",
+      "tree": "ember",
+      "coast": [
+        {
+          "x": -16,
+          "y": -5
+        },
+        {
+          "x": -15,
+          "y": 3
+        },
+        {
+          "x": -10,
+          "y": 8
+        },
+        {
+          "x": -4,
+          "y": 10
+        },
+        {
+          "x": 3,
+          "y": 9
+        },
+        {
+          "x": 8,
+          "y": 10
+        },
+        {
+          "x": 15,
+          "y": 5
+        },
+        {
+          "x": 17,
+          "y": -1
+        },
+        {
+          "x": 14,
+          "y": -6
+        },
+        {
+          "x": 9,
+          "y": -9
+        },
+        {
+          "x": 0,
+          "y": -10
+        },
+        {
+          "x": -9,
+          "y": -9
+        },
+        {
+          "x": -14,
+          "y": -7
+        }
+      ],
+      "pond": {
+        "x": 9,
+        "y": 5
+      },
+      "pondSize": {
+        "x": 3.35,
+        "y": 1.9
+      },
+      "roads": [
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": -6
+            },
+            {
+              "x": -9,
+              "y": -5
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 5.2,
+              "y": 2
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -9.3,
+              "y": 1
+            },
+            {
+              "x": -7.2,
+              "y": 3.8
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 5,
+              "y": -4
+            },
+            {
+              "x": 9,
+              "y": -7.5
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 5
+            },
+            {
+              "x": -1,
+              "y": 5.8
+            }
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": -7,
+            "y": 3
+          },
+          "size": {
+            "x": 10,
+            "y": 7
+          },
+          "label": "Cinnamon terraces"
+        },
+        {
+          "center": {
+            "x": 4,
+            "y": 3
+          },
+          "size": {
+            "x": 8,
+            "y": 6
+          },
+          "label": "Spiceclaw quarry"
+        },
+        {
+          "center": {
+            "x": 3,
+            "y": -4
+          },
+          "size": {
+            "x": 8,
+            "y": 4
+          },
+          "label": "Warm seed beds"
+        }
+      ],
+      "points": [
+        {
+          "action": "boat",
+          "label": "Emberfold pier",
+          "position": {
+            "x": -11,
+            "y": -7.2
+          },
+          "item": "",
+          "source": "",
+          "art": "boat",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Emberbulb terraces",
+          "position": {
+            "x": -6,
+            "y": 5
+          },
+          "item": "emberbulb",
+          "source": "bulb-ember",
+          "art": "emberbulb",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Smoked Pepperbells",
+          "position": {
+            "x": -8,
+            "y": 1
+          },
+          "item": "pepperbell",
+          "source": "pepper-ember",
+          "art": "pepperbell",
+          "kind": ""
+        },
+        {
+          "action": "fish",
+          "label": "Lavafin warmwater bank",
+          "position": {
+            "x": 9,
+            "y": -7.5
+          },
+          "item": "lavafin",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "creature",
+          "label": "Spiceclaw quarry",
+          "position": {
+            "x": 6,
+            "y": 3
+          },
+          "item": "spiceclaw",
+          "source": "crab-ember",
+          "art": "spicecrab",
+          "kind": "crab"
+        },
+        {
+          "action": "tap",
+          "label": "Cinnamon sap tree",
+          "position": {
+            "x": -1,
+            "y": 7
+          },
+          "item": "syrup",
+          "source": "sap-ember",
+          "art": "sap-tap",
+          "kind": ""
+        }
+      ],
+      "props": [
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -11.946,
+            "y": 4.654
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -10.509,
+            "y": 5.031
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -8.275,
+            "y": 5.333
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -11.873,
+            "y": 3.121
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -9.432,
+            "y": 3.66
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -11.812,
+            "y": 1.799
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -10.329,
+            "y": 2.004
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -5.946,
+            "y": 7.654
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -4.509,
+            "y": 8.031
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -2.275,
+            "y": 8.333
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 1.159,
+            "y": 7.75
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -3.432,
+            "y": 6.66
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 1.303,
+            "y": 6.421
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 4.054,
+            "y": 7.654
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 5.491,
+            "y": 8.031
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 7.725,
+            "y": 8.333
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 8.722,
+            "y": 7.818
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 4.127,
+            "y": 6.121
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 6.568,
+            "y": 6.66
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 12.054,
+            "y": -1.346
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 13.491,
+            "y": -0.969
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 12.127,
+            "y": -2.879
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 14.568,
+            "y": -2.34
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -12.946,
+            "y": -2.346
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -11.509,
+            "y": -1.969
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -12.873,
+            "y": -3.879
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": -10.432,
+            "y": -3.34
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -12.7,
+            "y": 3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -12,
+            "y": 3.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -11.4,
+            "y": 2.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -12.3,
+            "y": 2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -11.2,
+            "y": 3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -4.7,
+            "y": 7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -4,
+            "y": 7.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -3.4,
+            "y": 6.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -4.3,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -3.2,
+            "y": 7.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.3,
+            "y": 6
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 4,
+            "y": 6.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 4.6,
+            "y": 5.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.7,
+            "y": 5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 4.8,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 10.3,
+            "y": -3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 11,
+            "y": -2.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 11.6,
+            "y": -3.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 10.7,
+            "y": -3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 11.8,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -8.7,
+            "y": -2
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -8,
+            "y": -1.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -7.4,
+            "y": -2.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -8.3,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.3,
+            "y": -5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3,
+            "y": -4.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.6,
+            "y": -5.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.7,
+            "y": -5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "rock-emberfold",
+          "position": {
+            "x": 5,
+            "y": 7
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-emberfold",
+          "position": {
+            "x": 3,
+            "y": 7
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-emberfold",
+          "position": {
+            "x": 10,
+            "y": -3
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-emberfold",
+          "position": {
+            "x": 11,
+            "y": -4
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-emberfold",
+          "position": {
+            "x": -12,
+            "y": 0
+          },
+          "role": "stone"
+        },
+        {
+          "art": "landmark-emberfold",
+          "position": {
+            "x": -1,
+            "y": -5.5
+          },
+          "role": "landmark"
+        }
+      ],
+      "pools": [
+        {
+          "center": {
+            "x": -2,
+            "y": 3
+          },
+          "size": {
+            "x": 1.6,
+            "y": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "key": "moonfen",
+      "name": "Moonfen Hollow",
+      "subtitle": "Luminous mushroom grove / pollen glade / moonwater marsh",
+      "ground": "#516d73",
+      "path": "#aaa8a3",
+      "tree": "moon",
+      "coast": [
+        {
+          "x": -16,
+          "y": -6
+        },
+        {
+          "x": -17,
+          "y": 0
+        },
+        {
+          "x": -13,
+          "y": 5
+        },
+        {
+          "x": -7,
+          "y": 9
+        },
+        {
+          "x": -2,
+          "y": 10
+        },
+        {
+          "x": 3,
+          "y": 7
+        },
+        {
+          "x": 10,
+          "y": 9
+        },
+        {
+          "x": 16,
+          "y": 4
+        },
+        {
+          "x": 16,
+          "y": -3
+        },
+        {
+          "x": 10,
+          "y": -7
+        },
+        {
+          "x": 6,
+          "y": -10
+        },
+        {
+          "x": -3,
+          "y": -9
+        },
+        {
+          "x": -11,
+          "y": -9
+        }
+      ],
+      "pond": {
+        "x": 10,
+        "y": 4
+      },
+      "pondSize": {
+        "x": 3.35,
+        "y": 1.9
+      },
+      "roads": [
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": -6
+            },
+            {
+              "x": -9,
+              "y": -4
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 5,
+              "y": 2
+            },
+            {
+              "x": 6,
+              "y": 2.3
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -8.3,
+              "y": 2
+            },
+            {
+              "x": -5,
+              "y": 4.8
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -4
+            },
+            {
+              "x": 7,
+              "y": -7
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 4
+            },
+            {
+              "x": 1,
+              "y": 4.8
+            }
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": -6,
+            "y": 4
+          },
+          "size": {
+            "x": 10,
+            "y": 7
+          },
+          "label": "Mooncap grove"
+        },
+        {
+          "center": {
+            "x": 3,
+            "y": 4
+          },
+          "size": {
+            "x": 8,
+            "y": 6
+          },
+          "label": "Mochimoth glade"
+        },
+        {
+          "center": {
+            "x": -2,
+            "y": -4
+          },
+          "size": {
+            "x": 7,
+            "y": 4
+          },
+          "label": "Marsh garden"
+        }
+      ],
+      "points": [
+        {
+          "action": "boat",
+          "label": "Moonfen boardwalk",
+          "position": {
+            "x": -11,
+            "y": -7.2
+          },
+          "item": "",
+          "source": "",
+          "art": "boat",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Mooncap grove",
+          "position": {
+            "x": -5,
+            "y": 6
+          },
+          "item": "mooncap",
+          "source": "cap-moon",
+          "art": "mooncap",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Lanternroot marsh",
+          "position": {
+            "x": -7,
+            "y": 2
+          },
+          "item": "lanternroot",
+          "source": "root-moon",
+          "art": "lanternroot",
+          "kind": ""
+        },
+        {
+          "action": "fish",
+          "label": "Jellyray moonwater bank",
+          "position": {
+            "x": 7,
+            "y": -7
+          },
+          "item": "jellyray",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "creature",
+          "label": "Mochimoth glade",
+          "position": {
+            "x": 1,
+            "y": 6
+          },
+          "item": "mochipollen",
+          "source": "moth-moon",
+          "art": "mochimoth",
+          "kind": "moth"
+        },
+        {
+          "action": "bud",
+          "label": "Dewblossom",
+          "position": {
+            "x": 7,
+            "y": 3
+          },
+          "item": "dewnectar",
+          "source": "dew-moon",
+          "art": "dewblossom",
+          "kind": ""
+        }
+      ],
+      "props": [
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -11.146,
+            "y": 5.31
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -9.591,
+            "y": 5.088
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -8.071,
+            "y": 4.65
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -12.642,
+            "y": 3.449
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -10.521,
+            "y": 3.654
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -9.463,
+            "y": 3.112
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -12.621,
+            "y": 2.036
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -11.634,
+            "y": 1.719
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -9.375,
+            "y": 1.355
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -6.288,
+            "y": 7.771
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -4.146,
+            "y": 8.31
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -2.591,
+            "y": 8.088
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -2.463,
+            "y": 6.112
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 4.712,
+            "y": 6.771
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 6.854,
+            "y": 7.31
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 8.409,
+            "y": 7.088
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 9.929,
+            "y": 6.65
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 12.1,
+            "y": 7.071
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 5.358,
+            "y": 5.449
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 7.479,
+            "y": 5.654
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 11.982,
+            "y": 5.677
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 10.712,
+            "y": -2.229
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 12.854,
+            "y": -1.69
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 14.409,
+            "y": -1.912
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 11.358,
+            "y": -3.551
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 13.479,
+            "y": -3.346
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 14.537,
+            "y": -3.888
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 11.379,
+            "y": -4.964
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": 12.366,
+            "y": -5.281
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -3.288,
+            "y": 2.771
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-moon",
+          "position": {
+            "x": -2.642,
+            "y": 1.449
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -12.7,
+            "y": 3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -12,
+            "y": 3.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -11.4,
+            "y": 2.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -12.3,
+            "y": 2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -11.2,
+            "y": 3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -3.4,
+            "y": 6.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -3.2,
+            "y": 7.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 3.3,
+            "y": 6
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 4,
+            "y": 6.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 4.6,
+            "y": 5.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 3.7,
+            "y": 5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 4.8,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 10.3,
+            "y": -3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 11,
+            "y": -2.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 11.6,
+            "y": -3.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 10.7,
+            "y": -3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": 11.8,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -8.7,
+            "y": -2
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -8,
+            "y": -1.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -7.2,
+            "y": -1.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "rock-moonfen",
+          "position": {
+            "x": -12,
+            "y": -2
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-moonfen",
+          "position": {
+            "x": -11,
+            "y": 2
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-moonfen",
+          "position": {
+            "x": 11,
+            "y": -4
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-moonfen",
+          "position": {
+            "x": 10,
+            "y": -3
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-moonfen",
+          "position": {
+            "x": 4,
+            "y": 7
+          },
+          "role": "stone"
+        },
+        {
+          "art": "landmark-moonfen",
+          "position": {
+            "x": -1,
+            "y": -5.5
+          },
+          "role": "landmark"
+        }
+      ],
+      "pools": [
+        {
+          "center": {
+            "x": -10,
+            "y": 0
+          },
+          "size": {
+            "x": 1.5,
+            "y": 1
+          }
+        },
+        {
+          "center": {
+            "x": 8,
+            "y": -3.8
+          },
+          "size": {
+            "x": 1.8,
+            "y": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "key": "pearltide",
+      "name": "Pearltide Atoll",
+      "subtitle": "Coral orchard / kelp pools / pearlroot beds",
+      "ground": "#729d87",
+      "path": "#d6c49b",
+      "tree": "coral",
+      "coast": [
+        {
+          "x": -16,
+          "y": -5
+        },
+        {
+          "x": -15,
+          "y": 2
+        },
+        {
+          "x": -10,
+          "y": 7
+        },
+        {
+          "x": -5,
+          "y": 9
+        },
+        {
+          "x": 0,
+          "y": 8
+        },
+        {
+          "x": 6,
+          "y": 10
+        },
+        {
+          "x": 13,
+          "y": 7
+        },
+        {
+          "x": 17,
+          "y": 2
+        },
+        {
+          "x": 15,
+          "y": -4
+        },
+        {
+          "x": 10,
+          "y": -8
+        },
+        {
+          "x": 4,
+          "y": -10
+        },
+        {
+          "x": -4,
+          "y": -10
+        },
+        {
+          "x": -10,
+          "y": -8
+        },
+        {
+          "x": -14,
+          "y": -7
+        }
+      ],
+      "pond": {
+        "x": 8,
+        "y": 4
+      },
+      "pondSize": {
+        "x": 3.35,
+        "y": 1.9
+      },
+      "roads": [
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": -6
+            },
+            {
+              "x": -9,
+              "y": -5
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 3.9,
+              "y": 2.8
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": 2
+            },
+            {
+              "x": -6,
+              "y": 3.8
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 2,
+              "y": -5
+            },
+            {
+              "x": 8,
+              "y": -7.5
+            }
+          ]
+        },
+        {
+          "points": [
+            {
+              "x": 4,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 4
+            },
+            {
+              "x": -1,
+              "y": 6
+            }
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "center": {
+            "x": -6,
+            "y": 4
+          },
+          "size": {
+            "x": 10,
+            "y": 6
+          },
+          "label": "Coral orchard"
+        },
+        {
+          "center": {
+            "x": 5,
+            "y": 2
+          },
+          "size": {
+            "x": 7,
+            "y": 6
+          },
+          "label": "Kelp pools"
+        },
+        {
+          "center": {
+            "x": -1,
+            "y": -4
+          },
+          "size": {
+            "x": 8,
+            "y": 4
+          },
+          "label": "Pearlroot beds"
+        }
+      ],
+      "points": [
+        {
+          "action": "boat",
+          "label": "Pearltide jetty",
+          "position": {
+            "x": -11,
+            "y": -7.2
+          },
+          "item": "",
+          "source": "",
+          "art": "boat",
+          "kind": ""
+        },
+        {
+          "action": "forage",
+          "label": "Pearlsprout beds",
+          "position": {
+            "x": -6,
+            "y": 5
+          },
+          "item": "pearlsprout",
+          "source": "pearl-tide",
+          "art": "pearlsprout",
+          "kind": ""
+        },
+        {
+          "action": "fruit",
+          "label": "Seafoam Cloudfruit",
+          "position": {
+            "x": -1,
+            "y": 6
+          },
+          "item": "cloudfruit",
+          "source": "fruit-tide",
+          "art": "cloudfruit",
+          "kind": ""
+        },
+        {
+          "action": "fish",
+          "label": "Jellyray reef bank",
+          "position": {
+            "x": 8,
+            "y": -7.5
+          },
+          "item": "jellyray",
+          "source": "",
+          "art": "",
+          "kind": ""
+        },
+        {
+          "action": "creature",
+          "label": "Kelpsnail tidepool",
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "item": "kelpjelly",
+          "source": "snail-tide",
+          "art": "kelpsnail",
+          "kind": "snail"
+        }
+      ],
+      "props": [
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -12.364,
+            "y": 3.099
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -9.924,
+            "y": 3.304
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -8.915,
+            "y": 2.762
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -11.28,
+            "y": 1.686
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -9.866,
+            "y": 1.369
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -8.2,
+            "y": 1.005
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -11.778,
+            "y": -0.036
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -10.633,
+            "y": -0.584
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -8.221,
+            "y": -0.435
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -6.364,
+            "y": 8.099
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -3.924,
+            "y": 8.304
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -2.915,
+            "y": 7.762
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -5.28,
+            "y": 6.686
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -3.866,
+            "y": 6.369
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 2.636,
+            "y": 8.099
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 5.076,
+            "y": 8.304
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 6.085,
+            "y": 7.762
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 8.293,
+            "y": 7.804
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 3.72,
+            "y": 6.686
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 5.134,
+            "y": 6.369
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 6.8,
+            "y": 6.005
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 8.847,
+            "y": 6.488
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 11.636,
+            "y": 0.099
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 14.076,
+            "y": 0.304
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 12.72,
+            "y": -1.314
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 14.134,
+            "y": -1.631
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": -2.364,
+            "y": 2.099
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-coral",
+          "position": {
+            "x": 0.076,
+            "y": 2.304
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -12.7,
+            "y": 3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -12,
+            "y": 3.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -11.4,
+            "y": 2.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -12.3,
+            "y": 2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -11.2,
+            "y": 3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -4.7,
+            "y": 7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -4,
+            "y": 7.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -3.4,
+            "y": 6.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -4.3,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -3.2,
+            "y": 7.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 3.3,
+            "y": 6
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 4,
+            "y": 6.3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 4.6,
+            "y": 5.9
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 3.7,
+            "y": 5.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 4.8,
+            "y": 6.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 10.3,
+            "y": -3
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 11,
+            "y": -2.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 11.6,
+            "y": -3.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 10.7,
+            "y": -3.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": 11.8,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -8.7,
+            "y": -2
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -8,
+            "y": -1.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -7.4,
+            "y": -2.1
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -8.3,
+            "y": -2.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-pearltide",
+          "position": {
+            "x": -7.2,
+            "y": -1.5
+          },
+          "role": "grass"
+        },
+        {
+          "art": "rock-pearltide",
+          "position": {
+            "x": -10,
+            "y": 0
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-pearltide",
+          "position": {
+            "x": -11,
+            "y": 1
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-pearltide",
+          "position": {
+            "x": 12,
+            "y": -2
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-pearltide",
+          "position": {
+            "x": 10,
+            "y": -4
+          },
+          "role": "stone"
+        },
+        {
+          "art": "rock-pearltide",
+          "position": {
+            "x": 11,
+            "y": -3
+          },
+          "role": "stone"
+        },
+        {
+          "art": "landmark-pearltide",
+          "position": {
+            "x": -1,
+            "y": -5.5
+          },
+          "role": "landmark"
+        }
+      ],
+      "pools": [
+        {
+          "center": {
+            "x": -1,
+            "y": 1
+          },
+          "size": {
+            "x": 2.2,
+            "y": 1
+          }
+        }
+      ]
+    }
+  ]
+}

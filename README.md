@@ -2,7 +2,7 @@
 
 A free, offline single-player Unity game prototype for Windows. Explore strange islands, bring impossible ingredients home, and grow a harbor restaurant in modern top-down pixel art.
 
-The latest cozy polish adds consistent Pixelify typography, pixel menu borders, connected kitchen furniture, corrected prop depth/collision and customer/staff aisles. Tools and held ingredients use compact native sprites. Actual chef poses and a windup/contact/recovery cooldown prevent tool spam. See [the polish test guide](docs/COZY_POLISH_PASS.md).
+The archipelago expansion adds five deliberately laid-out islands, 19 ingredients, 20 dishes, four new food creatures, six crops and six original music themes. Roads stay untillable; rooted grass, subtly animated trees and biome habitats replace random scatter. Independent audio sliders, pixel zoom and paged books extend the cozy Pixelify UI. See [the expansion and playtest guide](docs/ARCHIPELAGO_EXPANSION.md).
 
 ## Play
 
@@ -14,7 +14,7 @@ Open `Wildfeast.exe` from the Windows build folder. Keep its accompanying data f
 - Right click / E: doors, signs, forage, guests and other world interactions.
 - Tab / B: inventory; drag or click two slots to rearrange. Includes Recipes, Journal, Requests and Options tabs.
 - M: island map with player and landmark markers.
-- Shovel: till clear land; seed packet: plant; can: water, holding 20 units. Refill beside water.
+- Shovel: till clear green land, never roads; seed packet: plant; can: water, holding 20 units. Refill beside water.
 - Axe: chop Cinnamonwood; scythe: sweep Noodlegrass; pickaxe: mine Saltstone. Trade materials at the workshop.
 - Cooking: alternating A/D cuts at the chopping rhythm, A/D heat and Space stirring, then drag garnishes onto the plate (or 1/2/3).
 - Escape: close/cancel or open Options. Voyages finish at the destination dock.
@@ -29,7 +29,7 @@ If ingredients run out, add Harbor Porridge to the menu. The pantry restores thr
 
 ## Beyond the first supper
 
-Brothback patrols the northeast springs and reacts when you approach. Dodge its steam charge and collect stock with E while it cools. Search the northwest grove for Lanternroot and its seeds. Till clear ground on either island, plant seeds and water on successive days. The ferry visibly carries you along a sea route to either island from the start; no equipment purchase unlocks exploration or Cloudfruit. Restore the terrace and hire Nori, who walks cooked meals to guests. The provision locker increases bag capacity, and botanical gloves increase fruit yield. Four harbor letters connect discoveries to served dishes.
+Brothback patrols the northeast springs and reacts when you approach. Dodge its steam charge and collect stock with E while it cools. Search the northwest grove for Lanternroot and its seeds. Till clear ground on any island, plant seeds and water on successive days. The ferry visibly carries you along a sea route to all five islands from the start; no equipment purchase unlocks exploration or Cloudfruit. Restore the terrace and hire Nori, who walks cooked meals to guests. The provision locker increases bag capacity, and botanical gloves increase fruit yield. Four harbor letters connect discoveries to served dishes.
 
 ## Open the Unity project
 
@@ -48,7 +48,8 @@ Editor and standalone saves use separate files. See `docs/HANDOFF.md` for their 
 - `docs/VERIFICATION.md`: actual checks and limitations.
 - `docs/HANDOFF.md`: implementation status and next work.
 - `docs/ASSET_PROVENANCE.md`: original artwork and audio sources.
-- `docs/ISLAND_LIFE_PASS.md`: current tools, item inventory, menus, map, sailing and audio.
+- `docs/ARCHIPELAGO_EXPANSION.md`: five maps, ecology, crops, dishes, options and test route.
+- `docs/ISLAND_LIFE_PASS.md`: previous tools, item inventory, menus, map, sailing and audio.
 - `docs/LIVING_WORLD_PASS.md`: creator feedback, interaction redesign, controls, and remaining polish targets.
 
 This is an implemented small-world prototype, not a finished commercial-scale game. Human playtesting should establish whether the loop and art direction warrant a larger production.

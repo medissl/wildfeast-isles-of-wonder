@@ -1,3 +1,17 @@
+# Current handoff: five-island archipelago
+
+Read ARCHIPELAGO_EXPANSION.md and the newest verification first. There are five actual island roots: Saltleaf 0, Mistwake 1, Emberfold 3, Moonfen 4 and Pearltide 5; **2 remains the restaurant** to retain legacy scene/save meaning. WorldView.islands stores roots in catalog order. Use IslandRoot(area), Archipelago.Valid/Get and the catalog instead of assuming every non-home area is Mistwake.
+
+Resources/Archipelago.json is the shared layout source: coast, main/secondary pools, road polylines, habitat regions, props and interaction points. archipelago_art.py authors it with original terrain, native foliage/grass frames, resources, four creatures, forage/seed icons and distinct dishes. Run it AFTER cozy_polish_art.py. archipelago_music.py generates three additional original music themes; the six music clips are selected by area key. Preserve the Pixelify font, actual chef contact/recovery actions and restaurant furniture/aisles.
+
+ArchipelagoBuilder.Author replaces only the outdoor roots, retaining restaurant and UI objects, then bakes all five maps through public URP render requests. The preceding scene was backed up to work/fifth-pass-scene-backup.unity outside the repo. Assemble remains a whole-scene bootstrap. No scene YAML was edited manually. The preexisting untracked PackageManagerSettings.asset remains excluded.
+
+FoodEcology presents ram quietness, a cracked spice shell, Lanternroot attraction, watering reactions and knife sap tapping. ItemInventory.EcologyAction owns atomic persistent contacts/water transactions. Progress adds independent music/effect levels, zoom, reducedMotion, seeds and ecology; no schema reset or new economy. Old combined volumes migrate. Old crop plots that now hit roads/water relocate while preserving growth and quantities. Six crops can grow in spatial plots; the original three authored beds keep their two original seed types.
+
+GameUI uses five-row pagination for the 19-entry journal and 20-recipe book, five ferry choices, current-island M charts, two actual audio sliders and sound/camera/comfort Options. Terrain is green/tillable versus visibly protected roads; physical placement checks still reject solid objects. World motion swaps native foliage frames, keeping roots and trunks stationary. Ground creature bodies have footprints; the hovering moth does not.
+
+Release: Wildfeast-Archipelago-Windows.zip and matching Unity source. Verification captures cover both supported screen sizes, all five maps, Options and recipe pages. Human art judgement, progression balance, fresh-player comprehension and physical controller support still need playtesting.
+
 # Current handoff: cozy polish
 
 Read COZY_POLISH_PASS.md and the latest verification section first. Typography now uses one static Pixelify Sans font throughout authored and runtime UI, with original pixel slot/button borders. Large minigame images were removed from the restaurant and replaced with native world furniture, corrected footprints, ground depth and immediate centered framing. Compact held ingredients and cleanup of area effects prevent oversized pickup images from covering the room. Guests and Nori use clear aisle routes.

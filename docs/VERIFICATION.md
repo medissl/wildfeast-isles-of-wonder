@@ -1,3 +1,27 @@
+# Latest verification: five-island archipelago
+
+Verified 2 October 2026 with Unity 6000.3.7f1, the final authored five-island scene and the exact Windows build distributed as Wildfeast-Archipelago-Windows.zip. Both Windows diagnostic processes and the Unity test process exited with code 0. Ordinary player saves were not opened or overwritten.
+
+- **56/56 Unity EditMode tests passed**, zero failures. Original economy, save, inventory, furniture depth, font, routes and action-clock checks remain. New tests cover five free destinations, road/water planting restrictions, native foliage frames, authored island references/physical resources, seed growth, all recipe requirements, settings/seed/ecology disk persistence, older combined-volume migration, atomic watering, preserved legacy crops relocated off new roads and physical walking clearance on every authored road.
+- **177 integrated checks passed at 1920×1080**, and **177 at 1366×768**, without a runtime-errors file or logged exceptions/errors. These use virtual keyboard/mouse inputs and isolated saves. They retain the full original fishing, animated forage, garden, mining spam protection, prep/cook/plate, guest service, earnings, upgrades, Nori delivery and story journey.
+- The expansion journey physically sails to all five destinations; checks one arrived root, its actual M chart/player pin and protected road; exercises independent mouse-adjusted music/SFX sliders, saved camera zoom and reduced foliage motion; collects cream after quiet approach, cracks the spice shell through three timed pickaxe contacts, taps sap with the knife, gathers new seeds, waters/opens a blossom, attracts a moth with actual held Lanternroot and waters/collects Kelpsnail jelly.
+- Creature collection verifies a compact ingredient moving to the player while the animal artwork stays in its habitat. Journal/recipe pagination is exercised by pointer; the gathered Spiceclaw Bisque ingredients are deposited, cooked, served and paid through the existing restaurant economy. Final island/settings save loading is checked.
+- Map inspection and a sampled physical road test caught a trail crossing a marsh pool, obstructed cottage/landmark approaches and a fishing trail too close to a coastline. The delivered layouts fix these; the road test samples terrain and circle/footprint collision along every segment of every island road.
+- Native captures inspected include all five baked maps, their live charts/markers, the actual 1080p and smaller-screen Options, recipe pages, inventory, chef actions, room depth, customer layout and island scenery. New generated map/art assets use 32 PPU, point filtering and no mipmaps. Scene/texture edits use public Editor APIs; the outdoor reconstruction preserves the restaurant and UI.
+
+Hidden-window 180-frame URP render-request samples on Intel Iris Xe (including UI setup):
+
+| Resolution | Mean | P95 | Unity allocated |
+| --- | --- | --- | --- |
+| 1920 × 1080 | 1.39 ms | 1.58 ms | 120.6 MiB |
+| 1366 × 768 | 1.14 ms | 1.46 ms | 120.4 MiB |
+
+These are offscreen diagnostic samples, not actual display FPS or human playtesting. Both standalone runs emit the existing ComputeBuffer disposal warning during shutdown after PASS; it is not a runtime error or a failed process.
+
+The final supported-Editor build succeeds at 149,266,471 reported build bytes. Release packaging checks ZIP CRCs and hashes of the shipped executable/managed game assembly against the verified build. The matching source archive is exported from the committed repository; generated Library, build output, diagnostics and the preexisting untracked PackageManagerSettings.asset are excluded.
+
+Delivery evidence is in outputs/archipelago-verification (56-test XML, both 177-check reports and native captures), alongside the Windows/source archives, SHA256 sums, updated plan/work-mode/guide and five-island preview. Earlier verification entries below describe prior releases. Physical controller support, a fresh player's comprehension, art judgement, comfortable real-time play and broader progression balance remain for human playtesting. The original three authored garden beds keep their original two seed types; all six crops use spatial plots. This is an expanded playable prototype, not a complete production-scale world.
+
 # Latest verification: cozy polish
 
 Verified 2 October 2026, using Unity 6000.3.7f1 and the exact final Windows build. No ordinary save was used or replaced.

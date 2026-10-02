@@ -32,10 +32,14 @@ namespace Wildfeast
         public Crop[] crops = { new Crop(), new Crop(), new Crop() };
         public bool relaxed = true, muted, storySeen;
         public float volume = 0.35f;
+        public float musicVolume=.35f, effectsVolume=.55f;
+        public int zoom=1; public bool reducedMotion;
         public int pepperSeeds = 5, rootSeeds, equipped;
         public ItemSlot[] slots;
         public List<FieldPlot> fields = new List<FieldPlot>();
         public List<ResourceStock> resources = new List<ResourceStock>();
+        public List<ResourceStock> seeds = new List<ResourceStock>();
+        public List<EcologyProgress> ecology = new List<EcologyProgress>();
         public int water=20;
         public static Progress New()
         {
@@ -73,10 +77,13 @@ namespace Wildfeast
             if (source != null) State.harvested.Add(source);
             if (source != null && id == "pepperbell") State.pepperSeeds++;
             if (source != null && id == "lanternroot") State.rootSeeds++;
+            if(source!=null&&ItemInventory.Growable(id)&&id!="pepperbell"&&id!="lanternroot")
+            {var seed=State.seeds.FirstOrDefault(s=>s.id==id);if(seed==null){seed=new ResourceStock{id=id};State.seeds.Add(seed);}seed.count++;}
             if (!State.discovered.Contains(id)) State.discovered.Add(id);
             if (id == "brothback") Learn("broth");
             if (id == "lanternroot") Learn("lantern");
             if (id == "cloudfruit") Learn("cloud");
+            foreach(var recipe in Data.recipes)if(recipe.ingredients.All(a=>State.discovered.Contains(a.id)))Learn(recipe.id);
             if (notify) Notify(); return true;
         }
         void Learn(string id) { if (!State.recipes.Contains(id)) State.recipes.Add(id); }
@@ -146,6 +153,7 @@ namespace Wildfeast
             if (State.phase == "service" && State.orders.Any(o => !o.paid)) return false;
             foreach(var f in State.fields)if(f.crop.planted&&f.crop.wateredDay==State.day)f.crop.growth++;
             State.day++; State.phase = "explore"; State.island = 0; State.harvested.Clear(); State.orders.Clear();
+            State.ecology.Clear();
             for (int i = 0; i < State.crops.Length; i++) if (State.crops[i].planted && State.crops[i].wateredDay == State.day - 1) State.crops[i].growth++;
             if (Count("grain") < 3) Adjust(State.pantry, "grain", 3 - Count("grain"));
             Notify(); return true;
@@ -169,13 +177,13 @@ namespace Wildfeast
         }
         public bool Travel(int island)
         {
-            if (State.phase != "explore" || island < 0 || island > 1) return false;
+            if (State.phase != "explore" || !Archipelago.Valid(island)) return false;
             State.island = island; Notify(); return true;
         }
-        public int Seeds(string item) => item == "pepperbell" ? State.pepperSeeds : item == "lanternroot" ? State.rootSeeds : 0;
+        public int Seeds(string item) => item == "pepperbell" ? State.pepperSeeds : item == "lanternroot" ? State.rootSeeds : State.seeds.Where(s=>s.id==item).Sum(s=>s.count);
         public bool Plant(int index, string item)
         {
-            if (State.phase != "explore" || index < 0 || index >= State.crops.Length || State.crops[index].planted || Seeds(item) < 1) return false;
+            if (State.phase != "explore" || index < 0 || index >= State.crops.Length || State.crops[index].planted || (item!="pepperbell"&&item!="lanternroot") || Seeds(item) < 1) return false;
             if(item == "pepperbell") State.pepperSeeds--; else State.rootSeeds--;
             var crop=State.crops[index]; crop.planted=true;crop.item=item;crop.growth=0;crop.wateredDay=-1;
             Notify();return true;

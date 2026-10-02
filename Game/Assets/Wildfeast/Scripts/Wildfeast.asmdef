@@ -1,5 +1,5 @@
 {
   "name": "Wildfeast",
-  "references": ["Unity.InputSystem", "Unity.TextMeshPro", "Unity.ugui", "Unity.RenderPipelines.Universal.Runtime"],
+  "references": ["Unity.InputSystem", "Unity.TextMeshPro", "Unity.ugui", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Universal.2D.Runtime"],
   "autoReferenced": true
 }

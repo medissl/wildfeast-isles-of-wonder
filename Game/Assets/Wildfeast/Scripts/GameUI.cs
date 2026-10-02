@@ -55,19 +55,20 @@ namespace Wildfeast
         }
         public void Map(WorldView world)
         {
-            Show("Isles of Wonder",world.Area==1?"Mistwake · Cloudfruit conservatory and saltstone gardens":"Saltleaf · Your restaurant, wild gardens and Steamstone springs");
+            var island=Archipelago.Get(world.Area==2?0:world.Area);
+            Show("Isles of Wonder",island.name+" · "+island.subtitle);
             var map=Box(rows,"Island chart",new Vector2(0,-12),new Vector2(520,338),new Vector2(0,1),Color.white);
-            map.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art(world.Area==1?"map-mistwake":"map-saltleaf");
+            map.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-"+island.key);
             Vector2 position=world.Area==2?new Vector2(-6,-1):world.player.position;
             var pin=Box(map,"You are here",new Vector2((position.x+20)/40*520,-(13-position.y)/26*338),new Vector2(16,16),new Vector2(0,1),Color.white);
             pin.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-player");
             Text(rows,"YOU · Gold diamond",new Vector2(12,-361),new Vector2(320,28),18,Gold);
-            var locations=world.points.Where(p=>p.transform.IsChildOf(world.Area==1?world.mistwake:world.saltleaf)&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit"}.Contains(p.action)).ToArray();
+            var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish"}.Contains(p.action)).ToArray();
             for(int i=0;i<locations.Length;i++)
             {
                 var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+20)/40*520,-(13-p.transform.position.y)/26*338),new Vector2(12,12),new Vector2(0,1),Color.white);
                 marker.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-landmark");
-                Text(rows,p.label,new Vector2(538,-16-i*38),new Vector2(200,35),16,Cream);
+                if(i<9)Text(rows,p.label,new Vector2(538,-16-i*34),new Vector2(202,31),15,Cream);
             }
         }
         static readonly Color Ink = C("ead2a1"), Panel = C("b68b5b"), Gold = C("7b302e"), Cream = C("493326"), Dim = C("705440");
@@ -175,6 +176,23 @@ namespace Wildfeast
             }
             else Text(row,"Discover its main ingredient",new Vector2(72,-33),new Vector2(430,22),14,Dim);
             var button=Button(row,selected?"On the menu":"Add to menu",new Vector2(-10,-10),new Vector2(180,39),choose,new Vector2(1,1));button.interactable=known&&model.State.phase=="explore";
+        }
+        public void Pagination(int current,int count,int size,Action<int> change)
+        {
+            int pages=Mathf.CeilToInt(count/(float)size);
+            var previous=Button(rows,"< Previous",new Vector2(0,-350),new Vector2(210,44),()=>change(current-1),new Vector2(0,1));previous.interactable=current>0;
+            var next=Button(rows,"Next >",new Vector2(534,-350),new Vector2(210,44),()=>change(current+1),new Vector2(0,1));next.interactable=current<pages-1;
+            var text=Text(rows,$"{current+1} / {pages}",new Vector2(220,-357),new Vector2(304,30),18,Cream);text.alignment=TextAlignmentOptions.Center;
+        }
+        public void SliderRow(int index,string caption,float value,Action<float> changed)
+        {
+            var row=Box(rows,caption,new Vector2(0,-index*65),new Vector2(744,59),new Vector2(0,1),Ink);
+            Text(row,caption,new Vector2(18,-15),new Vector2(245,32),21,Cream);
+            var label=Text(row,Mathf.RoundToInt(value*100)+"%",new Vector2(655,-17),new Vector2(74,28),18,Gold);
+            var rail=Box(row,"Volume slider",new Vector2(295,-25),new Vector2(340,12),new Vector2(0,1),C("8e6949"));Skin(rail.GetComponent<UnityEngine.UI.Image>(),true);
+            var handle=Box(rail,"Handle",new Vector2(0,0),new Vector2(22,30),new Vector2(0,.5f),C("f4d898"));Skin(handle.GetComponent<UnityEngine.UI.Image>(),true);
+            var slider=rail.gameObject.AddComponent<UnityEngine.UI.Slider>();slider.minValue=0;slider.maxValue=1;slider.handleRect=handle;slider.targetGraphic=handle.GetComponent<UnityEngine.UI.Image>();slider.SetValueWithoutNotify(value);
+            slider.onValueChanged.AddListener(v=>{label.text=Mathf.RoundToInt(v*100)+"%";changed(v);});
         }
         public void FooterButton(string caption,Action action)
         { Button(rows,caption,new Vector2(0,-350),new Vector2(744,48),action,new Vector2(0,1)); }

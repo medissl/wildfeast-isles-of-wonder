@@ -13,25 +13,12 @@ namespace Wildfeast
         GameController game;
         readonly Dictionary<FieldPlot,SpriteRenderer[]> plots=new Dictionary<FieldPlot,SpriteRenderer[]>();
         readonly List<HarvestNode> nodes=new List<HarvestNode>();
-        Coroutine pulling;Transform pullArt;Vector3 pullOrigin;
+        Coroutine pulling;Transform pullArt;Vector3 pullOrigin;SpriteRenderer pullDrop;
         public bool Sailing {get;private set;}
         public void Init(GameController controller)
         {
             game=controller;
-            foreach(var root in new[]{game.world.saltleaf,game.world.mistwake})
-            {
-                foreach(var sr in root.GetComponentsInChildren<SpriteRenderer>(true))
-                {
-                    string id=sr.gameObject.name;
-                    if(id.StartsWith("tree")||id=="noodlegrass"||id=="saltstone")
-                    {
-                        var node=sr.gameObject.AddComponent<HarvestNode>();node.art=sr;node.original=sr.sprite;node.item=id.StartsWith("tree")?"wood":id=="saltstone"?"stone":"fiber";
-                        node.required=node.item=="wood"?7:node.item=="stone"?9:8;node.hits=node.item=="fiber"?1:3;
-                        node.source="resource-"+(root==game.world.saltleaf?0:1)+"-"+Mathf.RoundToInt(sr.transform.localPosition.x*32)+"-"+Mathf.RoundToInt(sr.transform.localPosition.y*32);
-                        node.colliders=sr.GetComponentsInChildren<Collider2D>(true);nodes.Add(node);
-                    }
-                }
-            }
+            nodes.AddRange(game.world.GetComponentsInChildren<HarvestNode>(true));
             game.Model.Changed+=Refresh;Refresh();
         }
         void Refresh()
@@ -40,7 +27,7 @@ namespace Wildfeast
             {
                 if(!plots.TryGetValue(f,out var views))
                 {
-                    Transform root=f.island==0?game.world.saltleaf:game.world.mistwake;
+                    Transform root=game.world.IslandRoot(f.island);
                     var soil=WorldView.Add(root,"soil",new Vector2(f.x,f.y),-500);
                     var crop=WorldView.Add(soil.transform,"planted-seed",new Vector2(0,.2f),1000-f.y*32);
                     views=new[]{soil,crop};plots.Add(f,views);
@@ -69,6 +56,8 @@ namespace Wildfeast
         public bool Use(int tool,Vector2 facing,Vector2 target)
         {
             if(game.world.Area==2||game.Model.State.phase!="explore")return false;
+            var ecology=game.world.points.Where(p=>p&&p.gameObject.activeInHierarchy&&p.GetComponent<FoodEcology>()&&Vector2.Distance(p.transform.position,target)<1.25f).OrderBy(p=>Vector2.Distance(p.transform.position,target)).FirstOrDefault();
+            if(ecology&&ecology.GetComponent<FoodEcology>().Tool(tool))return true;
             Vector2 tile=new Vector2(Mathf.Round(target.x),Mathf.Round(target.y));
             var model=game.Model;var f=ItemInventory.Plot(model.State,game.world.Area,tile);
             if(tool==6)
@@ -77,7 +66,7 @@ namespace Wildfeast
                 var blockers=Physics2D.OverlapBoxAll(tile+Vector2.up*.2f,new Vector2(.8f,.5f),0);
                 bool solid=blockers.Any(c=>!c.transform.IsChildOf(game.world.player));
                 if(!WorldView.Water(tile,game.world.Area)&&!solid&&ItemInventory.Till(model,game.world.Area,tile)){game.world.Burst(tile,"dirt-puff");Notice("Soil tilled · Select seeds to plant");}
-                else Notice(f!=null?"This soil is already tilled.":"Choose clear ground away from water and solid objects.");return true;
+                else Notice(f!=null?"This soil is already tilled.":"Choose clear green ground. Roads and shore banks cannot be tilled.");return true;
             }
             if(tool==2)
             {
@@ -88,7 +77,7 @@ namespace Wildfeast
                 return false;
             }
             if((tool==3||tool==4)&&f!=null)
-            {if(ItemInventory.Plant(model,f,tool==3?"pepperbell":"lanternroot"))game.world.Burst(tile,"dirt-puff");else Notice("Use an empty tilled plot and a seed packet.");return true;}
+            {if(ItemInventory.Plant(model,f,ItemInventory.SeedItem(model.State.slots[model.State.equipped].id)))game.world.Burst(tile,"dirt-puff");else Notice("Use an empty tilled plot and a seed packet.");return true;}
             if(f!=null&&f.crop.growth>=model.Data.cropDays)
             {if(ItemInventory.Harvest(model,f))game.world.Burst(tile,f.crop.item);return true;}
             if(tool==7||tool==8||tool==9)
@@ -118,15 +107,18 @@ namespace Wildfeast
         }
         IEnumerator PullRoutine(WorldPoint point,Action complete)
         {
-            pullArt=point.artwork?point.artwork.transform:null;if(!pullArt){complete();yield break;}
+            bool shedding=point.action=="creature"||point.action=="hunt"||point.action=="bud"||point.action=="tap";
+            if(shedding){pullDrop=WorldView.Add(point.transform,"held-"+point.item,Vector2.up*.65f,1800);pullArt=pullDrop.transform;}
+            else pullArt=point.artwork?point.artwork.transform:null;
+            if(!pullArt){complete();yield break;}
             pullOrigin=pullArt.localPosition;float t=0;
             while(t<.55f){t+=Time.deltaTime;pullArt.localPosition=pullOrigin+new Vector3(Mathf.Round(Mathf.Sin(t*35)*2)/32,Mathf.Round(t*4)/32,0);yield return null;}
             game.world.Burst(point.transform.position,"dirt-puff");
             Vector3 start=pullArt.position,end=game.world.player.position+Vector3.up*.6f;t=0;
             while(t<.35f){t+=Time.deltaTime;float u=Mathf.Clamp01(t/.35f);pullArt.position=Vector3.Lerp(start,end,u)+Vector3.up*Mathf.Sin(u*Mathf.PI)*.8f;yield return null;}
-            pullArt.localPosition=pullOrigin;pullArt=null;pulling=null;complete();
+            if(pullDrop){Destroy(pullDrop.gameObject);pullDrop=null;}else pullArt.localPosition=pullOrigin;pullArt=null;pulling=null;complete();
         }
-        public void CancelPull(){if(pulling!=null)StopCoroutine(pulling);if(pullArt)pullArt.localPosition=pullOrigin;pulling=null;pullArt=null;}
+        public void CancelPull(){if(pulling!=null)StopCoroutine(pulling);if(pullDrop){Destroy(pullDrop.gameObject);pullDrop=null;}else if(pullArt)pullArt.localPosition=pullOrigin;pulling=null;pullArt=null;}
         public void Sail(int destination,Action complete){StartCoroutine(SailRoutine(destination,complete));}
         IEnumerator SailRoutine(int destination,Action complete)
         {
@@ -136,7 +128,7 @@ namespace Wildfeast
             world.FollowSea=true;world.playerArt.sortingOrder=1802;
             // Temporarily position both authored islands in a continuous sea route.
             // Rebase to the destination's local coordinates only after physically docking.
-            Transform arrival=destination==0?world.saltleaf:world.mistwake;
+            Transform arrival=world.IslandRoot(destination);
             Vector3 offset=new Vector3(40,-35,0);arrival.localPosition=offset;arrival.gameObject.SetActive(true);
             var oceanTiles=new List<GameObject>();
             for(int x=0;x<2;x++)for(int y=0;y<3;y++)oceanTiles.Add(WorldView.Add(world.transform,"ocean",new Vector2(x*40,-y*26),-2100,true).gameObject);

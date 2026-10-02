@@ -44,7 +44,7 @@ namespace Wildfeast.Tests
         [Test] public void NewInventoryAndFieldsRoundTripWithoutChangingLegacyEconomy()
         {
             string folder=Path.Combine(Path.GetTempPath(),"wildfeast-life-"+Guid.NewGuid());Directory.CreateDirectory(folder);
-            try{game.State.coins=37;ItemInventory.Swap(game.State,9,25);ItemInventory.Till(game,1,new Vector2(3,2));ItemInventory.Plant(game,game.State.fields.Single(),"pepperbell");game.State.water=7;var store=new SaveStore(Path.Combine(folder,"save.json"));store.Write(game.State);var loaded=store.Read(game.Data);Assert.IsNull(store.Warning);Assert.AreEqual("tool-pickaxe",loaded.slots[25].id);Assert.AreEqual(7,loaded.water);Assert.AreEqual(37,loaded.coins);Assert.AreEqual(1,loaded.fields.Single().island);Assert.IsTrue(loaded.fields.Single().crop.planted);}finally{Directory.Delete(folder,true);}
+            try{game.State.coins=37;ItemInventory.Swap(game.State,9,25);ItemInventory.Till(game,1,new Vector2(1,3));ItemInventory.Plant(game,game.State.fields.Single(),"pepperbell");game.State.water=7;var store=new SaveStore(Path.Combine(folder,"save.json"));store.Write(game.State);var loaded=store.Read(game.Data);Assert.IsNull(store.Warning);Assert.AreEqual("tool-pickaxe",loaded.slots[25].id);Assert.AreEqual(7,loaded.water);Assert.AreEqual(37,loaded.coins);Assert.AreEqual(1,loaded.fields.Single().island);Assert.IsTrue(loaded.fields.Single().crop.planted);}finally{Directory.Delete(folder,true);}
         }
         [Test] public void IslandsHaveDifferentShorelines()
         {Assert.AreNotEqual(WorldView.Coast(0).Length,WorldView.Coast(1).Length);}

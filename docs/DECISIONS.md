@@ -1,3 +1,9 @@
+# Latest decisions: five-island expansion
+
+The creator explicitly authorizes a larger map/content budget, superseding the earlier six-ingredient/two-island limit. Ship five structured food ecosystems with real free ferry destinations, coherent paths, anchored animated vegetation, physical resources and more dishes/creatures. Expansion totals are 19 ingredients, 20 recipes, five food-creature species and six cultivatable plants.
+
+Preserve the cozy restaurant/chef polish. Make terrain artwork, road planting rules, coast/pool collision and map markers agree through one layout catalog. Give new creatures different spatial interactions instead of cloning Brothback or adding generic activation panels. Retain nonlethal food shedding, inventory placement, capacity upgrades and the existing cook/serve economy. Add separate music/SFX sliders, stable pixel zoom and reduced ambient motion; page large books. Island IDs deliberately skip 2, which remains the legacy restaurant area.
+
 # Latest decisions: cozy polish
 
 The creator explicitly prioritizes consistent cozy/pixel typography, furniture that belongs in the restaurant, correct collision/depth, compact distinct tools, actual chef action frames and animation cooldowns. Pixelify Sans Regular replaces Liberation Sans in visible game text. Its static atlas and matching HUD material avoid mixed fonts. Original native world furniture replaces reuse of large cooking-screen artwork. Pixel UI borders, 32 PPU props and body/arm action poses maintain the art direction.

@@ -7,6 +7,8 @@ namespace Wildfeast
     public class WorldView : MonoBehaviour
     {
         public Transform saltleaf, mistwake, restaurant;
+        public Transform[] islands;
+        public Transform IslandRoot(int area)=>islands!=null&&islands.Length==5?islands[System.Array.FindIndex(Archipelago.Islands,i=>i.id==area)]:area==0?saltleaf:mistwake;
         public Transform player;
         public Camera worldCamera;
         public SpriteRenderer playerArt;
@@ -60,7 +62,10 @@ namespace Wildfeast
         public void SetArea(int area, Vector2 position)
         {
             foreach(var effect in transientEffects)if(effect)Destroy(effect);transientEffects.Clear();
-            Area = area; saltleaf.gameObject.SetActive(area == 0); mistwake.gameObject.SetActive(area == 1); restaurant.gameObject.SetActive(area == 2);
+            Area = area;
+            if(islands!=null&&islands.Length==5)for(int i=0;i<islands.Length;i++)islands[i].gameObject.SetActive(Archipelago.Islands[i].id==area);
+            else {saltleaf.gameObject.SetActive(area==0);mistwake.gameObject.SetActive(area==1);}
+            restaurant.gameObject.SetActive(area==2);
             player.position = position; player.GetComponent<Rigidbody2D>().position = position;
             worldCamera.transform.position = area==2?new Vector3(0,0,-10):new Vector3(position.x,position.y+1,-10);
         }
@@ -188,6 +193,13 @@ namespace Wildfeast
             beast.transform.position=beastHome+new Vector2(Mathf.Sin(Time.time*.6f)*.55f,Mathf.Sin(Time.time*.4f)*.15f);
             beast.artwork.sprite=Art("brothback-"+((int)(Time.time*3)%4));beast.artwork.flipX=Mathf.Cos(Time.time*.6f)<0;
         }
+        public void ApplyZoom(int level)
+        {
+            if(!(UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline is UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset))return;
+            var pixel=worldCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();if(!pixel)return;
+            int[] widths={800,640,426};int[] heights={450,360,240};
+            pixel.refResolutionX=widths[level];pixel.refResolutionY=heights[level];
+        }
         public void Cast(Vector2 target){castPoint=target;bobber.gameObject.SetActive(true);bobber.transform.position=target;fishingLine.enabled=true;Burst(target,"splash");}
         public void Fishing(float time,float tension,float progress)
         {
@@ -205,13 +217,12 @@ namespace Wildfeast
             for(int i=0;i<(sprite=="steam"||compact?1:5);i++){var sr=Add(transform,sprite,position+(Vector3)new Vector2(Random.Range(-.25f,.25f),Random.Range(0,.3f)),1800);if(compact)sr.sprite=compact;transientEffects.Add(sr.gameObject);var motion=sr.gameObject.AddComponent<WorldMotion>();motion.mode=3;motion.speed=.7f+i*.1f;Destroy(sr.gameObject,.8f);}
         }
         // Shoreline polygon is shared with the authored collision and terrain generator.
-        static readonly Vector2[] pixels={new Vector2(90,500),new Vector2(80,300),new Vector2(140,185),new Vector2(330,130),new Vector2(470,72),new Vector2(650,78),new Vector2(780,110),new Vector2(990,100),new Vector2(1140,230),new Vector2(1180,370),new Vector2(1140,590),new Vector2(1050,655),new Vector2(850,706),new Vector2(590,735),new Vector2(410,735),new Vector2(280,690),new Vector2(175,630)};
-        static readonly Vector2[] mistPixels={new Vector2(140,530),new Vector2(100,420),new Vector2(160,250),new Vector2(260,190),new Vector2(300,85),new Vector2(510,100),new Vector2(590,150),new Vector2(760,115),new Vector2(940,150),new Vector2(1090,270),new Vector2(1150,450),new Vector2(1070,550),new Vector2(1000,635),new Vector2(830,685),new Vector2(690,660),new Vector2(560,725),new Vector2(380,725),new Vector2(240,645)};
-        public static Vector2[] Coast(int area=0)=>(area==1?mistPixels:pixels).Select(v=>new Vector2((v.x+(640-v.x)/12-640)/32,(416-v.y-(420-v.y)/12)/32)).ToArray();
+        public static Vector2[] Coast(int area=0)=>Archipelago.Get(area).coast;
         public static bool Water(Vector2 position,int area=0)
         {
-            if(((position.x-10.3f)/3.35f)*((position.x-10.3f)/3.35f)+((position.y-5.95f)/1.9f)*((position.y-5.95f)/1.9f)<1)return true;
-            var polygon=Coast(area);bool inside=false;
+            var island=Archipelago.Get(area);
+            foreach(var pool in Archipelago.Pools(area)){Vector2 p=position-pool.center;if(p.x*p.x/(pool.size.x*pool.size.x)+p.y*p.y/(pool.size.y*pool.size.y)<1)return true;}
+            var polygon=island.coast;bool inside=false;
             for(int i=0,j=polygon.Length-1;i<polygon.Length;j=i++)if((polygon[i].y>position.y)!=(polygon[j].y>position.y)&&position.x<(polygon[j].x-polygon[i].x)*(position.y-polygon[i].y)/(polygon[j].y-polygon[i].y)+polygon[i].x)inside=!inside;
             return !inside;
         }
@@ -225,66 +236,9 @@ namespace Wildfeast
         // Called by the Editor bootstrap. The authored results are serialized into the scene.
         public void AuthorWorlds()
         {
-            saltleaf = new GameObject("SaltleafShore").transform; saltleaf.SetParent(transform);
-            mistwake = new GameObject("MistwakeIsle").transform; mistwake.SetParent(transform);
-            restaurant = new GameObject("HarborRestaurant").transform; restaurant.SetParent(transform);
-            Add(saltleaf, "saltleaf", Vector2.zero, -2000, true); Add(mistwake, "mistwake", Vector2.zero, -2000, true); Add(restaurant, "interior", Vector2.zero, -2000, true);
-            var random = new System.Random(43);
-            foreach (var parent in new[] { saltleaf, mistwake })
-            {
-                bool second = parent == mistwake;
-                for (int i = 0; i < 82; i++)
-                {
-                    float x = (float)random.NextDouble() * 28 - 14, y = (float)random.NextDouble() * 13 + -2;
-                    if(Water(new Vector2(x,y),second?1:0))continue;
-                    if(second&&Mathf.Abs(x-3)<3&&y>2&&y<8)continue;
-                    if ((Mathf.Abs(x + 6) < 4 && y < 4) || (x > 5 && y > 3) || (x > -3 && x < 7 && y < 3) || (x < -6 && y > 3 && y < 8)) continue;
-                    var tree = Add(parent, second ? "tree-blue" : i%4==0?"tree-purple":i%3==0?"tree-gold":"tree", new Vector2(x, y), 1000 - Mathf.RoundToInt(y * 32));
-                    Block(tree.transform, new Vector2(.38f, .4f), new Vector2(0, .15f));
-                }
-                for (int i = 0; i < 130; i++)
-                {
-                    float x = (float)random.NextDouble() * 28 - 14, y = (float)random.NextDouble() * 15 - 7;
-                    if (Mathf.Abs(x + 6) < 3 && Mathf.Abs(y) < 4) continue;
-                    if(Water(new Vector2(x,y),second?1:0))continue;
-                    var plant=Add(parent, i%2==0?"noodlegrass":i%7==0?"fern":i%4==0?"mushrooms":i%3==0?"flower-purple":"flower", new Vector2(x, y), 950-Mathf.RoundToInt(y*32));
-                    plant.gameObject.AddComponent<WorldMotion>().phase=i;
-                }
-                var pond=new GameObject("Spring bank",typeof(PolygonCollider2D));pond.transform.SetParent(parent,false);var edge=pond.GetComponent<PolygonCollider2D>();var circle=new Vector2[24];for(int n=0;n<24;n++)circle[n]=new Vector2(10.3f+Mathf.Cos(n*Mathf.PI/12)*3.35f,5.95f+Mathf.Sin(n*Mathf.PI/12)*1.9f);edge.points=circle;
-                var coast=new GameObject("Shoreline",typeof(EdgeCollider2D));coast.transform.SetParent(parent,false);coast.GetComponent<EdgeCollider2D>().points=Coast(second?1:0).Concat(new[]{Coast(second?1:0)[0]}).ToArray();
-                for(int n=0;n<14;n++)
-                {
-                    Vector2 water=new Vector2(-4+n*1.5f,-10.5f+(n%3)*.25f);
-                    var fish=Add(parent,"fish-shadow",water,-1500);var m=fish.gameObject.AddComponent<WorldMotion>();m.mode=1;m.radius=.6f;m.phase=n;m.speed=.7f;
-                    var ripple=Add(parent,"ripple-0",water,-1499);ripple.gameObject.AddComponent<WorldMotion>().mode=5;
-                }
-                for(int n=0;n<12;n++){var firefly=Add(parent,n%2==0?"butterfly":"spark",new Vector2(-12+n*2,2+n%3),1450);var m=firefly.gameObject.AddComponent<WorldMotion>();m.mode=1;m.radius=.55f;m.phase=n;m.speed=1.1f;firefly.transform.localScale=Vector3.one;}
-                Decorate(parent,second);
-            }
-            var home = Add(saltleaf, "restaurant", new Vector2(-6, -.9f), 1030);
-            Block(home.transform, new Vector2(4.8f, 2.7f), new Vector2(0, 2));
-            Point(saltleaf, "enter", "Enter the restaurant", new Vector2(-6, -1.15f));
-            Point(saltleaf, "service", "Open the restaurant", new Vector2(-3.6f,-1.2f),"","","sign-closed");
-            Point(saltleaf, "fish", "Cast at the shore", new Vector2(8, -8.6f), "leafgill");
-            Point(saltleaf, "forage", "Harvest Pepperbell", new Vector2(4.5f, -1.3f), "pepperbell", "pepper-east", "pepperbell");
-            Point(saltleaf, "forage", "Harvest Pepperbell", new Vector2(6, -3.4f), "pepperbell", "pepper-south", "pepperbell");
-            Point(saltleaf, "forage", "Gather Lanternroot", new Vector2(-9, 5.3f), "lanternroot", "root-grove", "lanternroot");
-            Point(saltleaf, "hunt", "Observe Brothback", new Vector2(8, 4), "brothback", "broth-spring", "brothback");
-            Point(saltleaf, "boat", "Visit the skiff", new Vector2(-11, -7.2f), "", "", "boat");
-            Point(saltleaf, "upgrades", "Visit the workshop", new Vector2(-2, -3.8f), "", "", "workshop");
-            for (int i = 0; i < 3; i++)
-            {
-                var plot = Point(saltleaf, "crop", "Garden bed", new Vector2(-11 + i * 2, -4f), "", "", "plot"); plot.index = i;
-                var spr = Add(plot.transform, "pepperbell", new Vector2(0, .3f), 1100); cropArt.Add(spr);
-            }
-            Add(mistwake, "boat", new Vector2(-11, -7.2f), 1300);
-            Point(mistwake, "boat", "Sail home", new Vector2(-11, -6.5f));
-            Add(mistwake,"iona-house",new Vector2(3,3),880);
-            Point(mistwake, "story", "Read Iona's letter", new Vector2(3,2), "", "", "mailbox");
-            Point(mistwake, "fruit", "Reach the floating Cloudfruit", new Vector2(-2, 4), "cloudfruit", "fruit-mist", "cloudfruit");
-            Point(mistwake, "fruit", "Reach the floating Cloudfruit", new Vector2(6, 0), "cloudfruit", "fruit-east", "cloudfruit");
-            Point(mistwake, "forage", "Gather Lanternroot", new Vector2(-8, 3), "lanternroot", "root-mist", "lanternroot");
-            Point(mistwake, "fish", "Cast at the shore", new Vector2(8, -8.6f), "leafgill");
+            Archipelago.Author(this);
+            restaurant=new GameObject("HarborRestaurant").transform;restaurant.SetParent(transform,false);
+            Add(restaurant,"interior",Vector2.zero,-2000,true);
             Border(restaurant, 9.8f, 5.45f);
             Point(restaurant, "exit", "Return to the shore", new Vector2(0, -5));
             Point(restaurant, "pantry", "Pantry", new Vector2(-8, 2.7f), "", "", "pantry");
@@ -312,10 +266,6 @@ namespace Wildfeast
             carriedDish=Add(player,"held-dish-fish",new Vector2(.3f,.55f),1500);carriedDish.transform.localScale=Vector3.one;carriedDish.sprite=null;
             var body = chef.GetComponent<Rigidbody2D>(); body.gravityScale = 0; body.freezeRotation = true; body.interpolation = RigidbodyInterpolation2D.None;
             var collider = chef.GetComponent<CapsuleCollider2D>(); collider.size = new Vector2(.45f, .35f); collider.offset = new Vector2(0, .15f);
-            foreach(var root in new[]{saltleaf,mistwake})
-            {
-                for(int i=0;i<6;i++)Add(root,"saltstone",new Vector2(7+i%3*1.5f,-5+i/3*2),1000-Mathf.RoundToInt((-5+i/3*2)*32));
-            }
             foreach(var sr in GetComponentsInChildren<SpriteRenderer>(true))
             {
                 string name=sr.gameObject.name;
@@ -371,14 +321,14 @@ namespace Wildfeast
             if (center && sr.sprite) go.transform.localPosition -= new Vector3(0, sr.sprite.bounds.size.y / 2, 0);
             return sr;
         }
-        WorldPoint Point(Transform parent, string action, string label, Vector2 pos, string item = "", string source = "", string art = "")
+        public WorldPoint Point(Transform parent, string action, string label, Vector2 pos, string item = "", string source = "", string art = "")
         {
             var go = new GameObject(label, typeof(WorldPoint)); go.transform.SetParent(parent, false); go.transform.localPosition = pos;
             var p = go.GetComponent<WorldPoint>(); p.action = action; p.label = label; p.item = item; p.source = source;
             if (art != "") p.artwork = Add(go.transform, art, Vector2.zero, 1000 - Mathf.RoundToInt(pos.y * 32));
             points.Add(p); return p;
         }
-        static void Block(Transform parent, Vector2 size, Vector2 offset)
+        public static void Block(Transform parent, Vector2 size, Vector2 offset)
         { var go = new GameObject("Collision", typeof(BoxCollider2D)); go.transform.SetParent(parent, false); go.transform.localPosition = offset; go.GetComponent<BoxCollider2D>().size = size; }
         static void Border(Transform parent, float x, float y)
         {

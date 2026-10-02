@@ -1,3 +1,15 @@
+# Current work-mode requirements: the archipelago
+
+Continue the checked-in five-island Wildfeast expansion. Read AGENTS.md, ARCHIPELAGO_EXPANSION.md, HANDOFF.md and VERIFICATION.md first. Preserve the five structured maps, 19 ingredients, 20 dishes, six growable crops, original creatures/music, free continuous ferry and polished restaurant/tool loop. The older two-island content ceiling is superseded by the creator's expansion request.
+
+Use the shared Archipelago catalog for coastlines, pools, authored roads, habitat placements and destinations. Road centers and approaches must be walkable; road soil stays untillable. Keep vegetation rooted, foliage motion subtle and resource patches coherent with their biome. Keep all world sprites at 32 PPU. Use appropriate physical footprints and ground sorting; terrain flowers may be traversable, solid furniture/trees/rocks/creatures may not. Give dishes readable native silhouettes and compact carried servings.
+
+Retain distinct spatial ecology actions: quiet Custardram approach, pickaxe shell contacts, Lanternroot moth attraction, watering reactions and knife sap taps. Persistent resource/water/seed/contact changes must be atomic model transactions, with one reward at the correct animation contact and no spam. Area 2 is still the restaurant; use IslandRoot and valid catalog IDs for all travel/map/farming logic. Preserve old progress, including relocating garden crops when redesigned roads or pools cross them.
+
+Keep mouse-operable inventory and five-row paged books, actual independent audio sliders, three pixel zoom levels and reduced motion. Change settings without resetting quantities or ordinary player saves. Do not replace cozy typography or reintroduce huge cooking-screen sprites in the world. Run archipelago_art.py after the earlier generators; archipelago_music.py creates the new original music. Use supported Editor APIs, back up scene work before deliberate outdoor reconstruction, and preserve manual restaurant/UI work.
+
+Finish changes in the actual Windows player. Verify route clearance, plant/seed identity, each ecology condition, discovery/recipe service, sound/zoom persistence, all five physical voyages and full existing restaurant progression. Inspect native captures at 1080p and 1366×768 with isolated diagnostic saves. Report actual evidence and limitations; offscreen checks do not establish human game feel or display FPS.
+
 # Current work-mode requirements: cozy polish
 
 Continue the actual checked-in Wildfeast Unity scene. Read COZY_POLISH_PASS.md, HANDOFF.md and VERIFICATION.md first. Preserve Pixelify Sans throughout game text, the pixel widget skins, compact native held props, furniture footprints and ground depth, centered restaurant camera and clear customer/staff aisles.

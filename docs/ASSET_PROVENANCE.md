@@ -1,3 +1,9 @@
+# Archipelago additions
+
+tools/archipelago_art.py creates the original five-island layout catalog and native pixel terrain, foliage/grass animation frames, biome stone patches, rooted forage/seed packets, four food creatures, open blossom/cracked-shell states, trail landmarks and 14 distinct dish silhouettes/compact servings. Fixed seeds, Pillow primitives and original ecological designs are used; none of the reference screenshots or franchise artwork is sampled. Map images are baked from this game's authored Unity scenery.
+
+tools/archipelago_music.py creates three new original seamless stereo 22050 Hz themes, approximately 35.6 seconds (Emberfold), 49.2 (Moonfen) and 40.9 (Pearltide), using synthesized harmonics and note envelopes with numpy. There are six musical compositions in total, including the previous harbor, Mistwake and restaurant themes. No recordings, external samples, generated commercial-style imitations or downloaded music are used. Preserve font licenses in every distribution. Run the archipelago generators last.
+
 # Island-life additions
 
 tools/island_life_art.py creates original shovel/axe/scythe/pickaxe, Cinnamonwood/Saltstone/Noodlegrass resources, soil/stump/particles, map markers, a parchment frame, detailed dining table, distinct Mistwake terrain and ocean tiles. Original artwork uses Pillow drawing primitives with a fixed seed; reference screenshots supply layout/art-direction inspiration only.

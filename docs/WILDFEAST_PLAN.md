@@ -1,3 +1,9 @@
+# Implemented expansion: five food ecosystems
+
+The creator has expanded the initial slice. The current playable scope is Saltleaf Shore, Mistwake Isle, Emberfold Cay, Moonfen Hollow and Pearltide Atoll, connected by free animated ferry travel. Outdoor map layout/artwork, terrain planting rules, grounded foliage, resource placement, food ecology, cuisine, paged books and sound/camera Options are implemented. The polished restaurant and original loop remain.
+
+The expansion contains 19 ingredients, 20 dishes, five food-creature species and six crops, with coherent paths and habitats. See ARCHIPELAGO_EXPANSION.md for island design, controls and the manual verification route; see VERIFICATION.md for actual automated evidence. The original proposal below describes earlier scope and remains historical where it differs.
+
 # Current implemented refinement: cozy polish
 
 Typography, restaurant furniture/collision/depth, pixel widgets, compact held props, directional chef action poses and cooldowns supersede the earlier presentation. See COZY_POLISH_PASS.md and VERIFICATION.md. Preserve the two-island inventory/gardening/service loop. The historical plans below remain context where not superseded.

@@ -1,3 +1,7 @@
+# Current implemented content budget
+
+The creator authorized five designed island maps, more original ecology/cuisine, grounded vegetation and expanded Options. The delivered archipelago contains five maps, 19 ingredients, 20 recipes, five food creatures, six crops and six original music themes. It retains the Windows/offline/free target and the existing service, inventory and action animation systems. ARCHIPELAGO_EXPANSION.md records the current scope. Earlier smaller budgets below are historical constraints, superseded by this request.
+
 # Production planning
 
 ## Current playable scope
