@@ -23,6 +23,7 @@ namespace Wildfeast
     [Serializable] public class Order { public int number; public string recipe, customer, preference; public bool cooked, paid; public int quality; }
     [Serializable] public class Progress
     {
+        public int energy = 100; public bool wokeAtHome;
         public int version = 1, day = 1, coins, earned, served, stage, island, requestIndex;
         public string phase = "explore";
         public CharacterProfile avatar=new CharacterProfile();
@@ -157,10 +158,13 @@ namespace Wildfeast
             if (State.phase != "service" || State.orders.Any(o => !o.paid)) return false;
             State.phase = "closing"; Notify(); return true;
         }
+        public bool SpendEnergy(int amount)
+        {if(amount<0||State.energy<amount)return false;State.energy-=amount;Notify();return true;}
         public bool NextDay()
         {
             if (State.phase == "service" && State.orders.Any(o => !o.paid)) return false;
             foreach(var f in State.fields)if(f.crop.planted&&f.crop.wateredDay==State.day)f.crop.growth++;
+            State.energy=100;State.wokeAtHome=true;
             State.day++; State.phase = "explore"; State.island = 0; State.harvested.Clear(); State.orders.Clear();
             State.ecology.Clear();
             for (int i = 0; i < State.crops.Length; i++) if (State.crops[i].planted && State.crops[i].wateredDay == State.day - 1) State.crops[i].growth++;

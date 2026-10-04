@@ -6,7 +6,7 @@ namespace Wildfeast
 {
     public class WorldView : MonoBehaviour
     {
-        public Transform saltleaf, mistwake, restaurant;
+        public Transform saltleaf, mistwake, restaurant, bedroom;
         public Transform[] islands;
         public Transform IslandRoot(int area)=>islands!=null&&islands.Length==5?islands[System.Array.FindIndex(Archipelago.Islands,i=>i.id==area)]:area==0?saltleaf:mistwake;
         public Transform player;
@@ -47,6 +47,7 @@ namespace Wildfeast
         public static Sprite Art(string name) => Resources.Load<Sprite>("Art/" + (name=="tool-scythe"?"icon-scythe":name=="tool-pickaxe"?"icon-pickaxe":name));
         public void Init()
         {
+            AuthorBedroom();
             chefFrames = new Sprite[4]; for (int i = 0; i < 4; i++) chefFrames[i] = Art("player-" + i);
             directional=new Sprite[4][];
             string[] directions={"down","up","left","right"};
@@ -69,9 +70,9 @@ namespace Wildfeast
             Area = area;
             if(islands!=null&&islands.Length==5)for(int i=0;i<islands.Length;i++)islands[i].gameObject.SetActive(Archipelago.Islands[i].id==area);
             else {saltleaf.gameObject.SetActive(area==0);mistwake.gameObject.SetActive(area==1);}
-            restaurant.gameObject.SetActive(area==2);
+            restaurant.gameObject.SetActive(area==2);if(bedroom)bedroom.gameObject.SetActive(area==6);
             player.position = position; player.GetComponent<Rigidbody2D>().position = position;
-            worldCamera.transform.position = area==2?new Vector3(0,0,-10):new Vector3(position.x,position.y+1,-10);
+            worldCamera.transform.position = area==2||area==6?new Vector3(0,0,-10):new Vector3(position.x,position.y+1,-10);
         }
         public WorldPoint Nearest()
         {
@@ -120,7 +121,7 @@ namespace Wildfeast
         {
             if(chefFrames==null)return;
             Vector3 target = new Vector3(player.position.x, player.position.y + 1, -10);
-            if (Area == 2) target = new Vector3(0, 0, -10);
+            if (Area == 2 || Area == 6) target = new Vector3(0, 0, -10);
             else if(!FollowSea) {var size=Archipelago.Get(Area).size;float halfX=worldCamera.orthographicSize*worldCamera.aspect;target.x=Mathf.Clamp(target.x,-Mathf.Max(0,size.x/2-halfX),Mathf.Max(0,size.x/2-halfX));target.y=Mathf.Clamp(target.y,-Mathf.Max(0,size.y/2-worldCamera.orthographicSize),Mathf.Max(0,size.y/2-worldCamera.orthographicSize));}
             var cameraPosition = Vector3.Lerp(worldCamera.transform.position, target, 1 - Mathf.Exp(-8 * Time.deltaTime));
             cameraPosition.x = Mathf.Round(cameraPosition.x * 32) / 32f; cameraPosition.y = Mathf.Round(cameraPosition.y * 32) / 32f;
@@ -227,22 +228,30 @@ namespace Wildfeast
         }
         // Shoreline polygon is shared with the authored collision and terrain generator.
         public static Vector2[] Coast(int area=0)=>Archipelago.Get(area).coast;
-        public static bool Water(Vector2 position,int area=0)
-        {
-            var island=Archipelago.Get(area);
-            foreach(var pool in Archipelago.Pools(area)){Vector2 p=position-pool.center;if(p.x*p.x/(pool.size.x*pool.size.x)+p.y*p.y/(pool.size.y*pool.size.y)<1)return true;}
-            var polygon=island.coast;bool inside=false;
-            for(int i=0,j=polygon.Length-1;i<polygon.Length;j=i++)if((polygon[i].y>position.y)!=(polygon[j].y>position.y)&&position.x<(polygon[j].x-polygon[i].x)*(position.y-polygon[i].y)/(polygon[j].y-polygon[i].y)+polygon[i].x)inside=!inside;
-            return !inside;
-        }
+        public static bool Water(Vector2 position,int area=0)=>!TerrainGrid.Land(TerrainGrid.Cell(position),area);
         public Vector2? WaterAt(Vector2 position,Vector2 direction)
         {
-            if(Area==2)return null;
+            if(Area==2||Area==6)return null;
             // Aim towards nearby water; a shoreline cast also works without precise facing.
             for(int k=0;k<16;k++){var aim=k==0?direction:new Vector2(Mathf.Cos(k*Mathf.PI/8),Mathf.Sin(k*Mathf.PI/8));for(float d=.6f;d<=2.3f;d+=.3f){var test=position+aim*d;if(Water(test,Area))return test+aim*.55f;}}
             return null;
         }
         // Called by the Editor bootstrap. The authored results are serialized into the scene.
+        public void AuthorBedroom(bool rebuild=false)
+        {
+            if(bedroom&&!rebuild)return;
+            if(bedroom){points.RemoveAll(p=>!p||p.transform.IsChildOf(bedroom));Object.DestroyImmediate(bedroom.gameObject);bedroom=null;}
+            foreach(var p in points.Where(p=>p&&p.action=="bed"&&p.transform.IsChildOf(restaurant)).ToArray())
+            {p.action="bedroom";p.label="Your room";if(p.artwork)p.artwork.sprite=Art("room-door");foreach(var c in p.GetComponentsInChildren<Collider2D>(true))c.enabled=false;}
+            bedroom=new GameObject("Harbor upstairs bedroom").transform;bedroom.SetParent(transform,false);
+            Add(bedroom,"bedroom-interior",Vector2.zero,-2000,true);
+            Border(bedroom,6.4f,4.4f);Block(bedroom,new Vector2(12.8f,1.6f),new Vector2(0,3.7f));
+            var bed=Point(bedroom,"bed","Sleep and save",new Vector2(3,1),"","","bed");Block(bed.transform,new Vector2(2.1f,1.35f),Vector2.up*.7f);bed.artwork.gameObject.AddComponent<PropDepth>().groundOffset=.7f;
+            Point(bedroom,"downstairs","Restaurant",new Vector2(0,-3.7f),"","","room-stairs");
+            var pot=Add(bedroom,"room-planter",new Vector2(-4,2),900);Block(pot.transform,new Vector2(.65f,.4f),Vector2.up*.2f);pot.gameObject.AddComponent<PropDepth>().groundOffset=.2f;
+            var chest=Add(bedroom,"crate",new Vector2(-3,1),950);Block(chest.transform,new Vector2(1,.5f),Vector2.up*.2f);chest.gameObject.AddComponent<PropDepth>().groundOffset=.2f;
+            bedroom.gameObject.SetActive(false);
+        }
         public void AuthorWorlds()
         {
             Archipelago.Author(this);

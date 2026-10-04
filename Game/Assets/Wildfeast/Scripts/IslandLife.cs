@@ -22,7 +22,7 @@ namespace Wildfeast
             game.Model.Changed+=Refresh;Refresh();
         }
         public void Rebind(GameModel previous)
-        {previous.Changed-=Refresh;foreach(var views in plots.Values)if(views[0])Destroy(views[0].gameObject);plots.Clear();foreach(var node in nodes){node.damage=0;node.lastDay=-1;}game.Model.Changed+=Refresh;Refresh();}
+        {previous.Changed-=Refresh;foreach(var views in plots.Values)if(views[0])Destroy(views[0].gameObject);plots.Clear();foreach(var grid in game.world.GetComponentsInChildren<TileWorld>(true))grid.ClearSoil();foreach(var node in nodes){node.damage=0;node.lastDay=-1;}game.Model.Changed+=Refresh;Refresh();}
         void Refresh()
         {
             foreach(var f in game.Model.State.fields)
@@ -34,7 +34,7 @@ namespace Wildfeast
                     var crop=WorldView.Add(soil.transform,"planted-seed",new Vector2(0,.2f),1000-f.y*32);
                     views=new[]{soil,crop};plots.Add(f,views);
                 }
-                views[0].sprite=WorldView.Art(f.crop.wateredDay==game.Model.State.day?"soil-wet":"soil");
+                views[0].sprite=null;game.world.IslandRoot(f.island).GetComponentInChildren<TileWorld>(true).Soil(f.x,f.y,f.crop.wateredDay==game.Model.State.day);
                 views[1].sprite=!f.crop.planted?null:WorldView.Art(f.crop.growth>=game.Model.Data.cropDays?f.crop.item:f.crop.growth>0?"sprout":"planted-seed");
             }
             foreach(var node in nodes)
@@ -59,24 +59,24 @@ namespace Wildfeast
         }
         public bool Use(int tool,Vector2 facing,Vector2 target)
         {
-            if(game.world.Area==2||game.Model.State.phase!="explore")return false;
+            if((game.world.Area==2||game.world.Area==6)||game.Model.State.phase!="explore")return false;
             var ecology=game.world.points.Where(p=>p&&p.gameObject.activeInHierarchy&&p.GetComponent<FoodEcology>()&&Vector2.Distance(p.transform.position,target)<1.25f).OrderBy(p=>Vector2.Distance(p.transform.position,target)).FirstOrDefault();
             if(ecology&&ecology.GetComponent<FoodEcology>().Tool(tool))return true;
-            Vector2 tile=new Vector2(Mathf.Round(target.x),Mathf.Round(target.y));
+            Vector2 tile=TerrainGrid.Cell(target);
             var model=game.Model;var f=ItemInventory.Plot(model.State,game.world.Area,tile);
             if(tool==6)
             {
                 game.Sound("cook");
-                if(Archipelago.Road(target,game.world.Area,.1f)){Notice("Paving and boardwalks cannot be tilled.");return true;}
+                if(Archipelago.Road(tile,game.world.Area)){Notice("Paving and boardwalks cannot be tilled.");return true;}
                 var blockers=Physics2D.OverlapBoxAll(tile+Vector2.up*.2f,new Vector2(.8f,.5f),0);
                 bool solid=blockers.Any(c=>!c.transform.IsChildOf(game.world.player));
-                if(!WorldView.Water(tile,game.world.Area)&&!solid&&ItemInventory.Till(model,game.world.Area,tile)){game.world.Burst(tile,"dirt-puff");Notice("Soil tilled · Select seeds to plant");}
-                else Notice(f!=null?"This soil is already tilled.":"Choose clear green ground. Roads and shore banks cannot be tilled.");return true;
+                if(!WorldView.Water(tile,game.world.Area)&&!solid&&ItemInventory.Till(model,game.world.Area,tile)){game.world.Burst(tile,"dirt-puff");Notice("Soil tilled");}
+                else Notice(f!=null?"This soil is already tilled.":"Choose clear soil");return true;
             }
             if(tool==2)
             {
                 game.Sound("splash");
-                if(game.world.WaterAt(game.world.player.position,facing).HasValue&&f==null){model.State.water=20;model.Notify();game.world.Burst(target,"splash");Notice("Watering can refilled · 20/20");return true;}
+                if(game.world.WaterAt(game.world.player.position,facing).HasValue&&f==null){model.State.water=20;model.Notify();game.world.Burst(target,"splash");Notice("Water 20/20");return true;}
                 if(f!=null){if(ItemInventory.Water(model,f))game.world.Burst(tile,"splash");else Notice(model.State.water<1?"Your can is empty. Refill beside water.":"Plant seeds here first, or water tomorrow.");return true;}
                 // Legacy authored beds continue to use their own interaction.
                 return false;
@@ -127,7 +127,7 @@ namespace Wildfeast
         public void Sail(int destination,Action complete){StartCoroutine(SailRoutine(destination,complete));}
         IEnumerator SailRoutine(int destination,Action complete)
         {
-            Sailing=true;var world=game.world;var body=world.player.GetComponent<Rigidbody2D>();body.simulated=false;
+            Sailing=true;var curtain=SceneCurtain.Create(game.ui);var world=game.world;var body=world.player.GetComponent<Rigidbody2D>();body.simulated=false;
             var ships=world.GetComponentsInChildren<SpriteRenderer>(true).Where(sr=>sr.gameObject.name=="boat").ToArray();foreach(var sr in ships)sr.enabled=false;
             Vector2 departure=Archipelago.Get(world.Area).dock,landing=Archipelago.Get(destination).dock;
             var ship=WorldView.Add(world.transform,"boat",departure,1800);ship.gameObject.name="Sailing skiff";
@@ -137,15 +137,15 @@ namespace Wildfeast
             Transform arrival=world.IslandRoot(destination);
             Vector3 offset=new Vector3(40,-35,0);arrival.localPosition=offset;arrival.gameObject.SetActive(true);
             var oceanTiles=new List<GameObject>();
-            for(int x=0;x<2;x++)for(int y=0;y<3;y++)oceanTiles.Add(WorldView.Add(world.transform,"ocean",new Vector2(x*40,-y*26),-2100,true).gameObject);
+            oceanTiles.Add(TileWorld.Ocean(world.transform,game.Model.State.reducedMotion));
             Vector2 parked=landing+(Vector2)offset;
             yield return MoveShip(ship,departure,departure+Vector2.down*4.3f,2.2f);
             yield return MoveShip(ship,departure+Vector2.down*4.3f,new Vector2(12,-27),2.5f);
             yield return MoveShip(ship,new Vector2(12,-27),parked+Vector2.down*4.3f,2.5f);
             yield return MoveShip(ship,parked+Vector2.down*4.3f,parked,2.2f);
-            arrival.localPosition=Vector3.zero;foreach(var tile in oceanTiles)Destroy(tile);
+            yield return curtain.Fade(true);arrival.localPosition=Vector3.zero;foreach(var tile in oceanTiles)Destroy(tile);
             foreach(var sr in ships)sr.enabled=true;Destroy(ship.gameObject);body.simulated=true;world.FollowSea=false;
-            world.SetArea(destination,Archipelago.Get(destination).arrival);Sailing=false;complete();
+            world.SetArea(destination,Archipelago.Get(destination).arrival);yield return curtain.Fade(false);Destroy(curtain.gameObject);Sailing=false;complete();
         }
         IEnumerator MoveShip(SpriteRenderer ship,Vector2 start,Vector2 end,float duration)
         {

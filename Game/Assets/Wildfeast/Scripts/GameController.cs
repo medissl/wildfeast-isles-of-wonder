@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -27,7 +27,7 @@ namespace Wildfeast
         public void ActivateJourney(SaveStore store)
         {var previous=Model;previous.Changed-=OnChanged;Saves=store;Model=new GameModel(Content.Load(),store.Read(Content.Load()));Model.Changed+=OnChanged;life.Rebind(previous);world.Appearance(Model.State.avatar);hunting=null;staffOrder=null;staffTimer=0;staffClock=0;toolAction.Cancel();world.StaffDish(null);SaveError=null;movement=Vector2.zero;Refresh();}
         public void ResumeJourney()
-        {journeyActive=true;var pos=Model.State.island==0?new Vector2(-6,-2.5f):Archipelago.Get(Model.State.island).arrival;world.SetArea(Model.State.phase=="explore"?Model.State.island:2,Model.State.phase=="explore"?pos:new Vector2(0,-3));Refresh();if(Model.State.phase=="closing")ShowClosing();if(Saves.Warning!=null)Say(Saves.Warning);}
+        {journeyActive=true;var pos=Model.State.island==0?new Vector2(-6,-2.5f):Archipelago.Get(Model.State.island).arrival;world.SetArea(Model.State.phase=="explore"?Model.State.island:2,Model.State.phase=="explore"?pos:new Vector2(0,-3));if(Model.State.wokeAtHome)world.SetArea(6,new Vector2(1,0));Refresh();if(Saves.Warning!=null)Say(Saves.Warning);}
         public int HuntingPhase => huntPhase;
         public WorldPoint HuntingPoint => hunting;
         Rigidbody2D body;
@@ -76,6 +76,7 @@ namespace Wildfeast
             Model.Changed += OnChanged;
             Vector2 startingPoint=Model.State.island==0?new Vector2(-6,-2.5f):Archipelago.Get(Model.State.island).arrival;
             world.SetArea(Model.State.phase=="service" || Model.State.phase=="closing" ? 2 : Model.State.island, Model.State.phase=="explore"?startingPoint:new Vector2(0,-3));
+            if(Model.State.wokeAtHome)world.SetArea(6,new Vector2(1,0));
             Refresh();
             if (Saves.Warning!=null) Say(Saves.Warning);
             journeyActive=args.Contains("--smoke-test");world.Appearance(Model.State.avatar);LegacySavePath=Saves.Path;
@@ -86,22 +87,24 @@ namespace Wildfeast
         }
         void OnChanged()
         {
-            Save();Refresh();
+            Refresh();
         }
-        void Save()
+        void SavePreferences()
         {
-            try { Saves.Write(Model.State);SaveError=null; }
-            catch (Exception ex) { SaveError=ex.Message;Debug.LogError("Save failed: "+ex.Message);ui.Message("Progress could not be saved. Check available disk space."); }
+            try{var checkpoint=Saves.Read(Model.Data);checkpoint.musicVolume=Model.State.musicVolume;checkpoint.effectsVolume=Model.State.effectsVolume;checkpoint.zoom=Model.State.zoom;checkpoint.muted=Model.State.muted;checkpoint.reducedMotion=Model.State.reducedMotion;checkpoint.relaxed=Model.State.relaxed;Saves.Write(checkpoint);}catch(Exception ex){SaveError=ex.Message;Say("Could not save options.");}
         }
+        public void SaveIntroduction()
+        {try{var checkpoint=Saves.Read(Model.Data);checkpoint.introSeen=true;Saves.Write(checkpoint);}catch(Exception ex){SaveError=ex.Message;Say("Could not record the introduction.");}}
         void Refresh()
         {
             ui.wallet.text=$"Day {Model.State.day}  ·  {Model.State.coins} shells";
-            ui.location.text=world.Area==2?"THE HARBOR TABLE":Archipelago.Get(world.Area).name.ToUpperInvariant();
+            ui.location.text=world.Area==6?"YOUR ROOM":world.Area==2?"THE HARBOR TABLE":Archipelago.Get(world.Area).name.ToUpperInvariant();
             ui.objective.text="";world.Refresh(Model);
-            ui.Belt(Model);
-            var music=Resources.Load<AudioClip>("Audio/music-"+(world.Area==2?"restaurant":Archipelago.Get(world.Area).key));if(ambience.clip!=music){ambience.clip=music;ambience.Play();}
+            ui.Belt(Model);ui.Energy(Model.State.energy);
+            var music=Resources.Load<AudioClip>("Audio/music-"+(world.Area==2||world.Area==6?"restaurant":Archipelago.Get(world.Area).key));if(ambience.clip!=music){ambience.clip=music;ambience.Play();}
             ambience.volume=Model.State.muted?0:Model.State.musicVolume*.6f;effects.volume=Model.State.muted?0:Model.State.effectsVolume;
             world.ApplyZoom(Model.State.zoom);
+            foreach(var tiles in world.GetComponentsInChildren<TileWorld>(true))if(tiles.water)tiles.water.animationFrameRate=Model.State.reducedMotion?0:1;
             foreach(var motion in world.GetComponentsInChildren<VegetationMotion>(true))motion.enabled=!Model.State.reducedMotion;
             foreach(var motion in world.GetComponentsInChildren<WorldMotion>(true))if(motion.mode==0||motion.mode==1||motion.mode==5)motion.enabled=!Model.State.reducedMotion;
         }
@@ -115,6 +118,7 @@ namespace Wildfeast
         void Update()
         {
             if(!initialized||!journeyActive||(FrontEnd!=null&&FrontEnd.Active))return;
+            if(activity=="sleep"){movement=Vector2.zero;world.Animate(Vector2.zero);return;}
             toolAction.Tick(Time.deltaTime);
             if(Time.unscaledTime>toastUntil && SaveError==null)ui.Message("");
             if(GameInput.Back && !Sailing && !ToolBusy)
@@ -171,7 +175,7 @@ namespace Wildfeast
                 case "exit":
                     if(Model.State.phase=="service")Say("Finish tonight's orders before leaving.");
                     else {world.SetArea(Model.State.island,new Vector2(-6,-2.5f));Refresh();}break;
-                case "fish": if(ItemInventory.EquippedTool(Model.State)==1)StartFishing(p);else Say("Select the fishing rod, then click water or press Space.");break;
+                case "fish": if(ItemInventory.EquippedTool(Model.State)==1)StartFishing(p);else Say("Fishing rod needed");break;
                 case "forage":Gather(p,2);break;
                 case "fruit":Gather(p,Model.Has("reach")?3:2);break;
                 case "hunt": if(hunting==null)Say("Brothback reacts when you approach. Watch its steam.");break;
@@ -192,6 +196,8 @@ namespace Wildfeast
                     if(held!=null&&held.number!=o.number){Say($"This dish belongs at table {held.number+1}.");break;}
                     if(Model.Serve(o.number)){Sound("chime");world.Burst(p.transform.position,"spark");Say("+"+(Model.Data.Dish(o.recipe).price+o.quality*3+(Model.Data.Dish(o.recipe).flavor==o.preference?4:0))+" shells");CheckClosing();}
                     else Say("Cook this guest's order at the stove first.");break;
+                case "bedroom":world.SetArea(6,new Vector2(0,-2.7f));Refresh();break;
+                case "downstairs":world.SetArea(2,new Vector2(7,2));Refresh();break;
                 case "bed":if(Model.State.phase=="service")Say("There are still guests waiting.");else ShowClosing();break;
                 case "requests":ShowRequests();break;
                 case "discovery":GetComponent<IslandDiscoveries>().Visit(p);break;
@@ -199,11 +205,11 @@ namespace Wildfeast
         }
         void Gather(WorldPoint p,int quantity)
         {
-            if(activity==null&& !Model.State.harvested.Contains(p.source) && Model.State.phase=="explore" && Model.BagCount+quantity<=Model.Capacity){activity="forage";activityStarted=Time.time;Vector2 aim=(Vector2)p.transform.position-(Vector2)world.player.position;if(aim.sqrMagnitude>.01f){facing=aim.normalized;world.Face(facing);}life.Pull(p,quantity,()=>{activity=null;AwardGather(p,quantity);});return;}
+            if(activity==null&& !Model.State.harvested.Contains(p.source) && Model.State.phase=="explore" && Model.BagCount+quantity<=Model.Capacity){if(!Exert(3))return;activity="forage";activityStarted=Time.time;Vector2 aim=(Vector2)p.transform.position-(Vector2)world.player.position;if(aim.sqrMagnitude>.01f){facing=aim.normalized;world.Face(facing);}life.Pull(p,quantity,()=>{activity=null;AwardGather(p,quantity);});return;}
             AwardGather(p,quantity);
         }
         public void DiscoveryContact(WorldPoint point,int tool)
-        {if(ToolBusy||activity!=null)return;facing=((Vector2)point.transform.position-(Vector2)world.player.position).normalized;world.Face(facing);toolAction.Begin(tool,()=>GetComponent<IslandDiscoveries>().Use(point,tool));}
+        {if(ToolBusy||activity!=null||!Exert(2))return;facing=((Vector2)point.transform.position-(Vector2)world.player.position).normalized;world.Face(facing);toolAction.Begin(tool,()=>GetComponent<IslandDiscoveries>().Use(point,tool));}
         public void HarvestEcology(WorldPoint p,int quantity)=>Gather(p,quantity);
         void AwardGather(WorldPoint p,int quantity)
         {
@@ -213,8 +219,9 @@ namespace Wildfeast
         void StartFishing(WorldPoint p)
         {
             if(Model.State.phase!="explore" || Model.BagCount>=Model.Capacity){Say("Make room in your satchel before casting.");return;}
-            var water=world.WaterAt(world.player.position,facing);if(world.Area==2||!water.HasValue){Say("Cast beside water.");return;}
+            var water=world.WaterAt(world.player.position,facing);if(world.Area==2||world.Area==6||!water.HasValue){Say("Cast beside water.");return;}
             if(!WorldView.Water(p.transform.position,world.Area))p.transform.position=water.Value;
+            if(!Exert(6))return;
             fishingSpot=p;elapsed=0;tension=.5f;progress=0;danger=0;reeling=-1;fishChallenge=new FishingChallenge(Array.FindIndex(Archipelago.Islands,i=>i.id==world.Area),Model.State.relaxed,Model.Data.fishDuration);facing=((Vector2)p.transform.position-(Vector2)world.player.position).normalized;world.Face(facing);
             ui.Fishing();activity="fish";world.Cast(p.transform.position);Sound("splash");
         }
@@ -239,6 +246,7 @@ namespace Wildfeast
             var o=Model.State.orders.FirstOrDefault(x=>x.number==order);
             if(ToolBusy||o==null || o.cooked || o.paid || !Model.CanCook(o.recipe))return;
             if(!Model.Has("staff")&&Model.State.orders.Any(x=>x.cooked&&!x.paid)){Say("Serve the dish in your hands first.");return;}
+            Model.SpendEnergy(Mathf.Min(5,Model.State.energy));
             cookingOrder=order;elapsed=0;cookStep=0;cuts=0;expectedCut=0;turns=0;goodHeat=0;heat=.48f;cookClock=0;
             for(int i=0;i<3;i++)plated[i]=false;
             ui.CookingAction=-1;activity="cook";ShowCookStep();Sound("cook");
@@ -324,9 +332,7 @@ namespace Wildfeast
         void CheckClosing(){if(Model.CloseService())Say($"Service complete · {Model.State.earned} shells earned. Rest at the bed when ready.");}
         public void ShowWelcome()
         {
-            ui.Show("Your little table. A world of wonder.","Welcome to Saltleaf. The restaurant is yours.");
-            ui.Paragraph("WASD to walk. Right click / E to use doors and plants.\n\nClick a hotbar slot, use 1–0, or scroll.\nLeft click / Space uses your tool. Tab opens inventory. M opens the map.\n\nCatch something delicious. Bring it home.\nFlip the OPEN sign beside your restaurant door.");
-            ui.FooterButton("Step into Saltleaf",()=>{Model.State.stage=1;Model.Notify();ui.Hide();});
+            VisualGuide.Show(ui,0,()=>{Model.State.stage=1;Model.Notify();ui.Hide();});
         }
         public void ShowBag(){ui.Inventory(Model,()=>{Model.Notify();ShowBag();});MenuTabs("Inventory");}
         public void ShowMap(){ui.Map(world);MenuTabs("Map");}
@@ -334,7 +340,7 @@ namespace Wildfeast
         int journalPage,recipePage;
         public void ShowJournal()
         {
-            ui.Show("The forager's journal","Every ingredient tells a story. Discover it in the wild to learn its behavior and recipes.");
+            ui.Show("The forager's journal","");
             for(int i=journalPage*5;i<Mathf.Min(Model.Data.ingredients.Length+5,journalPage*5+5);i++)
             {
                 if(i>=Model.Data.ingredients.Length){var definition=Archipelago.Islands[i-Model.Data.ingredients.Length];var landmark=world.points.First(p=>p.action=="discovery"&&p.transform.IsChildOf(world.IslandRoot(definition.id)));bool visited=Model.State.landmarks.Contains(landmark.source);ui.Row(i-journalPage*5,visited?landmark.label:"Unexplored landmark",definition.name,landmark.source,visited?"Read":"Unknown",()=>GetComponent<IslandDiscoveries>().Visit(landmark),visited);continue;}
@@ -346,7 +352,7 @@ namespace Wildfeast
         void ShowItem(Ingredient item){ui.Show(item.name,item.habitat);ui.Paragraph(item.description);ui.FooterButton("Back to journal",ShowJournal);}
         public void ShowMenu()
         {
-            ui.Show("Tonight's menu","Pick the dishes you want to offer. Guests order from stocked recipes; matching their taste earns a tip.");
+            ui.Show("Tonight's menu","");
             for(int i=recipePage*5;i<Mathf.Min(Model.Data.recipes.Length,recipePage*5+5);i++)
             {
                 var recipe=Model.Data.recipes[i];bool known=Model.State.recipes.Contains(recipe.id),selected=Model.State.menu.Contains(recipe.id);
@@ -369,7 +375,7 @@ namespace Wildfeast
         public void ShowKitchen()
         {
             if(Model.State.phase!="service"){ShowMenu();return;}
-            ui.Show("The evening kitchen","Cook an order, then serve its guest at the matching table. Nori delivers finished dishes when hired.");
+            ui.Show("The evening kitchen","");
             foreach(var o in Model.State.orders)
             {
                 int number=o.number;var r=Model.Data.Dish(o.recipe);
@@ -378,7 +384,7 @@ namespace Wildfeast
         }
         public void ShowUpgrades()
         {
-            ui.Show("The harbor workshop","Restore your home and expedition tools. Everything here is bought with shells earned in your restaurant.");
+            ui.Show("The harbor workshop","");
             for(int i=0;i<Model.Data.upgrades.Length;i++)
             {
                 var u=Model.Data.upgrades[i];bool owned=Model.Has(u.id);string detail=u.description;
@@ -389,7 +395,7 @@ namespace Wildfeast
         }
         void ShowCrop(int index)
         {
-            var c=Model.State.crops[index];ui.Show("The kitchen garden",$"Plot {index+1} · Water once each morning. A harvest grows after {Model.Data.cropDays} watered nights; seeds are kept from discoveries.");
+            var c=Model.State.crops[index];ui.Show("The kitchen garden",$"Plot {index+1}");
             if(!c.planted)
             {
                 int row=0;foreach(string id in new[]{"pepperbell","lanternroot"})
@@ -403,12 +409,12 @@ namespace Wildfeast
         }
         void ShowTravel()
         {
-            ui.Show("Chart a course","Five food ecosystems · free passage · all islands open from the start.");
+            ui.Show("Chart a course","");
             for(int n=0;n<Archipelago.Islands.Length;n++)
             {var i=Archipelago.Islands[n];int destination=i.id;ui.Row(n,i.name,i.subtitle,i.id==0?"restaurant":i.points.First(p=>p.item!="").art,"Sail",()=>Sail(destination),Model.State.phase=="explore"&&world.Area!=i.id);}
         }
 
-        public void Sail(int island){if(activity!=null||ToolBusy||Model.State.phase!="explore"||!Archipelago.Valid(island)||world.Area==2)return;if(island==Model.State.island){ui.Hide();Say("Already docked at this island.");return;}ui.Hide();EndHunt();activity="sail";life.Sail(island,()=>{activity=null;Model.Travel(island);Refresh();Say("Docked at "+Archipelago.Get(island).name);});}
+        public void Sail(int island){if(activity!=null||ToolBusy||Model.State.phase!="explore"||!Archipelago.Valid(island)||!Archipelago.Valid(world.Area))return;if(island==Model.State.island){ui.Hide();Say("Already docked at this island.");return;}ui.Hide();EndHunt();activity="sail";life.Sail(island,()=>{activity=null;Model.Travel(island);Refresh();Say("Docked at "+Archipelago.Get(island).name);});}
         public void Equip(int slot)
         {
             if(activity!=null||ToolBusy||slot<0||slot>9)return;
@@ -418,16 +424,16 @@ namespace Wildfeast
         string Prompt(WorldPoint p)
         {
             var ecology=p.GetComponent<FoodEcology>();if(ecology)return ecology.Hint;
-            if(p.action=="fish")return ItemInventory.EquippedTool(Model.State)==1?"Space · Cast into water":"Select your fishing rod";
+            if(p.action=="fish")return ItemInventory.EquippedTool(Model.State)==1?"Space · Cast into water":"Fishing rod";
             if(p.action=="crop")
             {
                 var c=Model.State.crops[p.index];
                 if(c.growth>=Model.Data.cropDays)return "E · Harvest";
-                if(!c.planted)return ItemInventory.EquippedTool(Model.State)==3||ItemInventory.EquippedTool(Model.State)==4?"Space · Plant seed":"Select a seed packet to plant";
-                return c.wateredDay==Model.State.day?"Watered today":ItemInventory.EquippedTool(Model.State)==2?"Space · Water":"Select your watering can";
+                if(!c.planted)return ItemInventory.EquippedTool(Model.State)==3||ItemInventory.EquippedTool(Model.State)==4?"Space · Plant seed":"Seeds needed";
+                return c.wateredDay==Model.State.day?"Watered today":ItemInventory.EquippedTool(Model.State)==2?"Space · Water":"Watering can";
             }
             if(p.action=="hunt")return "Watch the steam · Dodge the charge";
-            return "Right click / E · "+p.label;
+            return "E · "+p.label;
         }
         void UseTool(WorldPoint p)
         {
@@ -446,6 +452,8 @@ namespace Wildfeast
                 return;
             }
             if((tool==0||tool<0)&&p!=null&&(p.action=="forage"||p.action=="fruit")){Interact(p);return;}
+            if(tool<0||world.Area==6)return;
+            if(!Exert(2))return;
             Vector2 target=life.Target(facing),direction=facing;
             toolAction.Begin(tool,()=>
             {
@@ -499,40 +507,55 @@ namespace Wildfeast
         {
             string[] goals={"seared","broth","lantern","cloud"};string[] names={"A first taste of the shore","Something for the ferryman","Light for the seed keeper","A taste of Iona's island"};
             int index=Model.State.requestIndex;
-            ui.Show("Harbor requests","Fulfill a request during service, then collect its reward before beginning the next day.");
+            ui.Show("Harbor requests","");
             if(index>=goals.Length){ui.Paragraph("The first four harbor requests are complete. The new islands still have food to discover. There are still gardens to tend and menus to try.");return;}
             var r=Model.Data.Dish(goals[index]);ui.Row(0,names[index],$"Serve {r.name} · reward {18+6*index} shells",r.icon,"Claim reward",()=>{if(Model.ClaimRequest()){Sound("chime");ShowRequests();}else Say("Serve the requested dish before collecting this reward.");});
         }
+        bool Exert(int amount)
+        {if(Model.SpendEnergy(amount))return true;Say("Time to rest. Sleep in your room to recover.");return false;}
         public void ShowClosing()
         {
             if(Model.State.phase=="service")return;
-            ui.Show(Model.State.phase=="closing"?"The last guest has gone":"A quiet evening",$"Day {Model.State.day} · Today's service earned {Model.State.earned} shells. Ingredients keep overnight; tomorrow brings fresh forage.");
-            ui.Row(0,"Your harbor requests","Collect a completed request reward before sleeping.","dish-fish","Requests",ShowRequests);
-            ui.Row(1,"Invest in tomorrow","Restore tools, the terrace, and the skiff.","crate","Workshop",ShowUpgrades);
-            ui.Row(2,"The kitchen garden","Watered plants grow overnight. Wild sources recover each morning.","pepperbell",null,null);
-            ui.FooterButton("Begin the next day",()=>{if(Model.NextDay()){ui.Hide();world.SetArea(0,new Vector2(-6,-2.5f));Refresh();Say("A fresh morning. Your journal is waiting.");}});
+            if(world.Area!=6){ui.Show("Service complete","");ui.FooterButton("Return to the restaurant",()=>ui.Hide());return;}
+            ui.Show("Rest until morning?","Your progress saves when you sleep.");
+            ui.FooterButton("Sleep and save",()=>StartCoroutine(SleepRoutine()));
+        }
+        public System.Collections.IEnumerator SleepRoutine()
+        {
+            if(world.Area!=6||Model.State.phase=="service"||activity!=null||ToolBusy)yield break;
+            ui.Hide();activity="sleep";movement=Vector2.zero;var curtain=SceneCurtain.Create(ui);
+            yield return curtain.Fade(true);
+            // Stage the next morning separately. A failed disk write leaves this day intact.
+            var next=SaveStore.Parse(JsonUtility.ToJson(Model.State),Model.Data);var morning=new GameModel(Model.Data,next);
+            if(morning.NextDay())
+            {
+                try{Saves.Write(next);ActivateJourney(Saves);journeyActive=true;world.SetArea(6,new Vector2(1,0));}
+                catch(Exception ex){SaveError=ex.Message;Debug.LogError("Sleep save failed: "+ex.Message);}
+            }
+            activity="sleep";Refresh();yield return curtain.Fade(false);Destroy(curtain.gameObject);activity=null;
+            Say(SaveError==null?"Morning · Progress saved":"Could not save. Your day has been preserved.");
         }
         public float MusicLevel=>ambience.volume;
         public float EffectsLevel=>effects.volume;
         public void ShowPause()
         {
             if(ToolBusy||Sailing)return;
-            ui.Show("Take a breath","Sound, camera and comfort · Changes save immediately. Menus keep their own size when zooming.");
-            ui.SliderRow(0,"Music volume",Model.State.musicVolume,v=>{Model.State.musicVolume=v;Model.Notify();});
-            ui.SliderRow(1,"Sound effects",Model.State.effectsVolume,v=>{Model.State.effectsVolume=v;Model.Notify();});
-            ui.Row(2,"Sound", "Mute both layers without losing your chosen levels.",null,Model.State.muted?"Muted":"Sound on",()=>{Model.State.muted=!Model.State.muted;Model.Notify();ShowPause();});
-            ui.Row(3,"World zoom","Native pixel steps · HUD size stays consistent.",null,new[]{"Wide","Comfort","Close"}[Model.State.zoom],()=>{Model.State.zoom=(Model.State.zoom+1)%3;Model.Notify();ShowPause();});
-            ui.Row(4,"Ambient motion","Quiet foliage and water · action animations remain readable.",null,Model.State.reducedMotion?"Reduced":"Full motion",()=>{Model.State.reducedMotion=!Model.State.reducedMotion;Model.Notify();ShowPause();});
-            ui.FooterButton("Display, controls and journey",ShowMoreOptions);
+            ui.Show("Take a breath","");
+            ui.SliderRow(0,"Music volume",Model.State.musicVolume,v=>{Model.State.musicVolume=v;Model.Notify();SavePreferences();});
+            ui.SliderRow(1,"Sound effects",Model.State.effectsVolume,v=>{Model.State.effectsVolume=v;Model.Notify();SavePreferences();});
+            ui.Row(2,"Sound", "",null,Model.State.muted?"Muted":"Sound on",()=>{Model.State.muted=!Model.State.muted;Model.Notify();SavePreferences();ShowPause();});
+            ui.Row(3,"World zoom","",null,new[]{"Wide","Comfort","Close"}[Model.State.zoom],()=>{Model.State.zoom=(Model.State.zoom+1)%3;Model.Notify();SavePreferences();ShowPause();});
+            ui.Row(4,"Ambient motion","",null,Model.State.reducedMotion?"Reduced":"Full motion",()=>{Model.State.reducedMotion=!Model.State.reducedMotion;Model.Notify();SavePreferences();ShowPause();});
+            ui.FooterButton("Display and field guide",ShowMoreOptions);
         }
         void ShowMoreOptions()
         {
-            ui.Show("Take a breath","Display and gameplay · Your progress saves after each completed action.");
-            ui.Row(0,"Challenge","Fishing tension and Brothback recovery windows.",null,Model.State.relaxed?"Relaxed":"Standard",()=>{Model.State.relaxed=!Model.State.relaxed;Model.Notify();ShowMoreOptions();});
+            ui.Show("Take a breath","");
+            ui.Row(0,"Challenge","",null,Model.State.relaxed?"Relaxed":"Standard",()=>{Model.State.relaxed=!Model.State.relaxed;Model.Notify();SavePreferences();ShowMoreOptions();});
             ui.Row(1,"Display",Screen.fullScreen?"Fills your display":"Resizable window",null,Screen.fullScreen?"Windowed":"Fullscreen",()=>{if(Screen.fullScreen)Screen.SetResolution(Mathf.Min(1280,Display.main.systemWidth-80),Mathf.Min(720,Display.main.systemHeight-80),FullScreenMode.Windowed);else Screen.SetResolution(Display.main.systemWidth,Display.main.systemHeight,FullScreenMode.FullScreenWindow);ShowMoreOptions();});
-            ui.Row(2,"Controls","Mouse / keyboard · WASD, E, Space, Tab, M, 1–0 and scroll.",null,"Read",()=>{ui.Show("Controls","Choose tools with the mouse, numbers or wheel.");ui.Paragraph("WASD · Walk\nLeft click / Space · Use held tool\nRight click / E · Interact\nTab · Inventory and journal tabs\nM · Current island map\nEsc · Close a page / Options\n\nShovel: green ground only. Paths cannot be planted.\nWatering can: refill by any shore or pond.\nHold a food ingredient to attract food creatures.");ui.FooterButton("Back to Options",ShowMoreOptions);});
-            ui.Row(3,"Your journeys","Save and return to the title screen.",null,"Title screen",()=>{Save();if(FrontEnd==null){FrontEnd=gameObject.AddComponent<JourneyFrontEnd>();FrontEnd.Init(this,Path.Combine(Path.GetDirectoryName(Saves.Path),"journeys"));}else FrontEnd.Title();});
-            ui.Row(4,"Leave the table","Save and close the game.",null,"Quit",()=>{Save();Application.Quit();});
+            ui.Row(2,"Field guide","",null,"View",()=>VisualGuide.Show(ui,0,ShowMoreOptions));
+            ui.Row(3,"Your journeys","Continue from your last sleep.",null,"Title screen",()=>{if(FrontEnd==null){FrontEnd=gameObject.AddComponent<JourneyFrontEnd>();FrontEnd.Init(this,Path.Combine(Path.GetDirectoryName(Saves.Path),"journeys"));}else FrontEnd.Title();});
+            ui.Row(4,"Leave the table","Continue from your last sleep.",null,"Quit",()=>Application.Quit());
             ui.FooterButton("Back to sound and camera",ShowPause);
         }
         void ShowReset()
@@ -540,7 +563,7 @@ namespace Wildfeast
             ui.Show("Start a new journey?","This resets the restaurant, discoveries, upgrades, and current service. A copy of the old save will be preserved.");
             ui.FooterButton("Archive old save and restart",()=>{Saves.ArchiveAndReset();UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);});
         }
-        void OnApplicationQuit(){if(initialized&&journeyActive)Save();}
-        void OnApplicationPause(bool paused){if(paused&&initialized&&journeyActive)Save();}
+        void OnApplicationQuit(){}
+        void OnApplicationPause(bool paused){}
     }
 }

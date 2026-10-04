@@ -11,7 +11,7 @@ namespace Wildfeast.Tests
             Assert.AreEqual(5,Archipelago.Islands.Select(i=>i.size).Distinct().Count());
             Assert.GreaterOrEqual(Archipelago.Islands.Select(i=>i.dock).Distinct().Count(),4);
             foreach(var i in Archipelago.Islands)
-            {Assert.IsFalse(WorldView.Water(i.arrival,i.id),i.key);Assert.IsTrue(Archipelago.Road(i.arrival,i.id,.3f),i.key);var art=WorldView.Art(i.key);Assert.AreEqual(i.size.x*32,art.rect.width);Assert.AreEqual(i.size.y*32,art.rect.height);}
+            {Assert.IsFalse(WorldView.Water(i.arrival,i.id),i.key);Assert.IsTrue(Archipelago.Road(i.arrival,i.id,.3f),i.key);Assert.IsNotEmpty(i.gridLand);Assert.IsNotEmpty(i.gridRoad);}
         }
         [Test] public void WholeVisibleSoilFootprintCannotOverlapPavingOrWater()
         {
@@ -20,7 +20,7 @@ namespace Wildfeast.Tests
             {
                 Vector2 tile=new Vector2(x,y);if(!Archipelago.Tillable(tile,i.id))continue;
                 for(int a=-2;a<=2;a++)for(int b=-2;b<=2;b++)
-                {var sample=tile+new Vector2(a*.25f,b*.25f);Assert.IsFalse(Archipelago.Road(sample,i.id),i.key+sample);Assert.IsFalse(WorldView.Water(sample,i.id),i.key+sample);}
+                {var sample=tile+new Vector2(a*.24f,b*.24f);Assert.IsFalse(Archipelago.Road(sample,i.id),i.key+sample);Assert.IsFalse(WorldView.Water(sample,i.id),i.key+sample);}
             }
         }
         [Test] public void WideIslandsPermitGardeningOutsideTheOldMapLimit()

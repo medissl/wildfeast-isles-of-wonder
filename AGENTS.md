@@ -1,3 +1,19 @@
+# Current restored-art guidance
+
+Read docs/HARBOR_REST.md first. The creator explicitly asked to roll back the generated-art experiments to the established First Light design, then improve around it. Canonical building, character, creature, furniture, icon, original title background and UI sprites were restored from e08d0de. The pre-experiment scene snapshot restored the existing room/UI. Preserve this design. Do not invoke image generation, replace the visual direction, or rerun experimental global art generators. Existing tree bases are canonical; animate them without replacing their design. OriginalPresentation only rebinds the existing UI sprites/colors and cleans up unused experiment assets.
+
+Keep the invisible Grid/Tilemap, connected road protection and existing gameplay. The three raised beds are gone. Old planted crops migrate into spatial plots without losing growth. Area 6 is a separate private bedroom; area 2 remains dining. Sleep stages the next morning in a separate model, saves atomically, then applies it; failure preserves the active day. Actions, quit and title return do not checkpoint the active day. New-slot creation, intro flag metadata, and options-only writes are separate. Energy is 100; tools cost 2 per existing animation, forage 3, valid casts 6, cooking up to 5. Exhaustion blocks world work; allow restaurant meals to finish at zero energy to avoid service deadlock. Sleep restores energy and grows watered crops. Verify isolated --rest-test, --smoke-test and --frontend-test. No packaging.
+
+The historical generated-menu and Pixel Harbor art directions below are superseded.
+
+# Current tile world guidance
+
+Read docs/TILE_WORLD.md first. Terrain now uses actual Grid/Tilemap layers, not the old island background PNGs. Resources/Archipelago.json gridLand/gridRoad/gridDeck are the shared authority for drawing, water collision, road protection and planting. Integer garden coordinates remain cell centres; Grid roots offset (-.5,-.5), unit cells, centre-anchored 32px sprites. Old field saves are validated/relocated without losing crops. Resource placement.source retains old harvest IDs after snapping feet to cells.
+
+Do not run older raster world generators over this pass. tools/tile_world_art.py generates native tile art and preserves catalog layouts once tileWorld is set. tools/plan_tile_routes.py explicitly reconnects authored destinations around solid footprints and dock cells; tools/foliage_tiles.py generates native rooted canopy/grass frames. The menu uses the restored native First Light title-horizon background and original text plaque. Do not generate replacement imagery.
+
+ArchipelagoBuilder.Author detects URP, imports sprites, creates persistent tile assets, reauthors outdoors, adds restaurant floor Tilemaps while retaining furniture/UI, and rebakes island maps and optional guide screenshots. Back up the scene first. TidalTile is a TileBase with six frames and Grid collision; reduced motion pauses its Tilemap. VisualGuide is optional in Options; ordinary HUD/menus should contain brief labels and contextual actions. Docking and introduction use fades. The creator explicitly asked for no packaging in this pass; build an unpacked verification player only.
+
 # Current First Light guidance
 
 Read docs/FIRST_LIGHT.md and docs/FIRST_LIGHT_PLAYTEST.md first. Normal startup opens JourneyFrontEnd; only --smoke-test bypasses it. --frontend-test exercises the actual title/creation/intro/slots flow with isolated --save-path and --test-output. Preserve five independent slot files and the legacy save. Avatar, introSeen and landmarks are additive state; slot creation initializes inventory before writing. CharacterLook changes actual native walk/action frames, keeping 32 PPU and point filtering. Its temporary textures require safe runtime/editor cleanup.

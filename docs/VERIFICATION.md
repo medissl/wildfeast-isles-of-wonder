@@ -1,3 +1,18 @@
+# Latest verification: restored First Light design and Harbor Rest — 4 October 2026
+
+The original native art/UI at e08d0de and pre-experiment scene presentation were restored. The generated menu imagery and abandoned replacement UI are removed. The retained work is the invisible Tilemap terrain plus targeted room, energy and sleep checkpoints. The unpacked Windows player is `outputs/Wildfeast-Harbor-Rest/Wildfeast.exe`; no release archive was created.
+
+- Unity EditMode: **86/86 passed**, zero failures (`restored-editmode.xml`). Includes energy transactions, morning crop growth, unfinished-service protection, old-save energy defaults and occupied legacy bed migration.
+- Windows title/creation/intro/slot journey: **33/33 passed at 1366×768**, exit 0 (`restored-front1366/result.txt`). Captures show the original native night background, rustic plaque and buttons.
+- Windows sleep/energy journey: **14 checks passed at 1920×1080**, exit 0 (`restored-rest1080/rest-result.txt`). Actual tools deplete energy, exhaustion blocks extra mining, restaurant door enters the room, sleep advances and saves a full-energy morning, Load recovers it, stairs return to dining.
+- A separate player launch restored that checkpoint: **4/4 checks passed at 1920×1080**, exit 0 (`restored-final-reload1080/reload-result.txt`). Day 2, 19 shells, 100 energy, only the bedroom active.
+- Full integrated journey: **202 checks passed** at 1366×768, exit 0 (`restored-final-journey1366/smoke-result.txt`), no runtime-error file. Covers native terrain/water, pointer hotbar and inventory, road protection, action cooldowns, fishing, spatial gardening, cooking/service/economy, all five continuous voyages, expanded ecology and sleep checkpoint recovery. The fixture exits the new room before travel rather than assuming an outdoor wake-up.
+- Inspected real player title, outdoor, bedroom and sleep-modal captures. Canonical tree bases remain unchanged; all 20 derived frames match the reproducible one-pixel motion tool. The restored final build completed successfully.
+
+Evidence is under `outputs/lush-life-verification/restored-*` outside Git. Earlier failed or abandoned art experiments are not final-build evidence. These automated checks do not establish human visual preference, balance, fresh-player comprehension, physical controller support, disk-full UI recovery or display FPS. A harmless Unity shutdown ComputeBuffer disposal warning remains in the full player log; no game runtime errors were logged.
+
+---
+
 # Latest verification: First Light — 4 October 2026
 
 Unity EditMode passed **75/75 tests**, including moving-bar fishing, progress loss, all species, slot isolation/full slots, additive old-save defaults, complete avatar/intro round trips, glasses alignment and palette changes in action frames, atomic discovery rewards and reachable outer routes. Process exit 0.

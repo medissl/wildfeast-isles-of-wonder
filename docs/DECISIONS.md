@@ -1,3 +1,11 @@
+# Latest: restored First Light design and Harbor Rest
+
+The creator explicitly requests preserving the existing design before the generated-art experiments. See HARBOR_REST.md and the top of AGENTS.md. Original art/UI were restored from e08d0de; preserve the grid and targeted bedroom, energy and sleep checkpoint additions. Earlier generated-menu directions are superseded.
+
+# Latest decision: tile world and quiet menus
+
+The creator requires a consistent invisible square grid for terrain, tilling, decoration placement and interaction targets. All five islands use actual editable Unity Tilemaps, connected dirt paths and protected deck cells, with textured banks and animated pixel water. Restaurant floors also use tiles. Keep the original food world and distinct geography. Use the restored native First Light backdrop and rustic plaque, remove the marketing tagline, and put control guidance in optional picture cards. No release packaging is requested for this pass.
+
 # Latest decisions: Wonder redesign
 
 The creator rejects recolored maps and crab-shaped wildlife. Use distinct landform sizes, route graphs, shore habitats and docking positions. Species are now a stock-pot boar, custard sheep, spice pangolin, winged dumpling moth and kelp snail, with original anatomy/animation. Preserve the nonlethal food loop, 19 ingredients/20 dishes and legacy save identities. Treat whole visible soil footprints and body targeting as correctness constraints. Read WONDER_REDESIGN.md for reference research and the execution brief.

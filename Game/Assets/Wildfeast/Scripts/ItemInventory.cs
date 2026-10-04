@@ -70,11 +70,11 @@ namespace Wildfeast
             var p=model.State;Sync(p);if(p.phase!="explore"||quantity<1||string.IsNullOrEmpty(source)||p.harvested.Contains(source)||(id!="wood"&&id!="stone"&&id!="fiber")||(!p.slots.Any(s=>s.id==id)&&!p.slots.Any(s=>s.count==0)))return false;
             var stock=p.resources.FirstOrDefault(a=>a.id==id);if(stock==null){stock=new ResourceStock{id=id};p.resources.Add(stock);}stock.count+=quantity;p.harvested.Add(source);model.Notify();return true;
         }
-        public static FieldPlot Plot(Progress p,int island,Vector2 target)=>p.fields.FirstOrDefault(f=>f.island==island&&f.x==Mathf.RoundToInt(target.x)&&f.y==Mathf.RoundToInt(target.y));
+        public static FieldPlot Plot(Progress p,int island,Vector2 target)=>p.fields.FirstOrDefault(f=>f.island==island&&f.x==TerrainGrid.Cell(target).x&&f.y==TerrainGrid.Cell(target).y);
         public static bool Till(GameModel model,int island,Vector2 target)
         {
-            var p=model.State;if(p.phase!="explore"||!Archipelago.Valid(island)||float.IsNaN(target.x)||float.IsNaN(target.y)||float.IsInfinity(target.x)||float.IsInfinity(target.y)||!Archipelago.Tillable(new Vector2(Mathf.Round(target.x),Mathf.Round(target.y)),island)||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
-            p.fields.Add(new FieldPlot{island=island,x=Mathf.RoundToInt(target.x),y=Mathf.RoundToInt(target.y)});model.Notify();return true;
+            var p=model.State;if(p.phase!="explore"||!Archipelago.Valid(island)||float.IsNaN(target.x)||float.IsNaN(target.y)||float.IsInfinity(target.x)||float.IsInfinity(target.y)||!Archipelago.Tillable(TerrainGrid.Cell(target),island)||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
+            p.fields.Add(new FieldPlot{island=island,x=TerrainGrid.Cell(target).x,y=TerrainGrid.Cell(target).y});model.Notify();return true;
         }
         public static bool Plant(GameModel model,FieldPlot plot,string item)
         {

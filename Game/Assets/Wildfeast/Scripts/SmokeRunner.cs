@@ -31,6 +31,30 @@ namespace Wildfeast
             Application.logMessageReceived+=Error;
             yield return new WaitForSeconds(.4f);
             game.ui.Hide();
+            if(args.Contains("--verify-sleep-reload"))
+            {
+                Check(game.world.Area==6&&game.Model.State.wokeAtHome,"Fresh process wakes in the saved bedroom");
+                Check(game.Model.State.day==2&&game.Model.State.coins==19&&game.Model.State.energy==100,"Fresh process restores the next morning checkpoint");
+                Check(game.world.bedroom.gameObject.activeInHierarchy&&!game.world.restaurant.gameObject.activeInHierarchy,"Only the saved bedroom is active");
+                Capture("sleep-reload.png");Check(!runtimeError,"Morning relaunch has no runtime errors");
+                File.WriteAllText(Path.Combine(output,"reload-result.txt"),"PASS: "+checks+" sleep relaunch checks");Application.Quit(0);yield break;
+            }
+            if(args.Contains("--rest-test"))
+            {
+                game.Model.State.stage=1;game.Model.Notify();game.Saves.Write(game.Model.State);string checkpoint=File.ReadAllText(game.Saves.Path);
+                Check(!game.world.points.Any(p=>p.action=="crop"),"Restaurant forecourt has no raised beds");
+                game.Model.State.coins=19;game.Model.SpendEnergy(98);Check(File.ReadAllText(game.Saves.Path)==checkpoint,"Day actions do not overwrite the sleep checkpoint");
+                var stone=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item=="stone"&&n.transform.IsChildOf(game.world.saltleaf));game.world.SetArea(0,(Vector2)stone.transform.position+Vector2.down*.9f);
+                yield return Hotbar(9);yield return ClickWorld(stone.transform.position);Check(game.Model.State.energy==0,"One pickaxe action spends the remaining two energy");
+                yield return WaitTool();int damage=stone.damage;yield return ClickWorld(stone.transform.position);Check(!game.ToolBusy&&stone.damage==damage,"Exhaustion blocks another tool action without extra damage");Capture("rest-01-energy.png");
+                var room=game.world.points.First(p=>p.action=="bedroom");game.world.SetArea(2,new Vector2(7,2));game.Interact(room);Check(game.world.Area==6&&game.world.bedroom.gameObject.activeInHierarchy,"Restaurant doorway leads to a separate upstairs room");yield return null;Capture("rest-02-bedroom.png");
+                var bed=game.world.points.First(p=>p.action=="bed");game.Interact(bed);Check(game.ui.PageOpen&&game.ui.title.text=="Rest until morning?","Bed offers sleep and save");Capture("rest-03-sleep.png");
+                int day=game.Model.State.day;yield return game.SleepRoutine();Check(game.Model.State.day==day+1&&game.Model.State.energy==100,"Sleep advances exactly one day and restores full energy");
+                var saved=game.Saves.Read(game.Model.Data);Check(saved.day==day+1&&saved.coins==19&&saved.energy==100&&saved.wokeAtHome,"Next morning economy and energy are checkpointed to disk");
+                game.Model.State.coins=99;game.Model.SpendEnergy(4);game.Model.Notify();game.ActivateJourney(game.Saves);game.ResumeJourney();Check(game.Model.State.coins==19&&game.Model.State.energy==100&&game.world.Area==6,"Load restores the saved morning in the bedroom");yield return null;Capture("rest-04-morning.png");
+                var back=game.world.points.First(p=>p.action=="downstairs");game.Interact(back);Check(game.world.Area==2,"Bedroom exit returns to dining room");
+                Check(!runtimeError,"Sleep and energy flow has no runtime errors");File.WriteAllText(Path.Combine(output,"rest-result.txt"),"PASS: "+checks+" rest checks");Application.Quit(0);yield break;
+            }
             if(args.Contains("--verify-island-spawn"))
             {
                 int expected=int.Parse(args[Array.IndexOf(args,"--expected-island")+1]);
@@ -41,6 +65,16 @@ namespace Wildfeast
                 File.WriteAllText(Path.Combine(output,"spawn-result.txt"),"PASS: 3 saved-island relaunch checks.\n");
                 Application.logMessageReceived-=Error;InputSystem.onAfterUpdate-=MakeKeyboardCurrent;Application.Quit(0);yield break;
             }
+            foreach(var island in Archipelago.Islands)
+            {
+                game.world.SetArea(island.id,island.arrival);var terrain=game.world.IslandRoot(island.id).GetComponentInChildren<TileWorld>();
+                Check(terrain&&terrain.ground.GetUsedTilesCount()>6&&terrain.paths.GetUsedTilesCount()>4,"Native editable terrain layers: "+island.key);
+                var wet=Vector3Int.zero;foreach(var p in terrain.water.cellBounds.allPositionsWithin)if(terrain.water.GetTile<TidalTile>(p)&&Vector2.Distance(new Vector2(p.x,p.y),island.arrival)<6){wet=p;break;}RenderFrame();int frame=terrain.water.GetAnimationFrame(wet);yield return new WaitForSeconds(.3f);RenderFrame();
+                Check(terrain.water.GetAnimationFrame(wet)!=frame,"Water frame advances in actual player: "+island.key);
+            }
+            game.world.SetArea(0,new Vector2(-6,-2.5f));game.Model.State.reducedMotion=true;game.Model.Notify();Check(game.world.saltleaf.GetComponentInChildren<TileWorld>().water.animationFrameRate==0,"Reduced motion pauses tile water animation");game.Model.State.reducedMotion=false;game.Model.Notify();
+            VisualGuide.Show(game.ui,0,game.ui.Hide);yield return null;Check(game.ui.rows.Find("Guide screenshot").GetComponent<UnityEngine.UI.Image>().sprite,"Field guide displays an actual world screenshot");Capture("27-visual-guide.png");
+            var nextGuide=game.ui.rows.GetComponentsInChildren<UnityEngine.UI.Button>().First(b=>b.name==">");yield return Click(Center(nextGuide.GetComponent<RectTransform>()));Check(game.ui.title.text=="Make a little garden","Pointer advances picture guide pages");game.ui.Hide();
             game.Model.State.stage=1;game.Model.Notify();
             var before=game.world.player.position;
             InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.D));
@@ -60,11 +94,11 @@ namespace Wildfeast
             from=game.ui.rows.Find("Inventory slot 20").GetComponent<RectTransform>();to=game.ui.rows.Find("Inventory slot 7").GetComponent<RectTransform>();
             yield return Drag(Center(from),Center(to));Check(game.Model.State.slots[7].id=="tool-axe","Dragging restores a tool to the hotbar");
             yield return Tap(Key.Tab);yield return Tap(Key.M);Check(game.ui.PageOpen&&game.ui.rows.Find("Island chart/You are here"),"M shows the island chart and live player marker");Capture("10-map.png");yield return Tap(Key.M);
-            game.world.SetArea(0,new Vector2(-4,-4.8f));yield return new WaitForSeconds(.2f);
-            yield return Hotbar(6);yield return ClickWorld(new Vector2(-4,-4));
-            var field=ItemInventory.Plot(game.Model.State,0,new Vector2(-4,-4));Check(field!=null,"Mouse-aimed shovel creates a persistent plot on clear land");
-            yield return Hotbar(3);yield return ClickWorld(new Vector2(-4,-4));Check(field.crop.planted&&field.crop.wateredDay==-1,"Seed packet plants the newly tilled tile");
-            yield return Hotbar(2);yield return ClickWorld(new Vector2(-4,-4));Check(field.crop.wateredDay==game.Model.State.day&&game.Model.State.water==19,"Watering consumes one unit from the can");Capture("11-free-garden.png");
+            Vector2 testGarden=FindGardenCell();game.world.SetArea(0,testGarden+Vector2.down*.8f);yield return new WaitForSeconds(.2f);
+            yield return Hotbar(6);yield return ClickWorld(testGarden);
+            var field=ItemInventory.Plot(game.Model.State,0,testGarden);Check(field!=null,"Mouse-aimed shovel creates a persistent plot on clear land");
+            yield return Hotbar(3);yield return ClickWorld(testGarden);Check(field.crop.planted&&field.crop.wateredDay==-1,"Seed packet plants the newly tilled tile");
+            yield return Hotbar(2);yield return ClickWorld(testGarden);Check(field.crop.wateredDay==game.Model.State.day&&game.Model.State.water==19,"Watering consumes one unit from the can");Capture("11-free-garden.png");
             game.Model.State.water=0;game.Model.Notify();game.world.SetArea(0,new Vector2(8,-8.6f));yield return new WaitForSeconds(.2f);yield return Tap(Key.Space);
             Check(game.Model.State.water==20,"Empty watering can refills beside a water source");
             var mineral=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item=="stone"&&n.transform.IsChildOf(game.world.saltleaf));
@@ -195,14 +229,13 @@ namespace Wildfeast
             Check(game.Model.ClaimRequest(),"First request reward is claimable");
             Check(!game.Model.ClaimRequest(),"Request rewards cannot be duplicated");
             game.Model.NextDay();game.world.SetArea(0,new Vector2(-6,-2.5f));
-            var plot=game.world.points.First(p=>p.action=="crop"&&p.index==0);
-            game.world.SetArea(0,(Vector2)plot.transform.position+Vector2.down*.45f);
-            yield return Tap(Key.Digit4);yield return Tap(Key.Space);
-            Check(game.Model.State.crops[0].planted&&game.Model.State.crops[0].wateredDay==-1,"Held seed plants visibly and leaves watering separate");
-            yield return Tap(Key.Digit3);yield return Tap(Key.Space);
-            Check(game.Model.State.crops[0].wateredDay==game.Model.State.day,"Watering can waters the planted bed through tool input");
-            Capture("08-gardening.png");
-            game.Model.NextDay();game.Model.Water(0);game.Model.NextDay();game.Model.Harvest(0);
+            var garden=FindGardenCell();ItemInventory.Till(game.Model,0,garden);var gardenPlot=ItemInventory.Plot(game.Model.State,0,garden);
+            game.world.SetArea(0,garden+Vector2.down*.8f);
+            yield return Hotbar(3);yield return ClickWorld(garden);
+            Check(gardenPlot.crop.planted&&gardenPlot.crop.wateredDay==-1,"Held seed plants visibly in spatial soil and leaves watering separate");
+            yield return Hotbar(2);yield return ClickWorld(garden);
+            Check(gardenPlot.crop.wateredDay==game.Model.State.day,"Watering can waters the planted cell through tool input");Capture("08-gardening.png");
+            game.Model.NextDay();ItemInventory.Water(game.Model,gardenPlot);game.Model.NextDay();ItemInventory.Harvest(game.Model,gardenPlot);
             Check(game.Model.Count("pepperbell",true)==3,"Crop harvest yields three portions");
             // Domain progression is exercised in the player's real model; later content is not unlocked by editing the save.
             game.Model.Deposit();
@@ -245,6 +278,7 @@ namespace Wildfeast
             game.Interact(game.world.points.First(p=>p.action=="fruit"));yield return new WaitForSeconds(1.1f);
             Check(game.Model.Count("cloudfruit",true)==3&&game.Model.State.recipes.Contains("cloud"),"Botanical gloves increase fruit yield and discovery unlocks its recipe");
             yield return new WaitForSeconds(.5f);Capture("03-mistwake.png");
+            game.world.SetArea(6,new Vector2(1,0));yield return game.SleepRoutine();
             var loaded=game.Saves.Read(game.Model.Data);
             Check(loaded.upgrades.Count==5&&loaded.storySeen&&loaded.bag.Any(a=>a.id=="cloudfruit"),"Player saves survive a disk round trip");
             yield return new WaitForSeconds(.5f);
@@ -262,6 +296,11 @@ namespace Wildfeast
         IEnumerator ExpansionJourney()
         {
             game.ui.Hide();
+            game.Interact(game.world.points.First(p=>p.action=="downstairs"));
+            game.Interact(game.world.points.First(p=>p.action=="exit"));
+            Check(game.world.Area==0,"Saved morning can leave the bedroom through the dining room");
+            // Position this travel fixture on a different island so every destination exercises a voyage.
+            game.Model.Travel(1);game.world.SetArea(1,Archipelago.Get(1).arrival);
             foreach(var island in Archipelago.Islands)
             {
                 game.Sail(island.id);float deadline=Time.time+12;while(game.Sailing&&Time.time<deadline)yield return null;
@@ -301,7 +340,7 @@ namespace Wildfeast
             var next=game.ui.rows.GetComponentsInChildren<UnityEngine.UI.Button>().First(b=>b.GetComponentInChildren<TMPro.TMP_Text>()?.text=="Next >");yield return Click(Center(next.GetComponent<RectTransform>()));Check(game.ui.rows.Find("Recipe custard"),"Pointer pagination reaches expansion recipes");Capture("24-recipes.png");game.ui.Hide();
             game.Model.Deposit();Check(game.Model.CanCook("claw"),"New Spiceclaw Bisque uses actual gathered ingredients");game.Model.State.menu.Clear();game.Model.State.menu.Add("claw");Check(game.Model.StartService(),"Restaurant accepts an expanded island recipe");game.world.SetArea(2,new Vector2(0,-3));
             var order=game.Model.State.orders.First();Check(order.recipe=="claw"&&game.Model.Cook(order.number,2)&&game.Model.Serve(order.number),"Expanded recipe can be cooked, served and paid through the existing economy");foreach(var o in game.Model.State.orders.Where(o=>!o.paid)){game.Model.Cook(o.number,1);game.Model.Serve(o.number);}game.Model.CloseService();game.Model.NextDay();
-            game.Model.Travel(5);var saved=game.Saves.Read(game.Model.Data);Check(saved.island==5&&saved.zoom==1&&Mathf.Abs(saved.effectsVolume-.73f)<.001f,"Expanded island and audio/zoom settings survive disk loading");
+            game.Model.Travel(5);game.world.SetArea(6,new Vector2(1,0));yield return game.SleepRoutine();var saved=game.Saves.Read(game.Model.Data);Check(saved.island==0&&saved.wokeAtHome&&saved.zoom==1&&Mathf.Abs(saved.effectsVolume-.73f)<.001f,"Sleep stores the next home morning and audio/zoom settings");
             game.Model.Travel(1);game.world.SetArea(1,new Vector2(-6,-2.5f));yield return new WaitForSeconds(.3f);
         }
         void MakeKeyboardCurrent(){keyboard?.MakeCurrent();testMouse?.MakeCurrent();}
@@ -330,6 +369,18 @@ namespace Wildfeast
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position}.WithButton(MouseButton.Right));yield return null;yield return null;
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;
+        }
+        Vector2 FindGardenCell()
+        {
+            var candidates=new List<Vector2>();for(int x=-7;x<4;x++)for(int y=-7;y<0;y++)candidates.Add(new Vector2(x,y));
+            Physics2D.SyncTransforms();
+            foreach(var p in candidates.OrderBy(p=>Vector2.Distance(p,new Vector2(-4,-4))))
+            {
+                if(ItemInventory.Plot(game.Model.State,0,p)!=null||!Archipelago.Tillable(p,0)||WorldView.Water(p+Vector2.down*.8f,0))continue;
+                var blocked=Physics2D.OverlapBoxAll(p+Vector2.up*.2f,new Vector2(.8f,.5f),0).Concat(Physics2D.OverlapCircleAll(p+Vector2.down*.65f,.18f));
+                if(!blocked.Any(c=>!c.transform.IsChildOf(game.world.player)))return p;
+            }
+            throw new Exception("No clear garden cell near the harbor");
         }
         RenderTexture captureTarget;
         void RenderFrame()

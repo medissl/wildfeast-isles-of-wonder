@@ -49,7 +49,7 @@ namespace Wildfeast
             }
             if(rewardCue){rewardCue.enabled=Ready&&!harvested;rewardCue.sortingOrder=point.artwork?point.artwork.sortingOrder+3:1800;}
         }
-        public string Hint=>game&&game.Model.State.harvested.Contains(point.source)?"Recovering · Fresh harvest tomorrow":kind=="ram"?(Ready?"E / right-click · Collect cream":"Stand still nearby · let the ram settle"):kind=="moth"?(Ready?"E / right-click · Collect pollen":"Hold Lanternroot to attract the moth"):kind=="crab"?(Ready?"E / right-click · Collect shed spice":$"Pickaxe · Loosen spice plates {Contacts}/3"):kind=="snail"?(Ready?"E / right-click · Collect kelp jelly":"Watering can · Wake the Kelpsnail"):kind=="bud"?(Ready?"E / right-click · Harvest dew nectar":"Watering can · Open the Dewblossom"):"Field knife · Tap Cinnamon sap";
+        public string Hint=>game&&game.Model.State.harvested.Contains(point.source)?"Resting":kind=="ram"?(Ready?"E · Collect cream":"Wait quietly"):kind=="moth"?(Ready?"E · Collect pollen":"Lanternroot lure"):kind=="crab"?(Ready?"E · Collect shed spice":$"Pickaxe · Loosen spice plates {Contacts}/3"):kind=="snail"?(Ready?"E · Collect kelp jelly":"Water Kelpsnail"):kind=="bud"?(Ready?"E · Harvest dew nectar":"Water Dewblossom"):"Field knife · Tap Cinnamon sap";
         public bool Tool(int tool)
         {
             if(game.Model.State.harvested.Contains(point.source)){game.Say("This source recovers tomorrow.");return true;}

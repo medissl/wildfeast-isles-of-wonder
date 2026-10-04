@@ -32,7 +32,7 @@ namespace Wildfeast
             yield return new WaitForSeconds(4);Check(!game.FrontEnd.Active&&game.Model.State.introSeen,"Full introduction completes into a playable saved world");
             Check(game.world.player.GetComponent<Rigidbody2D>().simulated,"Player physics returns after the introduction");Capture("07-custom-player.png");
             Check(game.Model.State.avatar.face==2&&game.Model.State.avatar.shirt==2&&game.Model.State.avatar.pants==4&&game.Model.State.avatar.boots==1,"All clothing and face categories are saved");
-            game.Model.State.coins=77;game.Model.Notify();string first=File.ReadAllText(game.FrontEnd.Slots.PathFor(0));
+            game.Model.State.coins=77;game.Model.Notify();game.world.SetArea(6,new Vector2(1,0));yield return game.SleepRoutine();string first=File.ReadAllText(game.FrontEnd.Slots.PathFor(0));
             game.FrontEnd.Title();yield return null;yield return Click("New");game.FrontEnd.NameField.text="Basil";yield return Click("Begin journey");yield return Click("Skip introduction");
             Check(game.FrontEnd.Slots.Exists(1)&&game.Model.State.avatar.name=="Basil"&&game.Model.State.coins==0,"Second new journey uses another slot and fresh progress");
             Check(File.ReadAllText(game.FrontEnd.Slots.PathFor(0))==first,"Creating another journey leaves the first save byte-identical");

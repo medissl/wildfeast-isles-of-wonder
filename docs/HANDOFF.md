@@ -1,3 +1,15 @@
+# Latest: restored First Light design and Harbor Rest
+
+The creator explicitly requests preserving the existing design before the generated-art experiments. See HARBOR_REST.md and the top of AGENTS.md. Original art/UI were restored from e08d0de; preserve the grid and targeted bedroom, energy and sleep checkpoint additions. Earlier generated-menu directions are superseded.
+
+# Current handoff: tile world
+
+Read TILE_WORLD.md and the newest VERIFICATION entry first. Five outdoor maps now use native Unity Grid/Tilemap layers: land, connected trails, animated collision water and cultivated soil. The restaurant has timber/kitchen/rug Tilemaps. Catalog integer cell arrays are shared with domain tilling and spatial water checks. Centres remain at integer coordinates for old saves. Footprint clearance and one connected trail network per island are tested; docks use protected wooden cells. Resources snap to cells with preserved source identities. The initial scene backup is outputs/tile-world-scene-before.unity outside Git.
+
+Original ground/path/bank/deck/soil textures use 32px tiles, point filtering and no compression or mipmaps. The canopy and grass art has richer clustered shading and rooted frames. TidalTile derives directly from TileBase and supplies six frames plus Grid collision. Reduced motion pauses water animation. Island maps and the picture guide are actual URP captures. Normal player startup retains five slots, creation, the skippable intro and all existing game content. The restored original pixel title background and rustic plaque replace the rejected generated imagery; clouds/glints animate behind it. Optional VisualGuide cards replace repeated control paragraphs. Docking and intro cuts fade.
+
+Use tile_world_art.py, plan_tile_routes.py and foliage_tiles.py for this art direction. Preserve the original First Light title background when regenerating native art. Reauthor through ArchipelagoBuilder.Author, retaining room/UI; do not run Assemble or older raster generators. The creator requested no packaging: the current verification player is outputs/Wildfeast-Tile-World/Wildfeast.exe, without new ZIP archives. Human judgement of texture density, path readability and guide comprehension still needs playtesting.
+
 # Current handoff: First Light
 
 Read FIRST_LIGHT.md, FIRST_LIGHT_PLAYTEST.md and the newest VERIFICATION entry. Normal boot now shows the animated title. JourneyFrontEnd owns New/Load/Options/Exit, five JourneySlots, legacy continue, real sprite customization and a skippable 24-second in-world introduction. GameController switches model/save subscriptions and IslandLife clears old plot views when changing journeys. Avatar choices affect all native direction/action frames through cached temporary CharacterLook textures; the original assets remain unchanged. SaveStore normalizes fresh inventory before writing, validates additive avatar/intro/landmark fields, and preserves legacy saves.

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 640f5a6861ea82343b197d1ae870282f, type: 3}
+  m_Name: tile-water-6-1
+  m_EditorClassIdentifier: Wildfeast::Wildfeast.TidalTile
+  frames:
+  - {fileID: 21300000, guid: f2fd4cab183280c42a04af99c932473b, type: 3}
+  - {fileID: 21300000, guid: 75e5a141d75aa9d47b5f281ddec19a80, type: 3}
+  - {fileID: 21300000, guid: fb17e95c20c77b34dbaa3a4213183a77, type: 3}
+  - {fileID: 21300000, guid: c9a70ba1a47cb994f98f935463a0a27e, type: 3}
+  - {fileID: 21300000, guid: 169a7aa32df89994b8ea9bf84f321332, type: 3}
+  - {fileID: 21300000, guid: f4762feb4ce9c7143abd723e7d70a8be, type: 3}
+  colliderType: 2

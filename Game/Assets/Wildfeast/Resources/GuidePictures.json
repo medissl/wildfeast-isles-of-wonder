@@ -1,0 +1,9 @@
+{
+  "source": "Actual unpacked Tile World verification player captures",
+  "pictures": {
+    "explore": "../../outputs/tile-world-verification/verified1080/01-saltleaf.png",
+    "garden": "../../outputs/tile-world-verification/verified1080/11-free-garden.png",
+    "fishing": "../../outputs/tile-world-verification/menus1366/09-fishing-moonfen.png",
+    "kitchen": "../../outputs/tile-world-verification/verified1080/04-cooking.png"
+  }
+}
