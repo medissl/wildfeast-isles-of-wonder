@@ -79,24 +79,28 @@ namespace Wildfeast.Editor
         public static void AssembleAndBuild(){Assemble();Build();}
         public static void BakeIslandMaps(WorldView world,Camera camera,PixelPerfectCamera pixelCamera)
         {
-            pixelCamera.enabled=false;world.player.gameObject.SetActive(false);camera.orthographicSize=13;camera.aspect=1280f/832;
-            var target=new RenderTexture(1280,832,24,RenderTextureFormat.ARGB32);target.Create();
+            pixelCamera.enabled=false;world.player.gameObject.SetActive(false);
+            RenderTexture target=null;
             try
             {
                 foreach(var island in Archipelago.Islands)
                 {
+                    int width=Mathf.RoundToInt(island.size.x*32),height=Mathf.RoundToInt(island.size.y*32);
+                    camera.orthographicSize=island.size.y/2;camera.aspect=island.size.x/island.size.y;
+                    target=new RenderTexture(width,height,24,RenderTextureFormat.ARGB32);target.Create();
                     foreach(var root in world.islands)root.gameObject.SetActive(root==world.IslandRoot(island.id));world.restaurant.gameObject.SetActive(false);
                     camera.transform.position=new Vector3(0,0,-10);
                     RenderPipeline.SubmitRenderRequest(camera,new UniversalRenderPipeline.SingleCameraRequest{destination=target});
                     var previous=RenderTexture.active;RenderTexture.active=target;
-                    var texture=new Texture2D(1280,832,TextureFormat.RGB24,false);texture.ReadPixels(new Rect(0,0,1280,832),0,0);texture.Apply();
+                    var texture=new Texture2D(width,height,TextureFormat.RGB24,false);texture.ReadPixels(new Rect(0,0,width,height),0,0);texture.Apply();
                     string path="Assets/Wildfeast/Resources/Art/map-"+island.key+".png";
                     File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);RenderTexture.active=previous;
                     AssetDatabase.ImportAsset(path);
                     var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=2048;importer.SaveAndReimport();
+                    target.Release();UnityEngine.Object.DestroyImmediate(target);target=null;
                 }
             }
-            finally{target.Release();UnityEngine.Object.DestroyImmediate(target);world.player.gameObject.SetActive(true);pixelCamera.enabled=true;camera.orthographicSize=5.625f;camera.ResetAspect();world.SetArea(0,new Vector2(-6,-2.5f));}
+            finally{if(target){target.Release();UnityEngine.Object.DestroyImmediate(target);}world.player.gameObject.SetActive(true);pixelCamera.enabled=true;camera.orthographicSize=5.625f;camera.ResetAspect();world.SetArea(0,new Vector2(-6,-2.5f));}
         }
     }
 }

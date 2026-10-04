@@ -73,7 +73,7 @@ namespace Wildfeast
         public static FieldPlot Plot(Progress p,int island,Vector2 target)=>p.fields.FirstOrDefault(f=>f.island==island&&f.x==Mathf.RoundToInt(target.x)&&f.y==Mathf.RoundToInt(target.y));
         public static bool Till(GameModel model,int island,Vector2 target)
         {
-            var p=model.State;if(p.phase!="explore"||!Archipelago.Valid(island)||float.IsNaN(target.x)||float.IsNaN(target.y)||Mathf.Abs(target.x)>18||Mathf.Abs(target.y)>11||!Archipelago.Tillable(new Vector2(Mathf.Round(target.x),Mathf.Round(target.y)),island)||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
+            var p=model.State;if(p.phase!="explore"||!Archipelago.Valid(island)||float.IsNaN(target.x)||float.IsNaN(target.y)||float.IsInfinity(target.x)||float.IsInfinity(target.y)||!Archipelago.Tillable(new Vector2(Mathf.Round(target.x),Mathf.Round(target.y)),island)||Plot(p,island,target)!=null||p.fields.Count>=256)return false;
             p.fields.Add(new FieldPlot{island=island,x=Mathf.RoundToInt(target.x),y=Mathf.RoundToInt(target.y)});model.Notify();return true;
         }
         public static bool Plant(GameModel model,FieldPlot plot,string item)

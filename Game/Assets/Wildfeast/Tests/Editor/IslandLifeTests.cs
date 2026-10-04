@@ -34,7 +34,7 @@ namespace Wildfeast.Tests
         }
         [Test] public void FieldHarvestIsAtomicAndPreservesMatureCropWhenFull()
         {
-            ItemInventory.Till(game,0,Vector2.zero);var plot=game.State.fields.Single();ItemInventory.Plant(game,plot,"pepperbell");plot.crop.growth=2;
+            Assert.IsTrue(ItemInventory.Till(game,0,new Vector2(-4,-4)));var plot=game.State.fields.Single();ItemInventory.Plant(game,plot,"pepperbell");plot.crop.growth=2;
             game.Gather("leafgill",8);Assert.IsFalse(ItemInventory.Harvest(game,plot));Assert.AreEqual(2,plot.crop.growth);game.Deposit();int changes=0;game.Changed+=()=>{changes++;Assert.IsFalse(plot.crop.planted);Assert.AreEqual(3,game.Count("pepperbell",true));};Assert.IsTrue(ItemInventory.Harvest(game,plot));Assert.AreEqual(1,changes);
         }
         [Test] public void ForeignPlotsAndOutOfRangeSwapsCannotConsumeAnything()

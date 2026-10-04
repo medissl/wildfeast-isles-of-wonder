@@ -1,3 +1,19 @@
+# Latest verification: Wonder redesign — 4 October 2026
+
+The final Windows build passed **188 integrated checks at 1920×1080 and 188 at 1366×768**, each process exiting 0. Unity EditMode passed **62/62 tests**, 0 failures, process exit 0. A separate fresh Windows process passed **3 saved-Pearltide relaunch checks**, restoring island 5 on its actual dry landing rather than the old common origin. No runtime-errors.txt was produced by these three game runs.
+
+Coverage includes all five voyages, distinct dry disembarkation, matching map assets, soil road/water footprint protection, sampled authored route clearance against water/solid footprints, body targeting, pangolin body clicks through actual virtual mouse input, a step before collecting settled ram cream, watering/luring, complete existing fishing/cooking/service/staff/economy flows, new recipes and disk save loading. Domain tests cover full-satchel reward preservation and repeated readiness contacts. Two former test garden positions overlapped the newly protected paving margin; their setup moved to clear farmland while retaining harvest/save assertions.
+
+Reviewed final baked map shapes, native cast/sign preview, creature ready cues, habitat captures, maps and the fresh-process Pearltide landing. Scripted setup positioning is part of the diagnostic journey; these captures are not a claim of fresh-player comprehension or normal manual playthroughs. Scenes were authored through supported Unity Editor tooling; restaurant/UI references round-tripped. The pre-pass scene is backed up outside the repo at work/wonder-before.unity. Unrelated preexisting PackageManagerSettings.asset remains excluded.
+
+Supported-editor shipping build: 159,747,307 bytes. Hidden-window offscreen URP samples on Intel Iris Xe: 1080p mean 1.68 ms/P95 2.07 ms/89.4 MiB allocated; 1366×768 mean 1.13 ms/P95 1.34 ms/89.1 MiB. Samples are render-request diagnostics, not display FPS or minimum-hardware claims. The preexisting shutdown ComputeBuffer disposal warning remains after PASS; no runtime exception or failing check resulted.
+
+Deliverables: Wildfeast-Wonder-Redesign-Windows.zip, matching Unity source archive, WONDER_REDESIGN.md (research/design/execution prompt), WONDER_PLAYTEST.md, native cast/map previews and wonder-verification evidence. Package CRC and executable/managed-assembly hashes are checked. Source commit and archive checksum are recorded with release evidence.
+
+Still needs human judgement: overall art density, fresh-player navigation/creature comprehension, long sessions, progression balance and physical controller behavior. This is an expanded prototype, not finished production art.
+
+---
+
 # Latest verification: five-island archipelago
 
 Verified 2 October 2026 with Unity 6000.3.7f1, the final authored five-island scene and the exact Windows build distributed as Wildfeast-Archipelago-Windows.zip. Both Windows diagnostic processes and the Unity test process exited with code 0. Ordinary player saves were not opened or overwritten.

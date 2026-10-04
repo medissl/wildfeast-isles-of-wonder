@@ -57,16 +57,17 @@ namespace Wildfeast
         {
             var island=Archipelago.Get(world.Area==2?0:world.Area);
             Show("Isles of Wonder",island.name+" · "+island.subtitle);
-            var map=Box(rows,"Island chart",new Vector2(0,-12),new Vector2(520,338),new Vector2(0,1),Color.white);
+            float scale=Mathf.Min(520/island.size.x,338/island.size.y),mw=island.size.x*scale,mh=island.size.y*scale;
+            var map=Box(rows,"Island chart",new Vector2((520-mw)/2,-12),new Vector2(mw,mh),new Vector2(0,1),Color.white);
             map.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-"+island.key);
             Vector2 position=world.Area==2?new Vector2(-6,-1):world.player.position;
-            var pin=Box(map,"You are here",new Vector2((position.x+20)/40*520,-(13-position.y)/26*338),new Vector2(16,16),new Vector2(0,1),Color.white);
+            var pin=Box(map,"You are here",new Vector2((position.x+island.size.x/2)*scale,-(island.size.y/2-position.y)*scale),new Vector2(16,16),new Vector2(0,1),Color.white);
             pin.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-player");
             Text(rows,"YOU · Gold diamond",new Vector2(12,-361),new Vector2(320,28),18,Gold);
             var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish"}.Contains(p.action)).ToArray();
             for(int i=0;i<locations.Length;i++)
             {
-                var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+20)/40*520,-(13-p.transform.position.y)/26*338),new Vector2(12,12),new Vector2(0,1),Color.white);
+                var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+island.size.x/2)*scale,-(island.size.y/2-p.transform.position.y)*scale),new Vector2(12,12),new Vector2(0,1),Color.white);
                 marker.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-landmark");
                 if(i<9)Text(rows,p.label,new Vector2(538,-16-i*34),new Vector2(202,31),15,Cream);
             }

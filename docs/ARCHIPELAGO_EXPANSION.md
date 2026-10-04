@@ -1,3 +1,5 @@
+Current redesign: see WONDER_REDESIGN.md and WONDER_PLAYTEST.md. Map sizes, docking positions, cast and whole-tile road protection now supersede the earlier layouts below.
+
 # Wildfeast: the five-island expansion
 
 The creator requested a larger, deliberately designed food world after the cozy polish pass. This release replaces the two outdoor layouts with **five actual explorable islands**, while preserving the restaurant, cooking stages, item inventory, chef animations and economy. Each island is 40 Ã— 26 world units; this is an expanded playable prototype, with room for further environmental storytelling and bespoke art.
@@ -23,7 +25,7 @@ Creature, sap and nectar collection moves a compact ingredient into the player�
 ## Play the new interactions
 
 - **Custardram:** enter Mistwake's meadow, stand still nearby for two seconds, then press E or right-click to collect cream. Footsteps startle it.
-- **Spicecrab:** use the pickaxe on the Emberfold creature three times. Each contact follows the chef's windup/recovery animation. The cracked shell becomes visible; collect its shed spice with E.
+- **Spicepangolin:** use the pickaxe on the Emberfold creature three times. Each contact follows the chef's windup/recovery animation. The cracked shell becomes visible; collect its shed spice with E.
 - **Mochimoth:** place a gathered Lanternroot ingredient on your hotbar and hold it. Approach the Moonfen moth; it follows the light. Collect pollen when the hint says it is ready.
 - **Kelpsnail:** use the watering can on the Pearltide creature, spending one unit of water. Collect the jelly it sheds.
 - **Dewblossom:** water Moonfen's closed bud, then collect nectar from its visibly opened flower.

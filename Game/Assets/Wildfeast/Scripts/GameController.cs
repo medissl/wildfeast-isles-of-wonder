@@ -61,7 +61,8 @@ namespace Wildfeast
             ambience=gameObject.AddComponent<AudioSource>();ambience.clip=Resources.Load<AudioClip>("Audio/music-saltleaf");ambience.loop=true;ambience.Play();
             effects=gameObject.AddComponent<AudioSource>();
             Model.Changed += OnChanged;
-            world.SetArea(Model.State.phase=="service" || Model.State.phase=="closing" ? 2 : Model.State.island, Model.State.phase=="explore"?new Vector2(-6,-2.5f):new Vector2(0,-3));
+            Vector2 startingPoint=Model.State.island==0?new Vector2(-6,-2.5f):Archipelago.Get(Model.State.island).arrival;
+            world.SetArea(Model.State.phase=="service" || Model.State.phase=="closing" ? 2 : Model.State.island, Model.State.phase=="explore"?startingPoint:new Vector2(0,-3));
             Refresh();
             if (Saves.Warning!=null) Say(Saves.Warning);
             if (Model.State.stage == 0) ShowWelcome();
@@ -291,9 +292,9 @@ namespace Wildfeast
             else
             {
                 ui.prompt.text="Cooling  ·  E collect stock";
-                if(!ToolBusy&&(GameInput.Interact||GameInput.Use) && Vector2.Distance(world.player.position,hunting.transform.position)<1.8f)
+                if(!ToolBusy&&(GameInput.Interact||GameInput.Use) && Vector2.Distance(world.player.position,hunting.transform.position)<2.4f)
                 {var p=hunting;EndHunt();Gather(p,2);return;}
-                if(huntTimer>(Model.State.relaxed?5:3)){huntTimer=0;huntPhase=0;hunting.transform.position=huntOrigin;}
+                // The stock stays ready while approaching; a short timer previously stole the reward.
             }
             if(Vector2.Distance(world.player.position,huntOrigin)>9 || world.Area!=0)EndHunt();
         }

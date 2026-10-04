@@ -61,7 +61,7 @@ namespace Wildfeast
             {
                 if(Archipelago.Tillable(new Vector2(field.x,field.y),field.island))continue;
                 var island=Archipelago.Get(field.island);Vector2 origin=new Vector2(field.x,field.y);
-                var candidates=Enumerable.Range(-18,37).SelectMany(x=>Enumerable.Range(-11,23).Select(y=>new Vector2(x,y))).Where(tile=>Archipelago.Tillable(tile,field.island)&&!p.fields.Any(f=>f!=field&&f.island==field.island&&f.x==tile.x&&f.y==tile.y)&&!island.props.Any(prop=>prop.role!="grass"&&Vector2.Distance(prop.position,tile)<1.2f)&&!island.points.Any(point=>point.action!="fish"&&Vector2.Distance(point.position,tile)<1.5f)).OrderBy(tile=>(tile-origin).sqrMagnitude).ToArray();
+                var candidates=Enumerable.Range(-(int)island.size.x/2,(int)island.size.x).SelectMany(x=>Enumerable.Range(-(int)island.size.y/2,(int)island.size.y).Select(y=>new Vector2(x,y))).Where(tile=>Archipelago.Tillable(tile,field.island)&&!p.fields.Any(f=>f!=field&&f.island==field.island&&f.x==tile.x&&f.y==tile.y)&&!island.props.Any(prop=>prop.role!="grass"&&Vector2.Distance(prop.position,tile)<1.2f)&&!island.points.Any(point=>point.action!="fish"&&Vector2.Distance(point.position,tile)<1.5f)).OrderBy(tile=>(tile-origin).sqrMagnitude).ToArray();
                 if(candidates.Length==0)throw new InvalidDataException();field.x=(int)candidates[0].x;field.y=(int)candidates[0].y;
             }
             ItemInventory.Sync(p);return p;

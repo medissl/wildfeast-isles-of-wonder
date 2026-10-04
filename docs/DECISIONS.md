@@ -1,3 +1,7 @@
+# Latest decisions: Wonder redesign
+
+The creator rejects recolored maps and crab-shaped wildlife. Use distinct landform sizes, route graphs, shore habitats and docking positions. Species are now a stock-pot boar, custard sheep, spice pangolin, winged dumpling moth and kelp snail, with original anatomy/animation. Preserve the nonlethal food loop, 19 ingredients/20 dishes and legacy save identities. Treat whole visible soil footprints and body targeting as correctness constraints. Read WONDER_REDESIGN.md for reference research and the execution brief.
+
 # Latest decisions: five-island expansion
 
 The creator explicitly authorizes a larger map/content budget, superseding the earlier six-ingredient/two-island limit. Ship five structured food ecosystems with real free ferry destinations, coherent paths, anchored animated vegetation, physical resources and more dishes/creatures. Expansion totals are 19 ingredients, 20 recipes, five food-creature species and six cultivatable plants.

@@ -121,7 +121,8 @@
               "x": 7,
               "y": 3
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
@@ -141,7 +142,8 @@
               "x": 7.6,
               "y": -7.8
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
@@ -153,7 +155,8 @@
               "x": -2,
               "y": -3.1
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
@@ -173,7 +176,8 @@
               "x": -9,
               "y": 4.1
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
@@ -189,7 +193,8 @@
               "x": 4.8,
               "y": -3.4
             }
-          ]
+          ],
+          "width": 0.5
         }
       ],
       "regions": [
@@ -341,168 +346,160 @@
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -13.0,
-            "y": 6.35
+            "x": -12.67,
+            "y": 6.96
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -11.138,
-            "y": 5.92
+            "x": -11.12,
+            "y": 7.12
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -12.14,
-            "y": 4.539
+            "x": -13.78,
+            "y": 5.58
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -13.233,
-            "y": 2.554
+            "x": -12.36,
+            "y": 5.45
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -5.0,
-            "y": 8.35
+            "x": -13.74,
+            "y": 3.66
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -3.138,
-            "y": 7.92
+            "x": -4.87,
+            "y": 8.08
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -1.894,
-            "y": 7.686
+            "x": -3.67,
+            "y": 8.15
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 0.469,
-            "y": 8.222
+            "x": -2.01,
+            "y": 8.16
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 1.427,
-            "y": 8.213
+            "x": -0.4,
+            "y": 7.85
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 3.805,
-            "y": 7.681
+            "x": 1.24,
+            "y": 8.05
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -4.14,
-            "y": 6.539
+            "x": -4.78,
+            "y": 6.36
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -3.178,
-            "y": 6.02
+            "x": -3.34,
+            "y": 6.39
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -0.777,
-            "y": 6.311
+            "x": -1.77,
+            "y": 6.28
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 0.393,
-            "y": 6.698
+            "x": -0.19,
+            "y": 6.46
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 2.351,
-            "y": 6.231
+            "x": 1.1,
+            "y": 6.48
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 4.115,
-            "y": 6.056
+            "x": 2.93,
+            "y": 8.09
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 4.0,
-            "y": 8.35
+            "x": 4.53,
+            "y": 7.87
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 5.862,
-            "y": 7.92
+            "x": 5.91,
+            "y": 8.14
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 7.106,
-            "y": 7.686
+            "x": 7.39,
+            "y": 8.1
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 9.469,
-            "y": 8.222
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-cinnamon",
-          "position": {
-            "x": 10.427,
-            "y": 8.213
+            "x": 3.01,
+            "y": 6.45
           },
           "role": "tree"
         },
@@ -510,55 +507,55 @@
           "art": "tree-cinnamon",
           "position": {
             "x": 4.86,
-            "y": 6.539
+            "y": 6.28
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 5.822,
-            "y": 6.02
+            "x": 6.15,
+            "y": 6.25
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 12.0,
-            "y": -1.65
+            "x": 13.13,
+            "y": -2.14
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 13.862,
-            "y": -2.08
+            "x": 14.45,
+            "y": -1.97
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 12.86,
-            "y": -3.461
+            "x": 13.16,
+            "y": -3.53
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 13.822,
-            "y": -3.98
+            "x": 14.53,
+            "y": -3.58
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": 11.767,
-            "y": -5.446
+            "x": 13.33,
+            "y": -5.35
           },
           "role": "tree"
         },
@@ -566,204 +563,208 @@
           "art": "tree-cinnamon",
           "position": {
             "x": -14.0,
-            "y": -0.65
+            "y": -0.18
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -12.138,
-            "y": -1.08
+            "x": -13.84,
+            "y": -1.5
           },
           "role": "tree"
         },
         {
           "art": "tree-cinnamon",
           "position": {
-            "x": -13.14,
-            "y": -2.461
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-cinnamon",
-          "position": {
-            "x": -12.178,
-            "y": -2.98
+            "x": -12.32,
+            "y": -1.5
           },
           "role": "tree"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": -4.7,
-            "y": 7
+            "x": -12.12,
+            "y": -2.74
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": -4,
-            "y": 7.3
+            "x": -10.44,
+            "y": -4.07
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": -3.4,
-            "y": 6.9
+            "x": -11.74,
+            "y": -3.35
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": -4.3,
-            "y": 6.5
+            "x": -11.27,
+            "y": -3.9
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": -3.2,
-            "y": 7.5
+            "x": -11.79,
+            "y": 4.37
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 3.3,
-            "y": 6
+            "x": -12.21,
+            "y": 4.02
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 4,
-            "y": 6.3
+            "x": -7.39,
+            "y": 3.37
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 4.6,
-            "y": 5.9
+            "x": -6.88,
+            "y": 6.37
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 3.7,
-            "y": 5.5
+            "x": 4.29,
+            "y": 5.83
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 4.8,
-            "y": 6.5
+            "x": 10.4,
+            "y": 2.06
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 10.3,
-            "y": -3
+            "x": 8.0,
+            "y": 1.54
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 11,
-            "y": -2.7
+            "x": 4.66,
+            "y": 5.18
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 11.6,
-            "y": -3.1
+            "x": 9.78,
+            "y": 2.55
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 10.7,
-            "y": -3.5
+            "x": 3.88,
+            "y": 2.93
           },
           "role": "grass"
         },
         {
           "art": "grass-saltleaf",
           "position": {
-            "x": 11.8,
-            "y": -2.5
+            "x": 9.72,
+            "y": 2.37
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 9.2,
+            "y": 1.74
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 5.04,
+            "y": 3.89
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 3.96,
+            "y": 4.98
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-saltleaf",
+          "position": {
+            "x": 10.37,
+            "y": 1.75
           },
           "role": "grass"
         },
         {
           "art": "rock-saltleaf",
           "position": {
-            "x": 7,
-            "y": -5
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-saltleaf",
-          "position": {
-            "x": 8.5,
-            "y": -5
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-saltleaf",
-          "position": {
-            "x": 10,
+            "x": 9,
             "y": -4
           },
           "role": "stone"
         },
         {
-          "art": "rock-saltleaf",
-          "position": {
-            "x": 11,
-            "y": 1
-          },
-          "role": "stone"
-        },
-        {
-          "art": "landmark-saltleaf",
+          "art": "market-crates",
           "position": {
             "x": -4,
             "y": 3
           },
           "role": "landmark"
-        },
-        {
-          "art": "trail-post",
-          "position": {
-            "x": 3,
-            "y": 1.7
-          },
-          "role": "landmark"
         }
       ],
-      "pools": []
+      "pools": [],
+      "size": {
+        "x": 40,
+        "y": 26
+      },
+      "dock": {
+        "x": -11,
+        "y": -7.2
+      },
+      "arrival": {
+        "x": -10,
+        "y": -6
+      }
     },
     {
       "id": 1,
@@ -775,85 +776,65 @@
       "tree": "cloud",
       "coast": [
         {
-          "x": -14.3229,
-          "y": -3.276
+          "x": -14,
+          "y": -9
         },
         {
-          "x": -15.4688,
-          "y": -0.125
+          "x": -13,
+          "y": -3
         },
         {
-          "x": -13.75,
-          "y": 4.7448
+          "x": -11,
+          "y": 4
         },
         {
-          "x": -10.8854,
-          "y": 6.4635
+          "x": -12,
+          "y": 11
         },
         {
-          "x": -9.7396,
-          "y": 9.4714
+          "x": -7,
+          "y": 16
         },
         {
-          "x": -3.724,
-          "y": 9.0417
+          "x": -1,
+          "y": 17
         },
         {
-          "x": -1.4323,
-          "y": 7.6094
+          "x": 5,
+          "y": 14
         },
         {
-          "x": 3.4375,
-          "y": 8.612
+          "x": 10,
+          "y": 8
         },
         {
-          "x": 8.5938,
-          "y": 7.6094
+          "x": 12,
+          "y": 1
         },
         {
-          "x": 12.8906,
-          "y": 4.1719
+          "x": 9,
+          "y": -5
         },
         {
-          "x": 14.6094,
-          "y": -0.9844
+          "x": 5,
+          "y": -10
         },
         {
-          "x": 12.3177,
-          "y": -3.849
+          "x": -2,
+          "y": -13
         },
         {
-          "x": 10.3125,
-          "y": -6.2839
-        },
-        {
-          "x": 5.4427,
-          "y": -7.7161
-        },
-        {
-          "x": 1.4323,
-          "y": -7.0
-        },
-        {
-          "x": -2.2917,
-          "y": -8.862
-        },
-        {
-          "x": -7.4479,
-          "y": -8.862
-        },
-        {
-          "x": -11.4583,
-          "y": -6.5703
+          "x": -9,
+          "y": -12
         }
       ],
       "pond": {
-        "x": 10.3,
-        "y": 5.95
+        "x": 7,
+        "y": 10
       },
       "pondSize": {
-        "x": 3.35,
-        "y": 1.9
+        "x": 2.3,
+        "y": 1.6
       },
       "roads": [
         {
@@ -863,70 +844,90 @@
               "y": -6
             },
             {
-              "x": -11,
-              "y": -5.8
+              "x": -8,
+              "y": -5
             },
             {
-              "x": -5,
-              "y": -5.8
-            },
-            {
-              "x": -2,
+              "x": -4,
               "y": -3
             },
             {
-              "x": 3,
+              "x": 0,
               "y": 0
             },
             {
               "x": 3,
               "y": 2
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
             {
-              "x": -2,
+              "x": -4,
               "y": -3
             },
             {
               "x": -7,
-              "y": 1
-            },
-            {
-              "x": -9.3,
-              "y": 2.6
+              "y": 0
             },
             {
               "x": -8,
-              "y": 4.2
+              "y": 4
             },
             {
-              "x": -3.2,
-              "y": 4.2
+              "x": -5,
+              "y": 7
+            },
+            {
+              "x": -2,
+              "y": 8
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
             {
-              "x": 3,
+              "x": -8,
+              "y": 4
+            },
+            {
+              "x": -9,
+              "y": 8
+            },
+            {
+              "x": -7,
+              "y": 12
+            },
+            {
+              "x": -3,
+              "y": 13
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": 0,
               "y": 0
             },
             {
-              "x": 6,
+              "x": 4,
               "y": 0
-            },
-            {
-              "x": 8,
-              "y": -4
             },
             {
               "x": 7,
-              "y": -6
+              "y": -3
+            },
+            {
+              "x": 7,
+              "y": -5
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
@@ -939,42 +940,43 @@
               "y": 2
             },
             {
-              "x": 6.5,
-              "y": 2.7
+              "x": 6,
+              "y": 3
             }
-          ]
+          ],
+          "width": 0.5
         }
       ],
       "regions": [
         {
           "center": {
-            "x": -7,
-            "y": 4
+            "x": -6,
+            "y": 11
           },
           "size": {
-            "x": 10,
-            "y": 6
+            "x": 9,
+            "y": 9
           },
           "label": "Cloudfruit terraces"
         },
         {
           "center": {
             "x": 5,
-            "y": 4
+            "y": 5
           },
           "size": {
             "x": 8,
-            "y": 5
+            "y": 7
           },
           "label": "Custard meadow"
         },
         {
           "center": {
-            "x": 2,
-            "y": -3
+            "x": -1,
+            "y": -5
           },
           "size": {
-            "x": 8,
+            "x": 6,
             "y": 4
           },
           "label": "Seedkeeper garden"
@@ -1010,7 +1012,7 @@
           "label": "Cloudfruit terraces",
           "position": {
             "x": -2,
-            "y": 4
+            "y": 8
           },
           "item": "cloudfruit",
           "source": "fruit-mist",
@@ -1021,7 +1023,7 @@
           "action": "fruit",
           "label": "Cloudfruit bough",
           "position": {
-            "x": 6,
+            "x": 4,
             "y": 0
           },
           "item": "cloudfruit",
@@ -1034,7 +1036,7 @@
           "label": "Lanternroot beds",
           "position": {
             "x": -8,
-            "y": 3
+            "y": 5.5
           },
           "item": "lanternroot",
           "source": "root-mist",
@@ -1046,7 +1048,7 @@
           "label": "Bubblecarp bank",
           "position": {
             "x": 7,
-            "y": -6
+            "y": -5
           },
           "item": "bubblecarp",
           "source": "",
@@ -1057,8 +1059,8 @@
           "action": "forage",
           "label": "Custardpetal flowers",
           "position": {
-            "x": -4,
-            "y": 6
+            "x": -5,
+            "y": 12
           },
           "item": "custardpetal",
           "source": "petal-mist",
@@ -1069,7 +1071,7 @@
           "action": "creature",
           "label": "Custardram meadow",
           "position": {
-            "x": 7,
+            "x": 6,
             "y": 4
           },
           "item": "ramcream",
@@ -1082,216 +1084,280 @@
         {
           "art": "tree-cloud",
           "position": {
-            "x": -12.68,
-            "y": 4.189
+            "x": -6.82,
+            "y": 14.96
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -11.501,
-            "y": 3.67
+            "x": -5.43,
+            "y": 15.08
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -12.409,
-            "y": 2.204
+            "x": -3.94,
+            "y": 15.08
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -11.04,
-            "y": 2.073
+            "x": -9.62,
+            "y": 13.31
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -13.379,
-            "y": 0.354
+            "x": -8.28,
+            "y": 13.55
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -10.944,
-            "y": 0.731
+            "x": -10.15,
+            "y": 4.87
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -9.866,
-            "y": 1.033
+            "x": 3.06,
+            "y": 12.95
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -5.68,
-            "y": 8.189
+            "x": 4.68,
+            "y": 13.05
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -2.556,
-            "y": 7.961
+            "x": 3.24,
+            "y": 11.56
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 0.536,
-            "y": 7.881
+            "x": 4.87,
+            "y": 11.29
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -1.757,
-            "y": 6.621
+            "x": 8.77,
+            "y": 1.05
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -0.78,
-            "y": 6.503
+            "x": 10.4,
+            "y": 0.98
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 1.644,
-            "y": 6.009
+            "x": 9.08,
+            "y": -0.5
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 5.32,
-            "y": 8.189
+            "x": 10.91,
+            "y": -0.55
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 6.499,
-            "y": 7.67
+            "x": 9.17,
+            "y": -2.36
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 5.591,
-            "y": 6.204
+            "x": -3.24,
+            "y": 3.17
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 13.32,
-            "y": 0.189
+            "x": -1.71,
+            "y": 3.06
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": 13.591,
-            "y": -1.796
+            "x": -2.92,
+            "y": 1.34
           },
           "role": "tree"
         },
         {
           "art": "tree-cloud",
           "position": {
-            "x": -1.68,
-            "y": 2.189
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-cloud",
-          "position": {
-            "x": -0.501,
-            "y": 1.67
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-cloud",
-          "position": {
-            "x": -1.409,
-            "y": 0.204
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-cloud",
-          "position": {
-            "x": -0.04,
-            "y": 0.073
+            "x": -1.27,
+            "y": 1.39
           },
           "role": "tree"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": -12.7,
-            "y": 3
+            "x": -2.52,
+            "y": 10.89
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": -12,
-            "y": 3.3
+            "x": -5.71,
+            "y": 8.65
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": -11.4,
-            "y": 2.9
+            "x": -7.02,
+            "y": 7.78
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": -12.3,
-            "y": 2.5
+            "x": -4.88,
+            "y": 9.19
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": -11.2,
-            "y": 3.5
+            "x": -8.74,
+            "y": 12.27
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -4.97,
+            "y": 15.24
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -5.27,
+            "y": 15.32
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -7.98,
+            "y": 14.42
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -9.0,
+            "y": 12.95
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -3.15,
+            "y": 10.72
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -7.93,
+            "y": 14.94
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -9.92,
+            "y": 10.56
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -9.43,
+            "y": 11.81
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 1.78,
+            "y": 6.29
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 5.79,
+            "y": 8.33
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 3.88,
+            "y": 6.95
           },
           "role": "grass"
         },
@@ -1299,134 +1365,70 @@
           "art": "grass-mistwake",
           "position": {
             "x": 3.3,
-            "y": 6
+            "y": 7.63
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 4,
-            "y": 6.3
+            "x": 4.15,
+            "y": 8.13
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 4.6,
-            "y": 5.9
+            "x": 7.25,
+            "y": 7.1
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 3.7,
-            "y": 5.5
+            "x": 7.15,
+            "y": 6.95
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 4.8,
-            "y": 6.5
+            "x": 8.79,
+            "y": 3.83
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 10.3,
-            "y": -3
+            "x": -1.72,
+            "y": -6.79
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 11,
-            "y": -2.7
+            "x": -2.58,
+            "y": -6.59
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 11.6,
-            "y": -3.1
+            "x": -0.94,
+            "y": -3.91
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 10.7,
-            "y": -3.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": 11.8,
-            "y": -2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": -8.7,
-            "y": -2
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": -8,
-            "y": -1.7
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": -7.4,
-            "y": -2.1
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": -8.3,
-            "y": -2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": -7.2,
-            "y": -1.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": 2.3,
-            "y": -5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-mistwake",
-          "position": {
-            "x": 3,
+            "x": -1.13,
             "y": -4.7
           },
           "role": "grass"
@@ -1434,7 +1436,87 @@
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 3.6,
+            "x": -3.33,
+            "y": -6.83
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -3.23,
+            "y": -4.88
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 0.8,
+            "y": -6.57
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -1.2,
+            "y": -4.86
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -0.22,
+            "y": -3.24
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -3.29,
+            "y": -5.81
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 0.97,
+            "y": -3.24
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 0.54,
+            "y": -5.62
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": 0.77,
+            "y": -6.27
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -1.6,
+            "y": -6.32
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -2.25,
             "y": -5.1
           },
           "role": "grass"
@@ -1442,64 +1524,96 @@
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 2.7,
-            "y": -5.5
+            "x": 1.56,
+            "y": -5.64
           },
           "role": "grass"
         },
         {
           "art": "grass-mistwake",
           "position": {
-            "x": 3.8,
-            "y": -4.5
+            "x": -2.88,
+            "y": -6.67
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -0.77,
+            "y": -6.44
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -0.98,
+            "y": -3.56
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -1.13,
+            "y": -3.84
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -0.06,
+            "y": -5.05
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -0.13,
+            "y": -3.69
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-mistwake",
+          "position": {
+            "x": -1.21,
+            "y": -4.29
           },
           "role": "grass"
         },
         {
           "art": "rock-mistwake",
           "position": {
-            "x": 10,
-            "y": -4
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-mistwake",
-          "position": {
-            "x": 11,
-            "y": -2
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-mistwake",
-          "position": {
-            "x": 12,
-            "y": 0
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-mistwake",
-          "position": {
-            "x": -12,
-            "y": 2
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-mistwake",
-          "position": {
             "x": -10,
-            "y": 1
+            "y": 10
           },
           "role": "stone"
         },
         {
-          "art": "landmark-mistwake",
+          "art": "rock-mistwake",
           "position": {
-            "x": -1,
-            "y": -5.5
+            "x": 2,
+            "y": 12
+          },
+          "role": "stone"
+        },
+        {
+          "art": "orchard-cart",
+          "position": {
+            "x": -2,
+            "y": 11
+          },
+          "role": "landmark"
+        },
+        {
+          "art": "apiary",
+          "position": {
+            "x": 5,
+            "y": 7
           },
           "role": "landmark"
         }
@@ -1507,15 +1621,27 @@
       "pools": [
         {
           "center": {
-            "x": -12,
-            "y": 0
+            "x": -11,
+            "y": 1
           },
           "size": {
             "x": 1.2,
-            "y": 0.7
+            "y": 0.8
           }
         }
-      ]
+      ],
+      "size": {
+        "x": 32,
+        "y": 38
+      },
+      "dock": {
+        "x": -11,
+        "y": -7.2
+      },
+      "arrival": {
+        "x": -10,
+        "y": -6
+      }
     },
     {
       "id": 3,
@@ -1527,43 +1653,51 @@
       "tree": "ember",
       "coast": [
         {
-          "x": -16,
-          "y": -5
+          "x": -24,
+          "y": -4
         },
         {
-          "x": -15,
-          "y": 3
+          "x": -23,
+          "y": 2
         },
         {
-          "x": -10,
-          "y": 8
+          "x": -18,
+          "y": 7
         },
         {
-          "x": -4,
-          "y": 10
-        },
-        {
-          "x": 3,
+          "x": -9,
           "y": 9
         },
         {
-          "x": 8,
-          "y": 10
+          "x": -3,
+          "y": 8
         },
         {
-          "x": 15,
+          "x": 4,
+          "y": 9
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 22,
           "y": 5
         },
         {
-          "x": 17,
-          "y": -1
+          "x": 24,
+          "y": 1
+        },
+        {
+          "x": 21,
+          "y": -3
         },
         {
           "x": 14,
-          "y": -6
+          "y": -5
         },
         {
-          "x": 9,
+          "x": 8,
           "y": -9
         },
         {
@@ -1571,130 +1705,171 @@
           "y": -10
         },
         {
-          "x": -9,
+          "x": -8,
           "y": -9
         },
         {
-          "x": -14,
-          "y": -7
+          "x": -17,
+          "y": -8
         }
       ],
       "pond": {
-        "x": 9,
-        "y": 5
+        "x": 17,
+        "y": 3
       },
       "pondSize": {
-        "x": 3.35,
-        "y": 1.9
+        "x": 3.8,
+        "y": 2.1
       },
       "roads": [
         {
           "points": [
             {
-              "x": -11,
-              "y": -6
+              "x": -19,
+              "y": -5.1
             },
             {
-              "x": -9,
-              "y": -5
+              "x": -15,
+              "y": -4
             },
             {
-              "x": -4,
+              "x": -10,
               "y": -3
             },
             {
-              "x": 0,
-              "y": -1
-            },
-            {
-              "x": 4,
-              "y": 1
-            },
-            {
-              "x": 5.2,
-              "y": 2
-            }
-          ]
-        },
-        {
-          "points": [
-            {
-              "x": -4,
+              "x": -5,
               "y": -3
             },
-            {
-              "x": -9.3,
-              "y": 1
-            },
-            {
-              "x": -7.2,
-              "y": 3.8
-            }
-          ]
-        },
-        {
-          "points": [
             {
               "x": 0,
               "y": -1
             },
             {
               "x": 5,
-              "y": -4
+              "y": 0
             },
             {
-              "x": 9,
-              "y": -7.5
+              "x": 10,
+              "y": 0
+            },
+            {
+              "x": 12,
+              "y": 1
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
             {
-              "x": 4,
-              "y": 1
+              "x": -10,
+              "y": -3
             },
             {
-              "x": 1,
+              "x": -13,
+              "y": 0
+            },
+            {
+              "x": -10,
+              "y": 3
+            },
+            {
+              "x": -6,
+              "y": 3
+            },
+            {
+              "x": -4,
               "y": 5
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": 5,
+              "y": 0
             },
             {
-              "x": -1,
-              "y": 5.8
+              "x": 5,
+              "y": -4
+            },
+            {
+              "x": 10,
+              "y": -5.5
+            },
+            {
+              "x": 12,
+              "y": -5.5
             }
-          ]
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": 4
+            },
+            {
+              "x": 0,
+              "y": 5.5
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": 10,
+              "y": 0
+            },
+            {
+              "x": 10,
+              "y": 4
+            },
+            {
+              "x": 7,
+              "y": 5
+            }
+          ],
+          "width": 0.5
         }
       ],
       "regions": [
         {
           "center": {
-            "x": -7,
+            "x": -11,
             "y": 3
           },
           "size": {
-            "x": 10,
-            "y": 7
+            "x": 12,
+            "y": 8
           },
           "label": "Cinnamon terraces"
         },
         {
           "center": {
-            "x": 4,
-            "y": 3
+            "x": 7,
+            "y": 4
           },
           "size": {
             "x": 8,
             "y": 6
           },
-          "label": "Spiceclaw quarry"
+          "label": "Spicepangolin shelf"
         },
         {
           "center": {
             "x": 3,
-            "y": -4
+            "y": -5
           },
           "size": {
-            "x": 8,
+            "x": 9,
             "y": 4
           },
           "label": "Warm seed beds"
@@ -1705,8 +1880,8 @@
           "action": "boat",
           "label": "Emberfold pier",
           "position": {
-            "x": -11,
-            "y": -7.2
+            "x": -19,
+            "y": -6.5
           },
           "item": "",
           "source": "",
@@ -1717,8 +1892,8 @@
           "action": "forage",
           "label": "Emberbulb terraces",
           "position": {
-            "x": -6,
-            "y": 5
+            "x": -4,
+            "y": 6.5
           },
           "item": "emberbulb",
           "source": "bulb-ember",
@@ -1729,8 +1904,8 @@
           "action": "forage",
           "label": "Smoked Pepperbells",
           "position": {
-            "x": -8,
-            "y": 1
+            "x": -10,
+            "y": 4.5
           },
           "item": "pepperbell",
           "source": "pepper-ember",
@@ -1741,8 +1916,8 @@
           "action": "fish",
           "label": "Lavafin warmwater bank",
           "position": {
-            "x": 9,
-            "y": -7.5
+            "x": 12,
+            "y": -5.5
           },
           "item": "lavafin",
           "source": "",
@@ -1751,10 +1926,10 @@
         },
         {
           "action": "creature",
-          "label": "Spiceclaw quarry",
+          "label": "Spicepangolin shelf",
           "position": {
-            "x": 6,
-            "y": 3
+            "x": 7,
+            "y": 5.8
           },
           "item": "spiceclaw",
           "source": "crab-ember",
@@ -1765,7 +1940,7 @@
           "action": "tap",
           "label": "Cinnamon sap tree",
           "position": {
-            "x": -1,
+            "x": 0,
             "y": 7
           },
           "item": "syrup",
@@ -1778,488 +1953,544 @@
         {
           "art": "tree-ember",
           "position": {
-            "x": -11.946,
-            "y": 4.654
+            "x": -20.98,
+            "y": 2.87
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -10.509,
-            "y": 5.031
+            "x": -19.74,
+            "y": 2.89
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -8.275,
-            "y": 5.333
+            "x": -18.19,
+            "y": 3.03
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -11.873,
-            "y": 3.121
+            "x": -16.52,
+            "y": 3.16
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -9.432,
-            "y": 3.66
+            "x": -14.77,
+            "y": 3.13
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -11.812,
-            "y": 1.799
+            "x": -20.65,
+            "y": 1.46
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -10.329,
-            "y": 2.004
+            "x": -19.47,
+            "y": 1.43
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -5.946,
-            "y": 7.654
+            "x": -17.8,
+            "y": 1.4
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -4.509,
-            "y": 8.031
+            "x": -16.27,
+            "y": 1.43
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -2.275,
-            "y": 8.333
+            "x": -14.81,
+            "y": 1.48
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 1.159,
-            "y": 7.75
+            "x": -15.13,
+            "y": 6.91
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": -3.432,
-            "y": 6.66
+            "x": -13.33,
+            "y": 7.05
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 1.303,
-            "y": 6.421
+            "x": -12.15,
+            "y": 7.11
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 4.054,
-            "y": 7.654
+            "x": -10.49,
+            "y": 7.14
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 5.491,
-            "y": 8.031
+            "x": -9.12,
+            "y": 7.11
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 7.725,
-            "y": 8.333
+            "x": -7.26,
+            "y": 7.07
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 8.722,
-            "y": 7.818
+            "x": -14.87,
+            "y": 5.32
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 4.127,
-            "y": 6.121
+            "x": -13.21,
+            "y": 5.35
           },
           "role": "tree"
         },
         {
           "art": "tree-ember",
           "position": {
-            "x": 6.568,
-            "y": 6.66
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": 12.054,
-            "y": -1.346
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": 13.491,
-            "y": -0.969
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": 12.127,
-            "y": -2.879
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": 14.568,
-            "y": -2.34
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": -12.946,
-            "y": -2.346
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": -11.509,
-            "y": -1.969
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": -12.873,
-            "y": -3.879
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-ember",
-          "position": {
-            "x": -10.432,
-            "y": -3.34
-          },
-          "role": "tree"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -12.7,
-            "y": 3
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -12,
-            "y": 3.3
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -11.4,
-            "y": 2.9
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -12.3,
-            "y": 2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -11.2,
-            "y": 3.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -4.7,
-            "y": 7
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -4,
-            "y": 7.3
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -3.4,
-            "y": 6.9
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -4.3,
-            "y": 6.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -3.2,
-            "y": 7.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 3.3,
-            "y": 6
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 4,
-            "y": 6.3
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 4.6,
-            "y": 5.9
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 3.7,
+            "x": -7.22,
             "y": 5.5
           },
-          "role": "grass"
+          "role": "tree"
         },
         {
-          "art": "grass-emberfold",
+          "art": "tree-ember",
           "position": {
-            "x": 4.8,
-            "y": 6.5
+            "x": 3.73,
+            "y": 6.91
           },
-          "role": "grass"
+          "role": "tree"
         },
         {
-          "art": "grass-emberfold",
+          "art": "tree-ember",
           "position": {
-            "x": 10.3,
-            "y": -3
+            "x": 4.94,
+            "y": 6.97
           },
-          "role": "grass"
+          "role": "tree"
         },
         {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 11,
-            "y": -2.7
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 11.6,
-            "y": -3.1
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 10.7,
-            "y": -3.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": 11.8,
-            "y": -2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -8.7,
-            "y": -2
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -8,
-            "y": -1.7
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -7.4,
-            "y": -2.1
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
-          "position": {
-            "x": -8.3,
-            "y": -2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-emberfold",
+          "art": "tree-ember",
           "position": {
             "x": 2.3,
-            "y": -5
+            "y": 5.38
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 3.89,
+            "y": 5.24
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 18.91,
+            "y": -1.13
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 20.65,
+            "y": -0.84
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 21.92,
+            "y": -0.85
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 19.33,
+            "y": -2.55
+          },
+          "role": "tree"
+        },
+        {
+          "art": "tree-ember",
+          "position": {
+            "x": 20.65,
+            "y": -2.78
+          },
+          "role": "tree"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -14.77,
+            "y": -0.83
           },
           "role": "grass"
         },
         {
           "art": "grass-emberfold",
           "position": {
-            "x": 3,
-            "y": -4.7
+            "x": -6.15,
+            "y": 0.87
           },
           "role": "grass"
         },
         {
           "art": "grass-emberfold",
           "position": {
-            "x": 3.6,
-            "y": -5.1
+            "x": -14.65,
+            "y": 2.2
           },
           "role": "grass"
         },
         {
           "art": "grass-emberfold",
           "position": {
-            "x": 2.7,
-            "y": -5.5
+            "x": -12.87,
+            "y": 3.67
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -8.45,
+            "y": 1.37
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -9.73,
+            "y": 0.25
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -14.54,
+            "y": 3.69
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -15.72,
+            "y": 5.92
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -6.06,
+            "y": 0.14
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -16.39,
+            "y": 5.55
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -5.42,
+            "y": 0.62
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -13.0,
+            "y": 6.34
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": -14.15,
+            "y": 3.24
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.59,
+            "y": 2.89
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 10.54,
+            "y": 6.53
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 9.19,
+            "y": 6.16
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 5.3,
+            "y": 2.28
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.53,
+            "y": 2.44
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 5.64,
+            "y": 2.97
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 4.35,
+            "y": 6.17
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 4.5,
+            "y": -5.64
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.85,
+            "y": -3.77
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.74,
+            "y": -4.46
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.21,
+            "y": -5.36
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.46,
+            "y": -5.41
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 1.5,
+            "y": -5.28
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 6.68,
+            "y": -6.2
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 1.31,
+            "y": -3.98
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 0.67,
+            "y": -3.36
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 1.2,
+            "y": -4.4
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 6.68,
+            "y": -6.77
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 0.66,
+            "y": -6.71
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.15,
+            "y": -4.67
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 2.37,
+            "y": -3.21
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 3.13,
+            "y": -4.04
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-emberfold",
+          "position": {
+            "x": 6.49,
+            "y": -6.34
           },
           "role": "grass"
         },
         {
           "art": "rock-emberfold",
           "position": {
-            "x": 5,
-            "y": 7
+            "x": -18,
+            "y": 1
           },
           "role": "stone"
         },
         {
           "art": "rock-emberfold",
           "position": {
-            "x": 3,
-            "y": 7
+            "x": 18,
+            "y": -2
           },
           "role": "stone"
         },
         {
-          "art": "rock-emberfold",
+          "art": "quarry-cart",
           "position": {
-            "x": 10,
-            "y": -3
+            "x": -16,
+            "y": -1
           },
-          "role": "stone"
+          "role": "landmark"
         },
         {
-          "art": "rock-emberfold",
+          "art": "spice-kiln",
           "position": {
-            "x": 11,
-            "y": -4
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-emberfold",
-          "position": {
-            "x": -12,
-            "y": 0
-          },
-          "role": "stone"
-        },
-        {
-          "art": "landmark-emberfold",
-          "position": {
-            "x": -1,
-            "y": -5.5
+            "x": 2,
+            "y": 4
           },
           "role": "landmark"
         }
@@ -2268,14 +2499,26 @@
         {
           "center": {
             "x": -2,
-            "y": 3
+            "y": 2
           },
           "size": {
-            "x": 1.6,
-            "y": 0.9
+            "x": 1.1,
+            "y": 0.8
           }
         }
-      ]
+      ],
+      "size": {
+        "x": 52,
+        "y": 24
+      },
+      "dock": {
+        "x": -19,
+        "y": -6.5
+      },
+      "arrival": {
+        "x": -18,
+        "y": -5.1
+      }
     },
     {
       "id": 4,
@@ -2287,175 +2530,232 @@
       "tree": "moon",
       "coast": [
         {
-          "x": -16,
-          "y": -6
+          "x": -15,
+          "y": -13
         },
         {
-          "x": -17,
-          "y": 0
+          "x": -16,
+          "y": -5
         },
         {
           "x": -13,
-          "y": 5
+          "y": 1
         },
         {
-          "x": -7,
-          "y": 9
+          "x": -16,
+          "y": 8
         },
         {
-          "x": -2,
+          "x": -12,
+          "y": 15
+        },
+        {
+          "x": -6,
+          "y": 19
+        },
+        {
+          "x": 0,
+          "y": 20
+        },
+        {
+          "x": 7,
+          "y": 17
+        },
+        {
+          "x": 9,
           "y": 10
         },
         {
-          "x": 3,
-          "y": 7
+          "x": 15,
+          "y": 6
         },
         {
-          "x": 10,
-          "y": 9
+          "x": 14,
+          "y": 0
         },
         {
-          "x": 16,
-          "y": 4
-        },
-        {
-          "x": 16,
+          "x": 8,
           "y": -3
         },
         {
-          "x": 10,
-          "y": -7
-        },
-        {
-          "x": 6,
-          "y": -10
-        },
-        {
-          "x": -3,
+          "x": 12,
           "y": -9
         },
         {
-          "x": -11,
-          "y": -9
+          "x": 7,
+          "y": -15
+        },
+        {
+          "x": 0,
+          "y": -18
+        },
+        {
+          "x": -8,
+          "y": -16
         }
       ],
       "pond": {
-        "x": 10,
-        "y": 4
+        "x": 8,
+        "y": 8
       },
       "pondSize": {
-        "x": 3.35,
-        "y": 1.9
+        "x": 3,
+        "y": 2.6
       },
       "roads": [
         {
           "points": [
             {
-              "x": -11,
-              "y": -6
+              "x": -10,
+              "y": -12.5
+            },
+            {
+              "x": -6,
+              "y": -11
+            },
+            {
+              "x": -3,
+              "y": -7
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 3,
+              "y": 3
+            },
+            {
+              "x": 4,
+              "y": 5
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": 0
+            },
+            {
+              "x": -8,
+              "y": 4
+            },
+            {
+              "x": -6,
+              "y": 7
+            },
+            {
+              "x": -3,
+              "y": 8
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": -6,
+              "y": 7
             },
             {
               "x": -9,
-              "y": -4
+              "y": 10
             },
             {
-              "x": -5,
-              "y": -2
+              "x": -8,
+              "y": 14
             },
+            {
+              "x": -4,
+              "y": 15
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
             {
               "x": 0,
               "y": 0
             },
             {
               "x": 5,
-              "y": 2
-            },
-            {
-              "x": 6,
-              "y": 2.3
-            }
-          ]
-        },
-        {
-          "points": [
-            {
-              "x": -5,
               "y": -2
             },
             {
-              "x": -8.3,
-              "y": 2
-            },
-            {
-              "x": -5,
-              "y": 4.8
-            }
-          ]
-        },
-        {
-          "points": [
-            {
-              "x": 0,
-              "y": 0
-            },
-            {
-              "x": 1,
-              "y": -4
+              "x": 6,
+              "y": -5
             },
             {
               "x": 7,
               "y": -7
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
             {
-              "x": 0,
-              "y": 0
-            },
-            {
-              "x": -1,
-              "y": 4
+              "x": 3,
+              "y": 3
             },
             {
               "x": 1,
-              "y": 4.8
+              "y": 6
+            },
+            {
+              "x": 1,
+              "y": 10
+            },
+            {
+              "x": 3,
+              "y": 12
             }
-          ]
+          ],
+          "width": 0.5
         }
       ],
       "regions": [
         {
           "center": {
             "x": -6,
-            "y": 4
+            "y": 13
           },
           "size": {
             "x": 10,
-            "y": 7
+            "y": 9
           },
-          "label": "Mooncap grove"
+          "label": "Mooncap enclosure"
         },
         {
           "center": {
-            "x": 3,
-            "y": 4
+            "x": 1,
+            "y": 10
           },
           "size": {
             "x": 8,
-            "y": 6
+            "y": 8
           },
-          "label": "Mochimoth glade"
+          "label": "Pollen sanctuary"
         },
         {
           "center": {
-            "x": -2,
-            "y": -4
+            "x": -6,
+            "y": -7
           },
           "size": {
-            "x": 7,
-            "y": 4
+            "x": 8,
+            "y": 7
           },
           "label": "Marsh garden"
         }
@@ -2465,8 +2765,8 @@
           "action": "boat",
           "label": "Moonfen boardwalk",
           "position": {
-            "x": -11,
-            "y": -7.2
+            "x": -10,
+            "y": -14
           },
           "item": "",
           "source": "",
@@ -2477,8 +2777,8 @@
           "action": "forage",
           "label": "Mooncap grove",
           "position": {
-            "x": -5,
-            "y": 6
+            "x": -4,
+            "y": 16.5
           },
           "item": "mooncap",
           "source": "cap-moon",
@@ -2489,8 +2789,8 @@
           "action": "forage",
           "label": "Lanternroot marsh",
           "position": {
-            "x": -7,
-            "y": 2
+            "x": -6,
+            "y": 8.5
           },
           "item": "lanternroot",
           "source": "root-moon",
@@ -2513,8 +2813,8 @@
           "action": "creature",
           "label": "Mochimoth glade",
           "position": {
-            "x": 1,
-            "y": 6
+            "x": 3,
+            "y": 13.5
           },
           "item": "mochipollen",
           "source": "moth-moon",
@@ -2525,8 +2825,8 @@
           "action": "bud",
           "label": "Dewblossom",
           "position": {
-            "x": 7,
-            "y": 3
+            "x": 5,
+            "y": 5.5
           },
           "item": "dewnectar",
           "source": "dew-moon",
@@ -2538,408 +2838,448 @@
         {
           "art": "tree-moon",
           "position": {
-            "x": -11.146,
-            "y": 5.31
+            "x": -9.01,
+            "y": 15.84
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -9.591,
-            "y": 5.088
+            "x": -7.6,
+            "y": 15.98
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -8.071,
-            "y": 4.65
+            "x": -11.6,
+            "y": 14.52
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -12.642,
-            "y": 3.449
+            "x": -10.53,
+            "y": 14.4
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -10.521,
-            "y": 3.654
+            "x": -11.54,
+            "y": 12.66
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -9.463,
-            "y": 3.112
+            "x": -10.01,
+            "y": 12.98
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -12.621,
-            "y": 2.036
+            "x": -6.04,
+            "y": 17.86
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -11.634,
-            "y": 1.719
+            "x": -1.63,
+            "y": 18.16
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -9.375,
-            "y": 1.355
+            "x": -0.15,
+            "y": 17.84
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -6.288,
-            "y": 7.771
+            "x": -1.32,
+            "y": 16.34
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -4.146,
-            "y": 8.31
+            "x": 0.45,
+            "y": 16.53
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -2.591,
-            "y": 8.088
+            "x": 9.19,
+            "y": 4.03
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": -2.463,
-            "y": 6.112
+            "x": 10.63,
+            "y": 3.83
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 4.712,
-            "y": 6.771
+            "x": 12.06,
+            "y": 3.82
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 6.854,
-            "y": 7.31
+            "x": 9.15,
+            "y": 2.29
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 8.409,
-            "y": 7.088
+            "x": 10.59,
+            "y": 2.23
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 9.929,
-            "y": 6.65
+            "x": 12.06,
+            "y": 2.26
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 12.1,
-            "y": 7.071
+            "x": -11.93,
+            "y": 3.11
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 5.358,
-            "y": 5.449
+            "x": -10.4,
+            "y": 3.08
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 7.479,
-            "y": 5.654
+            "x": -11.75,
+            "y": 1.37
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 11.982,
-            "y": 5.677
+            "x": -10.39,
+            "y": 1.24
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 10.712,
-            "y": -2.229
+            "x": 0.93,
+            "y": -12.86
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 12.854,
-            "y": -1.69
+            "x": 2.34,
+            "y": -12.83
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 14.409,
-            "y": -1.912
+            "x": 4.19,
+            "y": -13.03
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 11.358,
-            "y": -3.551
+            "x": 1.13,
+            "y": -14.53
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 13.479,
-            "y": -3.346
+            "x": 2.78,
+            "y": -14.59
           },
           "role": "tree"
         },
         {
           "art": "tree-moon",
           "position": {
-            "x": 14.537,
-            "y": -3.888
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-moon",
-          "position": {
-            "x": 11.379,
-            "y": -4.964
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-moon",
-          "position": {
-            "x": 12.366,
-            "y": -5.281
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-moon",
-          "position": {
-            "x": -3.288,
-            "y": 2.771
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-moon",
-          "position": {
-            "x": -2.642,
-            "y": 1.449
+            "x": 4.12,
+            "y": -14.71
           },
           "role": "tree"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -12.7,
-            "y": 3
+            "x": -7.49,
+            "y": 16.08
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -12,
-            "y": 3.3
+            "x": -8.29,
+            "y": 16.92
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -11.4,
-            "y": 2.9
+            "x": -3.62,
+            "y": 12.86
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -12.3,
-            "y": 2.5
+            "x": -4.52,
+            "y": 13.04
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -11.2,
-            "y": 3.5
+            "x": -10.74,
+            "y": 15.31
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -3.4,
-            "y": 6.9
+            "x": -3.67,
+            "y": 12.9
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -3.2,
-            "y": 7.5
+            "x": -6.26,
+            "y": 11.18
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 3.3,
-            "y": 6
+            "x": -10.63,
+            "y": 10.5
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 4,
-            "y": 6.3
+            "x": -10.13,
+            "y": 15.61
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 4.6,
-            "y": 5.9
+            "x": -6.59,
+            "y": 16.72
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 3.7,
-            "y": 5.5
+            "x": -2.14,
+            "y": 11.73
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 4.8,
-            "y": 6.5
+            "x": -2.46,
+            "y": 10.76
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 10.3,
-            "y": -3
+            "x": 3.91,
+            "y": 9.71
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 11,
-            "y": -2.7
+            "x": -1.13,
+            "y": 13.27
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 11.6,
-            "y": -3.1
+            "x": 0.12,
+            "y": 12.83
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 10.7,
-            "y": -3.5
+            "x": -2.1,
+            "y": 12.01
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": 11.8,
-            "y": -2.5
+            "x": 2.65,
+            "y": 9.38
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -8.7,
-            "y": -2
+            "x": -2.32,
+            "y": 10.44
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -8,
-            "y": -1.7
+            "x": -1.26,
+            "y": 12.89
           },
           "role": "grass"
         },
         {
           "art": "grass-moonfen",
           "position": {
-            "x": -7.2,
-            "y": -1.5
+            "x": -2.15,
+            "y": 12.95
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -6.02,
+            "y": -3.7
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -4.87,
+            "y": -6.64
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -6.14,
+            "y": -3.82
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -7.5,
+            "y": -6.46
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -7.07,
+            "y": -6.67
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -9.3,
+            "y": -8.25
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -7.73,
+            "y": -8.49
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -9.39,
+            "y": -9.71
+          },
+          "role": "grass"
+        },
+        {
+          "art": "grass-moonfen",
+          "position": {
+            "x": -5.45,
+            "y": -4.44
           },
           "role": "grass"
         },
@@ -2947,47 +3287,31 @@
           "art": "rock-moonfen",
           "position": {
             "x": -12,
-            "y": -2
+            "y": 12
           },
           "role": "stone"
         },
         {
           "art": "rock-moonfen",
           "position": {
-            "x": -11,
-            "y": 2
+            "x": 9,
+            "y": 4
           },
           "role": "stone"
         },
         {
-          "art": "rock-moonfen",
+          "art": "mushroom-shrine",
           "position": {
-            "x": 11,
-            "y": -4
+            "x": -5,
+            "y": 11
           },
-          "role": "stone"
+          "role": "landmark"
         },
         {
-          "art": "rock-moonfen",
-          "position": {
-            "x": 10,
-            "y": -3
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-moonfen",
-          "position": {
-            "x": 4,
-            "y": 7
-          },
-          "role": "stone"
-        },
-        {
-          "art": "landmark-moonfen",
+          "art": "marsh-lantern",
           "position": {
             "x": -1,
-            "y": -5.5
+            "y": -8
           },
           "role": "landmark"
         }
@@ -2996,24 +3320,36 @@
         {
           "center": {
             "x": -10,
-            "y": 0
+            "y": -6
           },
           "size": {
-            "x": 1.5,
-            "y": 1
+            "x": 2,
+            "y": 2.2
           }
         },
         {
           "center": {
-            "x": 8,
-            "y": -3.8
+            "x": 4,
+            "y": -10
           },
           "size": {
-            "x": 1.8,
-            "y": 1.1
+            "x": 2.5,
+            "y": 1.6
           }
         }
-      ]
+      ],
+      "size": {
+        "x": 36,
+        "y": 44
+      },
+      "dock": {
+        "x": -10,
+        "y": -14
+      },
+      "arrival": {
+        "x": -9,
+        "y": -12.5
+      }
     },
     {
       "id": 5,
@@ -3025,52 +3361,84 @@
       "tree": "coral",
       "coast": [
         {
-          "x": -16,
+          "x": -25,
           "y": -5
         },
         {
-          "x": -15,
+          "x": -24,
           "y": 2
         },
         {
-          "x": -10,
-          "y": 7
-        },
-        {
-          "x": -5,
+          "x": -20,
           "y": 9
         },
         {
-          "x": 0,
-          "y": 8
+          "x": -13,
+          "y": 12
         },
         {
-          "x": 6,
-          "y": 10
+          "x": -5,
+          "y": 13
         },
         {
-          "x": 13,
-          "y": 7
-        },
-        {
-          "x": 17,
-          "y": 2
+          "x": 5,
+          "y": 12
         },
         {
           "x": 15,
-          "y": -4
+          "y": 9
+        },
+        {
+          "x": 23,
+          "y": 4
+        },
+        {
+          "x": 25,
+          "y": -3
+        },
+        {
+          "x": 20,
+          "y": -7
+        },
+        {
+          "x": 16,
+          "y": -10
+        },
+        {
+          "x": 12,
+          "y": -9
         },
         {
           "x": 10,
-          "y": -8
+          "y": -5
         },
         {
-          "x": 4,
-          "y": -10
+          "x": 13,
+          "y": -2
         },
         {
-          "x": -4,
-          "y": -10
+          "x": 12,
+          "y": 3
+        },
+        {
+          "x": 6,
+          "y": 6
+        },
+        {
+          "x": -2,
+          "y": 7
+        },
+        {
+          "x": -9,
+          "y": 5
+        },
+        {
+          "x": -13,
+          "y": 1
+        },
+        {
+          "x": -13,
+          "y": -4
         },
         {
           "x": -10,
@@ -3078,110 +3446,143 @@
         },
         {
           "x": -14,
-          "y": -7
+          "y": -11
+        },
+        {
+          "x": -20,
+          "y": -10
         }
       ],
       "pond": {
-        "x": 8,
-        "y": 4
+        "x": -3,
+        "y": 0
       },
       "pondSize": {
-        "x": 3.35,
-        "y": 1.9
+        "x": 6,
+        "y": 3.6
       },
       "roads": [
         {
           "points": [
             {
-              "x": -11,
-              "y": -6
+              "x": 18,
+              "y": -4.5
             },
             {
-              "x": -9,
-              "y": -5
-            },
-            {
-              "x": -5,
+              "x": 19,
               "y": -2
             },
             {
-              "x": 0,
-              "y": -1
-            },
-            {
-              "x": 4,
-              "y": 1
-            },
-            {
-              "x": 3.9,
-              "y": 2.8
-            }
-          ]
-        },
-        {
-          "points": [
-            {
-              "x": -5,
-              "y": -2
-            },
-            {
-              "x": -7,
+              "x": 18,
               "y": 2
             },
             {
-              "x": -6,
-              "y": 3.8
+              "x": 14,
+              "y": 5
+            },
+            {
+              "x": 9,
+              "y": 7
+            },
+            {
+              "x": 3,
+              "y": 8
+            },
+            {
+              "x": -4,
+              "y": 9
+            },
+            {
+              "x": -11,
+              "y": 8
+            },
+            {
+              "x": -16,
+              "y": 5
+            },
+            {
+              "x": -19,
+              "y": 0
+            },
+            {
+              "x": -18,
+              "y": -4
+            },
+            {
+              "x": -16,
+              "y": -6
             }
-          ]
+          ],
+          "width": 0.5
         },
         {
           "points": [
             {
-              "x": 0,
-              "y": -1
+              "x": 14,
+              "y": 5
             },
             {
-              "x": 2,
-              "y": -5
-            },
-            {
-              "x": 8,
-              "y": -7.5
-            }
-          ]
-        },
-        {
-          "points": [
-            {
-              "x": 4,
-              "y": 1
-            },
-            {
-              "x": 1,
-              "y": 4
-            },
-            {
-              "x": -1,
+              "x": 16,
               "y": 6
             }
-          ]
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": -11,
+              "y": 8
+            },
+            {
+              "x": -13,
+              "y": 10
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": -19,
+              "y": 0
+            },
+            {
+              "x": -21,
+              "y": 2
+            }
+          ],
+          "width": 0.5
+        },
+        {
+          "points": [
+            {
+              "x": -4,
+              "y": 9
+            },
+            {
+              "x": -4,
+              "y": 10.5
+            }
+          ],
+          "width": 0.5
         }
       ],
       "regions": [
         {
           "center": {
-            "x": -6,
-            "y": 4
+            "x": -14,
+            "y": 7
           },
           "size": {
             "x": 10,
-            "y": 6
+            "y": 7
           },
           "label": "Coral orchard"
         },
         {
           "center": {
-            "x": 5,
+            "x": 17,
             "y": 2
           },
           "size": {
@@ -3192,12 +3593,12 @@
         },
         {
           "center": {
-            "x": -1,
-            "y": -4
+            "x": -19,
+            "y": -3
           },
           "size": {
             "x": 8,
-            "y": 4
+            "y": 7
           },
           "label": "Pearlroot beds"
         }
@@ -3207,8 +3608,8 @@
           "action": "boat",
           "label": "Pearltide jetty",
           "position": {
-            "x": -11,
-            "y": -7.2
+            "x": 19,
+            "y": -6
           },
           "item": "",
           "source": "",
@@ -3219,8 +3620,8 @@
           "action": "forage",
           "label": "Pearlsprout beds",
           "position": {
-            "x": -6,
-            "y": 5
+            "x": -16,
+            "y": -4.5
           },
           "item": "pearlsprout",
           "source": "pearl-tide",
@@ -3231,8 +3632,8 @@
           "action": "fruit",
           "label": "Seafoam Cloudfruit",
           "position": {
-            "x": -1,
-            "y": 6
+            "x": -13,
+            "y": 11
           },
           "item": "cloudfruit",
           "source": "fruit-tide",
@@ -3243,8 +3644,8 @@
           "action": "fish",
           "label": "Jellyray reef bank",
           "position": {
-            "x": 8,
-            "y": -7.5
+            "x": 18,
+            "y": -4.5
           },
           "item": "jellyray",
           "source": "",
@@ -3255,7 +3656,7 @@
           "action": "creature",
           "label": "Kelpsnail tidepool",
           "position": {
-            "x": 5,
+            "x": 16,
             "y": 2
           },
           "item": "kelpjelly",
@@ -3268,472 +3669,328 @@
         {
           "art": "tree-coral",
           "position": {
-            "x": -12.364,
-            "y": 3.099
+            "x": -21.08,
+            "y": 5.96
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -9.924,
-            "y": 3.304
+            "x": -19.61,
+            "y": 6.08
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -8.915,
-            "y": 2.762
+            "x": -18.24,
+            "y": 6.07
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -11.28,
-            "y": 1.686
+            "x": -19.36,
+            "y": 4.41
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -9.866,
-            "y": 1.369
+            "x": -10.53,
+            "y": 11.1
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -8.2,
-            "y": 1.005
+            "x": -14.86,
+            "y": 9.29
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -11.778,
-            "y": -0.036
+            "x": -5.87,
+            "y": 11.02
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -10.633,
-            "y": -0.584
+            "x": -1.7,
+            "y": 11.01
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -8.221,
-            "y": -0.435
+            "x": 0.03,
+            "y": 11.16
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -6.364,
-            "y": 8.099
+            "x": 8.63,
+            "y": 8.88
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -3.924,
-            "y": 8.304
+            "x": 10.12,
+            "y": 9.18
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -2.915,
-            "y": 7.762
+            "x": 11.63,
+            "y": 9.03
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -5.28,
-            "y": 6.686
+            "x": 19.78,
+            "y": 2.13
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": -3.866,
-            "y": 6.369
+            "x": 21.3,
+            "y": 1.86
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": 2.636,
-            "y": 8.099
+            "x": 20.38,
+            "y": 0.44
           },
           "role": "tree"
         },
         {
           "art": "tree-coral",
           "position": {
-            "x": 5.076,
-            "y": 8.304
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 6.085,
-            "y": 7.762
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 8.293,
-            "y": 7.804
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 3.72,
-            "y": 6.686
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 5.134,
-            "y": 6.369
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 6.8,
-            "y": 6.005
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 8.847,
-            "y": 6.488
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 11.636,
-            "y": 0.099
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 14.076,
-            "y": 0.304
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 12.72,
-            "y": -1.314
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 14.134,
-            "y": -1.631
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": -2.364,
-            "y": 2.099
-          },
-          "role": "tree"
-        },
-        {
-          "art": "tree-coral",
-          "position": {
-            "x": 0.076,
-            "y": 2.304
+            "x": 21.81,
+            "y": 0.31
           },
           "role": "tree"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -12.7,
-            "y": 3
+            "x": -18.44,
+            "y": 8.38
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -12,
-            "y": 3.3
+            "x": -11.03,
+            "y": 5.56
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -11.4,
-            "y": 2.9
+            "x": -16.75,
+            "y": 9.15
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -12.3,
-            "y": 2.5
+            "x": -17.43,
+            "y": 9.58
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -11.2,
-            "y": 3.5
+            "x": -10.55,
+            "y": 5.58
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -4.7,
-            "y": 7
+            "x": -17.83,
+            "y": 5.8
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -4,
-            "y": 7.3
+            "x": 13.96,
+            "y": -0.6
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -3.4,
-            "y": 6.9
+            "x": 14.57,
+            "y": -0.12
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -4.3,
-            "y": 6.5
+            "x": 13.68,
+            "y": -0.64
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -3.2,
-            "y": 7.5
+            "x": 19.98,
+            "y": 2.45
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 3.3,
-            "y": 6
+            "x": -16.25,
+            "y": -0.51
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 4,
-            "y": 6.3
+            "x": -22.25,
+            "y": -4.38
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 4.6,
-            "y": 5.9
+            "x": -20.64,
+            "y": -4.34
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 3.7,
-            "y": 5.5
+            "x": -20.83,
+            "y": -5.5
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 4.8,
-            "y": 6.5
+            "x": -22.39,
+            "y": -4.93
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 10.3,
-            "y": -3
+            "x": -20.76,
+            "y": -4.34
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 11,
-            "y": -2.7
+            "x": -20.13,
+            "y": -2.21
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 11.6,
-            "y": -3.1
+            "x": -22.65,
+            "y": -5.95
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 10.7,
-            "y": -3.5
+            "x": -16.69,
+            "y": -1.28
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": 11.8,
-            "y": -2.5
+            "x": -21.71,
+            "y": -0.15
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -8.7,
-            "y": -2
+            "x": -22.42,
+            "y": -1.21
           },
           "role": "grass"
         },
         {
           "art": "grass-pearltide",
           "position": {
-            "x": -8,
-            "y": -1.7
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-pearltide",
-          "position": {
-            "x": -7.4,
-            "y": -2.1
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-pearltide",
-          "position": {
-            "x": -8.3,
-            "y": -2.5
-          },
-          "role": "grass"
-        },
-        {
-          "art": "grass-pearltide",
-          "position": {
-            "x": -7.2,
-            "y": -1.5
+            "x": -15.89,
+            "y": -0.74
           },
           "role": "grass"
         },
         {
           "art": "rock-pearltide",
           "position": {
-            "x": -10,
-            "y": 0
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-pearltide",
-          "position": {
-            "x": -11,
+            "x": 20,
             "y": 1
           },
           "role": "stone"
         },
         {
-          "art": "rock-pearltide",
+          "art": "shell-shrine",
           "position": {
-            "x": 12,
-            "y": -2
+            "x": -10,
+            "y": 10
           },
-          "role": "stone"
+          "role": "landmark"
         },
         {
-          "art": "rock-pearltide",
+          "art": "drying-rack",
           "position": {
-            "x": 10,
-            "y": -4
-          },
-          "role": "stone"
-        },
-        {
-          "art": "rock-pearltide",
-          "position": {
-            "x": 11,
-            "y": -3
-          },
-          "role": "stone"
-        },
-        {
-          "art": "landmark-pearltide",
-          "position": {
-            "x": -1,
-            "y": -5.5
+            "x": 16,
+            "y": -1
           },
           "role": "landmark"
         }
@@ -3741,15 +3998,27 @@
       "pools": [
         {
           "center": {
-            "x": -1,
-            "y": 1
+            "x": -21,
+            "y": 4
           },
           "size": {
-            "x": 2.2,
+            "x": 1.1,
             "y": 1
           }
         }
-      ]
+      ],
+      "size": {
+        "x": 56,
+        "y": 32
+      },
+      "dock": {
+        "x": 19,
+        "y": -6
+      },
+      "arrival": {
+        "x": 18,
+        "y": -4.5
+      }
     }
   ]
 }

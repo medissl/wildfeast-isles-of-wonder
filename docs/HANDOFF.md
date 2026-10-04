@@ -1,3 +1,9 @@
+# Current handoff: Wonder redesign
+
+Read WONDER_REDESIGN.md and WONDER_PLAYTEST.md first. The five islands now have different size/dock/arrival vectors. ProjectBuilder.BakeIslandMaps renders their native dimensions, GameUI.Map fits without distortion, WorldView clamps camera to each map, and sailing/save startup use their real landing points. Road protection checks the centred soil footprint rather than its former bottom-pivot centre. Old fields relocate inside current bounds without losing crops. Body clicks resolve FoodEcology origins; calm/lure grace lets players approach to collect, ready ingredients are visible, and Brothback stock no longer expires while approaching. Preserve existing IDs (including spicecrab art/crab-ember source) despite the new Spicepangolin presentation.
+
+The final original art generator is tools/wonder_art.py, run after archipelago_art.py. It redraws geography, independent creatures, chef/walk/action frames, visitor outfits, grounded forage, material props and measured signs. Author with ArchipelagoBuilder.Author; outdoor roots/maps change while room and UI references remain. The pre-pass scene backup is work/wonder-before.unity outside the repo. Standalone diagnostics add --verify-island-spawn --expected-island <id> alongside --smoke-test and isolated --save-path/--test-output for a fresh-process landing check.
+
 # Current handoff: five-island archipelago
 
 Read ARCHIPELAGO_EXPANSION.md and the newest verification first. There are five actual island roots: Saltleaf 0, Mistwake 1, Emberfold 3, Moonfen 4 and Pearltide 5; **2 remains the restaurant** to retain legacy scene/save meaning. WorldView.islands stores roots in catalog order. Use IslandRoot(area), Archipelago.Valid/Get and the catalog instead of assuming every non-home area is Mistwake.

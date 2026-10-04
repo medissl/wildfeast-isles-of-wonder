@@ -1,3 +1,5 @@
+Current playable revision: **Wonder redesign** — five different landforms/dimensions, distinct food wildlife, native cast/forage, protected road edges and reliable collection. See [design analysis](docs/WONDER_REDESIGN.md), [playtest guide](docs/WONDER_PLAYTEST.md) and [verification](docs/VERIFICATION.md). Run `tools/wonder_art.py` last when regenerating art.
+
 # Wildfeast: Isles of Wonder
 
 A free, offline single-player Unity game prototype for Windows. Explore strange islands, bring impossible ingredients home, and grow a harbor restaurant in modern top-down pixel art.

@@ -1,5 +1,7 @@
 # Wildfeast project guidance
 
+Read docs/WONDER_REDESIGN.md and docs/WONDER_PLAYTEST.md first for current art/geography. Run tools/wonder_art.py LAST after archipelago_art.py. It preserves IDs while replacing terrain, creatures, characters and sign lettering. Island dimensions/docks/arrivals differ: consume catalog size/dock/arrival in camera, map, ferry and save startup. Soil is centred and its entire footprint must avoid roads/water. Preserve body targeting, calm/lure grace, visible ready cues and persistent boar stock. Re-run body-click, dry-docking and isolated saved-island relaunch diagnostics when changing these flows.
+
 Read `docs/HANDOFF.md`, `docs/DECISIONS.md`, and `docs/VERIFICATION.md` before extending the game. The original vision is in `docs/WILDFEAST_PLAN.md`. Work in the Unity project at `Game/`; the repository root is not the Unity project root.
 
 ## Direction

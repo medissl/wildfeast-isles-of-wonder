@@ -28,7 +28,7 @@ namespace Wildfeast
                 if(!plots.TryGetValue(f,out var views))
                 {
                     Transform root=game.world.IslandRoot(f.island);
-                    var soil=WorldView.Add(root,"soil",new Vector2(f.x,f.y),-500);
+                    var soil=WorldView.Add(root,"soil",new Vector2(f.x,f.y),-500,true);
                     var crop=WorldView.Add(soil.transform,"planted-seed",new Vector2(0,.2f),1000-f.y*32);
                     views=new[]{soil,crop};plots.Add(f,views);
                 }
@@ -49,6 +49,8 @@ namespace Wildfeast
             if(mouse!=null&&mouse.leftButton.wasPressedThisFrame)
             {
                 Vector2 cursor=game.world.worldCamera.ScreenToWorldPoint(mouse.position.ReadValue());
+                var bodyPoint=game.world.PointAt(cursor);
+                if(bodyPoint&&bodyPoint.GetComponent<FoodEcology>())return bodyPoint.transform.position;
                 if(Vector2.Distance(hero,cursor)<=2)return cursor;
             }
             return hero+facing*.85f;
@@ -63,6 +65,7 @@ namespace Wildfeast
             if(tool==6)
             {
                 game.Sound("cook");
+                if(Archipelago.Road(target,game.world.Area,.1f)){Notice("Paving and boardwalks cannot be tilled.");return true;}
                 var blockers=Physics2D.OverlapBoxAll(tile+Vector2.up*.2f,new Vector2(.8f,.5f),0);
                 bool solid=blockers.Any(c=>!c.transform.IsChildOf(game.world.player));
                 if(!WorldView.Water(tile,game.world.Area)&&!solid&&ItemInventory.Till(model,game.world.Area,tile)){game.world.Burst(tile,"dirt-puff");Notice("Soil tilled · Select seeds to plant");}
@@ -124,7 +127,8 @@ namespace Wildfeast
         {
             Sailing=true;var world=game.world;var body=world.player.GetComponent<Rigidbody2D>();body.simulated=false;
             var ships=world.GetComponentsInChildren<SpriteRenderer>(true).Where(sr=>sr.gameObject.name=="boat").ToArray();foreach(var sr in ships)sr.enabled=false;
-            var ship=WorldView.Add(world.transform,"boat",new Vector2(-11,-7.2f),1800);ship.gameObject.name="Sailing skiff";
+            Vector2 departure=Archipelago.Get(world.Area).dock,landing=Archipelago.Get(destination).dock;
+            var ship=WorldView.Add(world.transform,"boat",departure,1800);ship.gameObject.name="Sailing skiff";
             world.FollowSea=true;world.playerArt.sortingOrder=1802;
             // Temporarily position both authored islands in a continuous sea route.
             // Rebase to the destination's local coordinates only after physically docking.
@@ -132,13 +136,14 @@ namespace Wildfeast
             Vector3 offset=new Vector3(40,-35,0);arrival.localPosition=offset;arrival.gameObject.SetActive(true);
             var oceanTiles=new List<GameObject>();
             for(int x=0;x<2;x++)for(int y=0;y<3;y++)oceanTiles.Add(WorldView.Add(world.transform,"ocean",new Vector2(x*40,-y*26),-2100,true).gameObject);
-            yield return MoveShip(ship,new Vector2(-11,-7.2f),new Vector2(-11,-11.5f),2.2f);
-            yield return MoveShip(ship,new Vector2(-11,-11.5f),new Vector2(12,-27),2.5f);
-            yield return MoveShip(ship,new Vector2(12,-27),new Vector2(29,-46.5f),2.5f);
-            yield return MoveShip(ship,new Vector2(29,-46.5f),new Vector2(29,-42.2f),2.2f);
+            Vector2 parked=landing+(Vector2)offset;
+            yield return MoveShip(ship,departure,departure+Vector2.down*4.3f,2.2f);
+            yield return MoveShip(ship,departure+Vector2.down*4.3f,new Vector2(12,-27),2.5f);
+            yield return MoveShip(ship,new Vector2(12,-27),parked+Vector2.down*4.3f,2.5f);
+            yield return MoveShip(ship,parked+Vector2.down*4.3f,parked,2.2f);
             arrival.localPosition=Vector3.zero;foreach(var tile in oceanTiles)Destroy(tile);
             foreach(var sr in ships)sr.enabled=true;Destroy(ship.gameObject);body.simulated=true;world.FollowSea=false;
-            world.SetArea(destination,new Vector2(-10,-6));Sailing=false;complete();
+            world.SetArea(destination,Archipelago.Get(destination).arrival);Sailing=false;complete();
         }
         IEnumerator MoveShip(SpriteRenderer ship,Vector2 start,Vector2 end,float duration)
         {

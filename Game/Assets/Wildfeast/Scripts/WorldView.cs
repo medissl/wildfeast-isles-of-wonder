@@ -35,6 +35,7 @@ namespace Wildfeast
         float[] guestDelay=new float[5];
         string previousPhase;
         float burstCooldown;
+        Vector3 lastStaffPosition;
         readonly List<GameObject> transientEffects=new List<GameObject>();
         readonly int[] guestWaypoint=new int[5];
         Vector2[][] guestArrivals,guestDepartures;
@@ -71,18 +72,19 @@ namespace Wildfeast
         }
         public WorldPoint Nearest()
         {
-            WorldPoint result = null; float distance = 1.6f;
+            WorldPoint result = null; float distance = 2.4f;
             foreach (var p in points) if (p && p.gameObject.activeInHierarchy)
             {
                 if(p.artwork&&!p.artwork.enabled&&(p.action=="forage"||p.action=="fruit"))continue;
                 float d = Vector2.Distance(player.position, p.transform.position);
-                if (d < distance) { distance = d; result = p; }
+                float reach=p.GetComponent<FoodEcology>()?2.4f:1.6f;
+                if (d < distance&&d<reach) { distance = d; result = p; }
             }
             return result;
         }
         public WorldPoint PointAt(Vector2 cursor)
         {
-            return points.Where(p=>p&&p.gameObject.activeInHierarchy&&Vector2.Distance(player.position,p.transform.position)<=2&&(Vector2.Distance(cursor,p.transform.position)<.9f||(p.artwork&&p.artwork.bounds.Contains(new Vector3(cursor.x,cursor.y,p.artwork.transform.position.z))))&&(!p.artwork||p.artwork.enabled)).OrderBy(p=>Vector2.Distance(cursor,p.transform.position)).FirstOrDefault();
+            return points.Where(p=>p&&p.gameObject.activeInHierarchy&&Vector2.Distance(player.position,p.transform.position)<=(p.GetComponent<FoodEcology>()?2.4f:2)&&(Vector2.Distance(cursor,p.transform.position)<.9f||(p.artwork&&p.artwork.bounds.Contains(new Vector3(cursor.x,cursor.y,p.artwork.transform.position.z))))&&(!p.artwork||p.artwork.enabled)).OrderBy(p=>Vector2.Distance(cursor,p.transform.position)).FirstOrDefault();
         }
         public void Face(Vector2 direction){if(direction.sqrMagnitude>.01f)facing=direction.normalized;}
         public void Animate(Vector2 motion)
@@ -107,13 +109,16 @@ namespace Wildfeast
                 if(orderIcons.Count>i){orderIcons[i].sortingOrder=sr.sortingOrder+3;orderIcons[i].enabled=guests[i].position.y>-4.5f&&guestDelay[i]<=0&&!guestLeaving[i];}
             }
             var staff=employee.GetComponent<SpriteRenderer>();staff.sortingOrder=1000-Mathf.RoundToInt(employee.transform.position.y*32);
+            var staffMotion=employee.transform.position-lastStaffPosition;
+            staff.sprite=Art("visitor-2-"+(staffMotion.sqrMagnitude>.00001f?(int)(Time.time*8)%4:0));
+            if(Mathf.Abs(staffMotion.x)>.001f)staff.flipX=staffMotion.x<0;lastStaffPosition=employee.transform.position;
         }
         void LateUpdate()
         {
             if(chefFrames==null)return;
             Vector3 target = new Vector3(player.position.x, player.position.y + 1, -10);
             if (Area == 2) target = new Vector3(0, 0, -10);
-            else if(!FollowSea) {float halfX=worldCamera.orthographicSize*worldCamera.aspect;target.x=Mathf.Clamp(target.x,-Mathf.Max(0,20-halfX),Mathf.Max(0,20-halfX));target.y=Mathf.Clamp(target.y,-Mathf.Max(0,13-worldCamera.orthographicSize),Mathf.Max(0,13-worldCamera.orthographicSize));}
+            else if(!FollowSea) {var size=Archipelago.Get(Area).size;float halfX=worldCamera.orthographicSize*worldCamera.aspect;target.x=Mathf.Clamp(target.x,-Mathf.Max(0,size.x/2-halfX),Mathf.Max(0,size.x/2-halfX));target.y=Mathf.Clamp(target.y,-Mathf.Max(0,size.y/2-worldCamera.orthographicSize),Mathf.Max(0,size.y/2-worldCamera.orthographicSize));}
             var cameraPosition = Vector3.Lerp(worldCamera.transform.position, target, 1 - Mathf.Exp(-8 * Time.deltaTime));
             cameraPosition.x = Mathf.Round(cameraPosition.x * 32) / 32f; cameraPosition.y = Mathf.Round(cameraPosition.y * 32) / 32f;
             worldCamera.transform.position = cameraPosition;

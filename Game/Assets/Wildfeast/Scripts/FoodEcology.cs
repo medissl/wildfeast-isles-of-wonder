@@ -9,30 +9,34 @@ namespace Wildfeast
     {
         public string kind,sprite; public WorldPoint point;
         public bool Ready {get;private set;} public int Contacts {get;private set;}
-        GameController game; Vector3 home; Vector2 lastHero; float calm; int day;
-        void Start(){game=FindFirstObjectByType<GameController>();home=transform.localPosition;lastHero=game.world.player.position;day=game.Model.State.day;var state=game.Model.State.ecology.FirstOrDefault(s=>s.source==point.source);if(state!=null){Contacts=state.contacts;Ready=state.ready;}}
+        GameController game; Vector3 home; Vector2 lastHero; float calm,grace; int day; SpriteRenderer rewardCue;
+        void Start(){game=FindFirstObjectByType<GameController>();home=transform.localPosition;lastHero=game.world.player.position;day=game.Model.State.day;ReadCondition();rewardCue=WorldView.Add(transform,"held-"+point.item,Vector2.up*(kind=="ram"?1.8f:1.6f),1800);rewardCue.enabled=false;}
         void ReadCondition()
         {var state=game.Model.State.ecology.FirstOrDefault(s=>s.source==point.source);if(state!=null){Contacts=state.contacts;Ready=state.ready;}}
         void Update()
         {
             if(!game||game.Model==null||game.Sailing)return;
-            if(day!=game.Model.State.day){day=game.Model.State.day;Ready=false;Contacts=0;calm=0;transform.localPosition=home;}
+            if(day!=game.Model.State.day){day=game.Model.State.day;Ready=false;Contacts=0;calm=0;grace=0;transform.localPosition=home;}
             bool harvested=game.Model.State.harvested.Contains(point.source);
             Vector2 hero=game.world.player.position;float distance=Vector2.Distance(hero,transform.position);
             if(kind=="ram")
             {
                 bool still=Vector2.Distance(hero,lastHero)<.01f;
-                calm=still&&distance<2.5f?calm+Time.deltaTime:0;Ready=calm>=2;
-                if(!still&&distance<2.1f)transform.localPosition=Vector3.MoveTowards(transform.localPosition,home+(transform.position-(Vector3)hero).normalized*.65f,Time.deltaTime*.6f);
+                calm=still&&distance<3?calm+Time.deltaTime:0;
+                if(calm>=2)grace=6;else grace=Mathf.Max(0,grace-Time.deltaTime);
+                Ready=grace>0&&distance<3.5f;
+                if(!Ready&&!still&&distance<2.1f)transform.localPosition=Vector3.MoveTowards(transform.localPosition,home+(transform.position-(Vector3)hero).normalized*.35f,Time.deltaTime*.3f);
                 else transform.localPosition=Vector3.MoveTowards(transform.localPosition,home,Time.deltaTime*.35f);
             }
             if(kind=="moth")
             {
-                bool lure=game.Model.State.slots[game.Model.State.equipped].id=="lanternroot";
+                bool lure=game.Model.State.slots[game.Model.State.equipped].id=="lanternroot"&&game.Model.State.slots[game.Model.State.equipped].count>0;
                 var target=lure&&distance<4?Vector3.Lerp(home,transform.parent.InverseTransformPoint(hero),.65f):home;
-                transform.localPosition=Vector3.MoveTowards(transform.localPosition,target,Time.deltaTime*.5f);Ready=lure&&distance<1.8f;
+                transform.localPosition=Vector3.MoveTowards(transform.localPosition,target,Time.deltaTime*.5f);
+                if(lure&&distance<2.4f)grace=5;else grace=Mathf.Max(0,grace-Time.deltaTime);
+                Ready=grace>0&&distance<3.5f;
             }
-            if(kind=="crab"&&!Ready&&distance<2.5f)transform.localPosition=home+new Vector3(Mathf.Sin(Time.time)*.2f,0,0);
+            if(kind=="crab"&&!Ready&&distance<2.5f)transform.localPosition=home+new Vector3(Mathf.Round(Mathf.Sin(Time.time*.6f)*2)/32,0,0);
             lastHero=hero;
             if(point.artwork)
             {
@@ -40,10 +44,11 @@ namespace Wildfeast
                 if(kind=="bud")point.artwork.sprite=WorldView.Art(Ready?"dewblossom-open":"dewblossom-closed");
                 if(kind=="crab"&&Ready&&!harvested)point.artwork.sprite=WorldView.Art("spicecrab-cracked");
                 point.artwork.sortingOrder=1000-Mathf.RoundToInt(transform.position.y*32);
-                point.artwork.color=harvested?new Color(.9f,.94f,.9f,1):Ready?new Color(1,1,.8f,1):Color.white;
+                point.artwork.color=harvested?new Color(.9f,.94f,.9f,1):Color.white;
             }
+            if(rewardCue){rewardCue.enabled=Ready&&!harvested;rewardCue.sortingOrder=point.artwork?point.artwork.sortingOrder+3:1800;}
         }
-        public string Hint=>game&&game.Model.State.harvested.Contains(point.source)?"Recovering Â· Fresh harvest tomorrow":kind=="ram"?(Ready?"E Â· Collect cream":"Stand still nearby Â· let the ram settle"):kind=="moth"?(Ready?"E Â· Collect pollen":"Hold Lanternroot to attract the moth"):kind=="crab"?(Ready?"E Â· Collect shed spice":$"Pickaxe Â· Crack shell {Contacts}/3"):kind=="snail"?(Ready?"E Â· Collect kelp jelly":"Watering can Â· Wake the Kelpsnail"):kind=="bud"?(Ready?"E Â· Harvest dew nectar":"Watering can Â· Open the Dewblossom"):"Field knife Â· Tap Cinnamon sap";
+        public string Hint=>game&&game.Model.State.harvested.Contains(point.source)?"Recovering · Fresh harvest tomorrow":kind=="ram"?(Ready?"E / right-click · Collect cream":"Stand still nearby · let the ram settle"):kind=="moth"?(Ready?"E / right-click · Collect pollen":"Hold Lanternroot to attract the moth"):kind=="crab"?(Ready?"E / right-click · Collect shed spice":$"Pickaxe · Loosen spice plates {Contacts}/3"):kind=="snail"?(Ready?"E / right-click · Collect kelp jelly":"Watering can · Wake the Kelpsnail"):kind=="bud"?(Ready?"E / right-click · Harvest dew nectar":"Watering can · Open the Dewblossom"):"Field knife · Tap Cinnamon sap";
         public bool Tool(int tool)
         {
             if(game.Model.State.harvested.Contains(point.source)){game.Say("This source recovers tomorrow.");return true;}

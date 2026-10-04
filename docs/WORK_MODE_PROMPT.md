@@ -1,3 +1,7 @@
+# Current execution brief
+
+Follow docs/WONDER_REDESIGN.md (analysis, reference sources and full implementation prompt) and docs/WONDER_PLAYTEST.md. Preserve five differently sized/structured islands and native unique creature/character art. Road protection covers the whole centred soil tile, collection uses visible body targeting and forgiving readiness, ferry/maps/camera/relaunch use catalog geography, and signs use measured lettering. Run wonder_art.py last. Verify actual body-click input and saved-island startup as well as the full restaurant journey.
+
 # Current work-mode requirements: the archipelago
 
 Continue the checked-in five-island Wildfeast expansion. Read AGENTS.md, ARCHIPELAGO_EXPANSION.md, HANDOFF.md and VERIFICATION.md first. Preserve the five structured maps, 19 ingredients, 20 dishes, six growable crops, original creatures/music, free continuous ferry and polished restaurant/tool loop. The older two-island content ceiling is superseded by the creator's expansion request.

@@ -106,10 +106,10 @@
     },
     {
       "id": "spiceclaw",
-      "name": "Spiceclaw spice",
+      "name": "Pangolin spice",
       "icon": "spiceclaw",
-      "habitat": "Emberfold quarry",
-      "description": "A Spicecrab retreats from your approach. Three careful pickaxe contacts crack its spice shell; collect the shed spice without harming the crab."
+      "habitat": "Emberfold mineral shelf",
+      "description": "A cinnamon-plated pangolin. Three careful pickaxe contacts loosen shed spice plates. Collect the visible spice with E or right-click its body; the animal stays unharmed."
     },
     {
       "id": "mochipollen",
@@ -225,7 +225,7 @@
     },
     {
       "id": "cloud",
-      "name": "Cloudfruit Soufflé",
+      "name": "Cloudfruit SoufflÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©",
       "description": "A little island sky, served warm.",
       "flavor": "sweet",
       "icon": "dish-cloud",

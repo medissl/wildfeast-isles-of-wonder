@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Wildfeast
 {
-    [Serializable] public class IslandRoute { public Vector2[] points; }
+    [Serializable] public class IslandRoute { public Vector2[] points; public float width=.5f; }
     [Serializable] public class IslandRegion { public Vector2 center,size; public string label; }
     [Serializable] public class IslandPlacement { public string art,role; public Vector2 position; }
     [Serializable] public class IslandPool {public Vector2 center,size;}
@@ -13,6 +13,7 @@ namespace Wildfeast
     {
         public int id; public string key,name,subtitle,ground,path,tree;
         public Vector2[] coast; public Vector2 pond,pondSize;
+        public Vector2 size=new Vector2(40,26),dock=new Vector2(-11,-7.2f),arrival=new Vector2(-10,-6);
         public IslandPool[] pools;
         public IslandRoute[] roads; public IslandRegion[] regions;
         public IslandPlacement[] props; public IslandPoint[] points;
@@ -28,8 +29,14 @@ namespace Wildfeast
         public static float SegmentDistance(Vector2 p,Vector2 a,Vector2 b)
         {Vector2 d=b-a;float t=d.sqrMagnitude>0?Mathf.Clamp01(Vector2.Dot(p-a,d)/d.sqrMagnitude):0;return Vector2.Distance(p,a+d*t);}
         public static bool Road(Vector2 p,int area,float margin=0)
-        {return Get(area).roads.Any(r=>Enumerable.Range(0,r.points.Length-1).Any(n=>SegmentDistance(p,r.points[n],r.points[n+1])<=.65f+margin));}
-        public static bool Tillable(Vector2 p,int area)=>Valid(area)&&!WorldView.Water(p,area)&&!Road(p,area,.42f);
+        {return Get(area).roads.Any(r=>Enumerable.Range(0,r.points.Length-1).Any(n=>SegmentDistance(p,r.points[n],r.points[n+1])<=r.width+.1f+margin));}
+        public static bool Tillable(Vector2 p,int area)
+        {
+            // Soil is a centred 1×1 tile. Its corners and edges must stay off paving/banks.
+            if(!Valid(area)||Road(p,area,.75f))return false;
+            for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++)if(WorldView.Water(p+new Vector2(x*.55f,y*.55f),area))return false;
+            return true;
+        }
         public static IslandPool[] Pools(int area)
         {var i=Get(area);return new[]{new IslandPool{center=i.pond,size=i.pondSize}}.Concat(i.pools??Array.Empty<IslandPool>()).ToArray();}
         public static void Author(WorldView world)
