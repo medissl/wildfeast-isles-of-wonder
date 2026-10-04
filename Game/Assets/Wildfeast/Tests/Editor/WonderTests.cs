@@ -8,7 +8,7 @@ namespace Wildfeast.Tests
     {
         [Test] public void IslandsHaveDifferentActualDimensionsAndLandings()
         {
-            Assert.AreEqual(5,Archipelago.Islands.Select(i=>i.size).Distinct().Count());
+            Assert.AreEqual(6,Archipelago.Islands.Select(i=>i.size).Distinct().Count());
             Assert.GreaterOrEqual(Archipelago.Islands.Select(i=>i.dock).Distinct().Count(),4);
             foreach(var i in Archipelago.Islands)
             {Assert.IsFalse(WorldView.Water(i.arrival,i.id),i.key);Assert.IsTrue(Archipelago.Road(i.arrival,i.id,.3f),i.key);Assert.IsNotEmpty(i.gridLand);Assert.IsNotEmpty(i.gridRoad);}

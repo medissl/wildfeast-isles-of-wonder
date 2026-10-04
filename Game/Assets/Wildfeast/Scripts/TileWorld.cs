@@ -6,14 +6,15 @@ namespace Wildfeast
     {
         public int area;
         public Tilemap ground,paths,water,soil;
-        public void Soil(int x,int y,bool wet)=>soil.SetTile(new Vector3Int(x,y,0),Resources.Load<TileBase>("Terrain/tile-soil"+(wet?"-wet":"")));
+        public void Soil(int x,int y,bool wet,Progress state=null)
+        {int mask=0;var offsets=new[]{Vector2Int.up,Vector2Int.right,Vector2Int.down,Vector2Int.left};for(int n=0;n<4;n++)if(state!=null&&ItemInventory.Plot(state,area,new Vector2(x,y)+offsets[n])!=null)mask|=1<<n;soil.SetTile(new Vector3Int(x,y,0),Resources.Load<TileBase>("Terrain/tile-"+Archipelago.Get(area).key+"-soil-"+mask+(wet?"-wet":"")));}
         public void ClearSoil()=>soil.ClearAllTiles();
         public static GameObject Ocean(Transform parent,bool reducedMotion)
         {
             var go=new GameObject("Open sea grid",typeof(Grid));go.transform.SetParent(parent,false);go.transform.localPosition=new Vector3(-.5f,-.5f,0);
             var map=Layer(go.transform,"Open sea",-2100);map.animationFrameRate=reducedMotion?0:1;
             var variants=new[]{Load("tile-water-0-0"),Load("tile-water-0-1")};
-            for(int x=-25;x<90;x++)for(int y=-80;y<20;y++)map.SetTile(new Vector3Int(x,y,0),variants[TerrainGrid.Variant(new Vector2Int(x,y),2)]);
+            for(int x=-70;x<170;x++)for(int y=-80;y<65;y++)map.SetTile(new Vector3Int(x,y,0),variants[TerrainGrid.Variant(new Vector2Int(x,y),2)]);
             return go;
         }
         public static void AuthorRoom(Transform parent)

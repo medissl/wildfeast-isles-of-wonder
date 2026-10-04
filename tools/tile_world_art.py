@@ -139,9 +139,9 @@ def generate():
                 prop['position']=vec(q);occupied.add(q);props.append(prop)
             isle['props']=props
             isle["tileWorld"]=True
-        for v in range(6):tile(f'tile-{isle["key"]}-grass-{v}',palettes[index],v)
+        for v in range(6):tile(f'tile-{isle["key"]}-grass-{v}',palettes[index%5],v)
         for mask in range(16):
-            for v in range(3):tile(f'tile-{isle["key"]}-path-{mask}-{v}',palettes[index],v,mask,'path')
+            for v in range(3):tile(f'tile-{isle["key"]}-path-{mask}-{v}',palettes[index%5],v,mask,'path')
         for mask in range(16):
             # Bank cells: earthy ledge along exposed sides, turf in the center.
             im=Image.open(ART/f'tile-{isle["key"]}-grass-{mask%6}.png').convert('RGBA');d=ImageDraw.Draw(im)

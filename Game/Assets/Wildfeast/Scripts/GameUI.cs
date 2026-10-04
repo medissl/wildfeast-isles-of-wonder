@@ -46,7 +46,7 @@ namespace Wildfeast
                 Skin(b.GetComponent<UnityEngine.UI.Image>(),true);
                 b.GetComponent<UnityEngine.UI.Image>().color=inventorySelected==i?C("ffd583"):i<10?C("fff0c6"):Color.white;
                 var drag=b.gameObject.AddComponent<InventoryDrag>();drag.index=index;drag.ui=this;drag.move=(from,to)=>{ItemInventory.Swap(model.State,from,to);inventorySelected=-1;redraw();};
-                if(item.count>0){var img=Box(b.transform,"Item",new Vector2(11,-5),new Vector2(44,44),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.Art(item.id);img.preserveAspect=true;img.raycastTarget=false;Text(b.transform,item.id=="tool-can"?model.State.water+"/20":item.count>1?item.count.ToString():"",new Vector2(6,-48),new Vector2(55,17),13,Ink);}
+                if(item.count>0){var img=Box(b.transform,"Item",new Vector2(11,-5),new Vector2(44,44),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.ItemArt(item.id);img.preserveAspect=true;img.raycastTarget=false;Text(b.transform,item.id=="tool-can"?model.State.water+"/20":item.count>1?item.count.ToString():"",new Vector2(6,-48),new Vector2(55,17),13,Ink);}
                 Text(b.transform,i<10?((i+1)%10).ToString():"",new Vector2(4,-3),new Vector2(14,18),12,Ink);
             }
             string selected=inventorySelected<0?"Hotbar above · Backpack below":ItemInventory.Name(model.State.slots[inventorySelected].id,model.Data)+" · Choose a destination slot";
@@ -55,16 +55,16 @@ namespace Wildfeast
         }
         public void Map(WorldView world)
         {
-            var island=Archipelago.Get(world.Area==2||world.Area==6?0:world.Area);
+            var room=world.GetComponentsInChildren<ResidentRoom>(true).FirstOrDefault(r=>r.area==world.Area);var island=Archipelago.Get(room?room.district:Districts.Interior(world.Area)?0:world.Area);
             Show("Isles of Wonder",island.name);
             float scale=Mathf.Min(520/island.size.x,338/island.size.y),mw=island.size.x*scale,mh=island.size.y*scale;
             var map=Box(rows,"Island chart",new Vector2((520-mw)/2,-12),new Vector2(mw,mh),new Vector2(0,1),Color.white);
             map.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-"+island.key);
-            Vector2 position=world.Area==2||world.Area==6?new Vector2(-6,-1):world.player.position;
+            Vector2 position=room?room.exterior:Districts.Interior(world.Area)?new Vector2(-6,-1):world.player.position;
             var pin=Box(map,"You are here",new Vector2((position.x+island.size.x/2)*scale,-(island.size.y/2-position.y)*scale),new Vector2(16,16),new Vector2(0,1),Color.white);
             pin.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-player");
             Text(rows,"YOU · Gold diamond",new Vector2(12,-361),new Vector2(320,28),18,Ink);
-            var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish","discovery"}.Contains(p.action)).ToArray();
+            var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish","discovery","passage","home","shop","talk"}.Contains(p.action)).ToArray();
             for(int i=0;i<locations.Length;i++)
             {
                 var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+island.size.x/2)*scale,-(island.size.y/2-p.transform.position.y)*scale),new Vector2(12,12),new Vector2(0,1),Color.white);
@@ -148,6 +148,7 @@ namespace Wildfeast
         }
         public void Show(string heading,string description)
         {
+            if(dialogue){dialogue.gameObject.SetActive(false);Destroy(dialogue.gameObject);dialogue=null;}page.gameObject.SetActive(true);
             ClearRows(); title.text=heading;subtitle.text=description;overlay.gameObject.SetActive(true);MiniOpen=false;
             toast.transform.parent.gameObject.SetActive(false);
             string active=heading=="Tonight's menu"?"Recipes":heading=="The forager's journal"?"Journal":heading=="Harbor requests"?"Requests":heading=="Take a breath"?"Options":heading;
@@ -157,6 +158,19 @@ namespace Wildfeast
         public void Hide()
         {
             overlay.gameObject.SetActive(false);activityPanel.gameObject.SetActive(false);MiniOpen=false;Closed?.Invoke();
+        }
+        RectTransform dialogue;
+        public void Dialogue(string name,string role,string line,string portrait,string next,Action advance,string choice,Action choose)
+        {
+            Show(name,role);page.gameObject.SetActive(false);
+            dialogue=Box(overlay,"Resident conversation",new Vector2(0,105),new Vector2(1030,260),new Vector2(.5f,0),Color.white);Frame(dialogue);
+            var frame=Box(dialogue,"Portrait frame",new Vector2(22,-22),new Vector2(172,204),new Vector2(0,1),Color.white);Frame(frame);
+            var image=Box(frame,"Expression",new Vector2(10,-12),new Vector2(152,152),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art(portrait);image.preserveAspect=true;image.raycastTarget=false;
+            var who=Text(frame,name,new Vector2(8,-167),new Vector2(156,34),20,Ink);who.alignment=TextAlignmentOptions.Center;
+            Text(dialogue,role,new Vector2(217,-25),new Vector2(765,28),20,Gold);
+            Text(dialogue,line,new Vector2(217,-67),new Vector2(765,108),25,Ink);
+            Button(dialogue,next,new Vector2(-28,-197),new Vector2(165,40),advance,new Vector2(1,1));
+            if(choice!=null)Button(dialogue,choice,new Vector2(217,-197),new Vector2(540,40),choose,new Vector2(0,1));
         }
         void ClearRows()
         {
@@ -168,7 +182,7 @@ namespace Wildfeast
             float x=18;
             if (!string.IsNullOrEmpty(icon))
             {
-                var img=Box(row,"Icon",new Vector2(14,-8),new Vector2(43,43),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.Art(icon);img.preserveAspect=true;x=70;
+                var img=Box(row,"Icon",new Vector2(14,-8),new Vector2(43,43),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();img.sprite=WorldView.ItemArt(icon);img.preserveAspect=true;x=70;
             }
             Text(row,heading,new Vector2(x,-7),new Vector2(540-x,24),20,Cream);
             Text(row,detail,new Vector2(x,-33),new Vector2(540-x,20),14,Dim);
@@ -181,11 +195,11 @@ namespace Wildfeast
         public void RecipeCard(int index,Recipe recipe,GameModel model,bool known,bool selected,Action choose)
         {
             var row=Box(rows,"Recipe "+recipe.id,new Vector2(0,-index*65),new Vector2(744,59),new Vector2(0,1),C("ead2a1"));
-            var image=Box(row,"Dish",new Vector2(12,-7),new Vector2(46,46),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.Art(known?recipe.icon:"spark");image.preserveAspect=true;image.raycastTarget=false;
+            var image=Box(row,"Dish",new Vector2(12,-7),new Vector2(46,46),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();image.sprite=WorldView.ItemArt(known?recipe.icon:"spark");image.preserveAspect=true;image.raycastTarget=false;
             Text(row,known?recipe.name+$" · {recipe.price} shells":"Undiscovered recipe",new Vector2(72,-5),new Vector2(470,25),20,Cream);
             if(known)for(int i=0;i<recipe.ingredients.Length;i++)
             {
-                var ingredient=recipe.ingredients[i];var icon=Box(row,"Ingredient",new Vector2(72+i*145,-32),new Vector2(22,22),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=WorldView.Art(model.Data.Item(ingredient.id).icon);icon.preserveAspect=true;icon.raycastTarget=false;
+                var ingredient=recipe.ingredients[i];var icon=Box(row,"Ingredient",new Vector2(72+i*145,-32),new Vector2(22,22),new Vector2(0,1),Color.white).GetComponent<UnityEngine.UI.Image>();icon.sprite=WorldView.ItemArt(model.Data.Item(ingredient.id).icon);icon.preserveAspect=true;icon.raycastTarget=false;
                 Text(row,$"{model.Count(ingredient.id)}/{ingredient.count} in pantry",new Vector2(98+i*145,-34),new Vector2(118,22),13,model.Count(ingredient.id)>=ingredient.count?Cream:C("ae4337"));
             }
             else Text(row,"Discover its main ingredient",new Vector2(72,-33),new Vector2(430,22),14,Dim);
@@ -244,7 +258,7 @@ namespace Wildfeast
             for(int i=0;i<10;i++)
             {
                 var slot=model.State.slots[i];toolFrames[i].color=i==model.State.equipped?C("ffd583"):Color.white;
-                toolIcons[i].sprite=string.IsNullOrEmpty(slot.id)?null:WorldView.Art(slot.id);toolIcons[i].enabled=slot.count>0;
+                toolIcons[i].sprite=string.IsNullOrEmpty(slot.id)?null:WorldView.ItemArt(slot.id);toolIcons[i].enabled=slot.count>0;
                 toolCounts[i].text=slot.id=="tool-can"?model.State.water+"/20":slot.count>1?slot.count.ToString():"";
             }
             equippedLabel.text=ItemInventory.Name(model.State.slots[model.State.equipped].id,model.Data);

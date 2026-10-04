@@ -45,7 +45,7 @@ namespace Wildfeast
                 Check(!game.world.points.Any(p=>p.action=="crop"),"Restaurant forecourt has no raised beds");
                 game.Model.State.coins=19;game.Model.SpendEnergy(98);Check(File.ReadAllText(game.Saves.Path)==checkpoint,"Day actions do not overwrite the sleep checkpoint");
                 var stone=game.world.GetComponentsInChildren<HarvestNode>(true).First(n=>n.item=="stone"&&n.transform.IsChildOf(game.world.saltleaf));game.world.SetArea(0,(Vector2)stone.transform.position+Vector2.down*.9f);
-                yield return Hotbar(9);yield return ClickWorld(stone.transform.position);Check(game.Model.State.energy==0,"One pickaxe action spends the remaining two energy");
+                yield return Hotbar(9);yield return ClickWorld(stone.transform.position);yield return WaitTool();Check(game.Model.State.energy==0,"One pickaxe action spends the remaining two energy");
                 yield return WaitTool();int damage=stone.damage;yield return ClickWorld(stone.transform.position);Check(!game.ToolBusy&&stone.damage==damage,"Exhaustion blocks another tool action without extra damage");Capture("rest-01-energy.png");
                 var room=game.world.points.First(p=>p.action=="bedroom");game.world.SetArea(2,new Vector2(7,2));game.Interact(room);Check(game.world.Area==6&&game.world.bedroom.gameObject.activeInHierarchy,"Restaurant doorway leads to a separate upstairs room");yield return null;Capture("rest-02-bedroom.png");
                 var bed=game.world.points.First(p=>p.action=="bed");game.Interact(bed);Check(game.ui.PageOpen&&game.ui.title.text=="Rest until morning?","Bed offers sleep and save");Capture("rest-03-sleep.png");
@@ -69,8 +69,8 @@ namespace Wildfeast
             {
                 game.world.SetArea(island.id,island.arrival);var terrain=game.world.IslandRoot(island.id).GetComponentInChildren<TileWorld>();
                 Check(terrain&&terrain.ground.GetUsedTilesCount()>6&&terrain.paths.GetUsedTilesCount()>4,"Native editable terrain layers: "+island.key);
-                var wet=Vector3Int.zero;foreach(var p in terrain.water.cellBounds.allPositionsWithin)if(terrain.water.GetTile<TidalTile>(p)&&Vector2.Distance(new Vector2(p.x,p.y),island.arrival)<6){wet=p;break;}RenderFrame();int frame=terrain.water.GetAnimationFrame(wet);yield return new WaitForSeconds(.3f);RenderFrame();
-                Check(terrain.water.GetAnimationFrame(wet)!=frame,"Water frame advances in actual player: "+island.key);
+                var wet=Vector3Int.zero;bool foundWater=false;float nearestWater=float.MaxValue;foreach(var p in terrain.water.cellBounds.allPositionsWithin)if(terrain.water.GetTile<TidalTile>(p)){float distance=Vector2.Distance(new Vector2(p.x,p.y),island.arrival);if(distance<nearestWater){wet=p;nearestWater=distance;foundWater=true;}}Check(foundWater,"District has animated water: "+island.key);game.world.SetArea(island.id,new Vector2(wet.x,wet.y));yield return new WaitForSeconds(.2f);RenderFrame();int frame=terrain.water.GetAnimationFrame(wet);bool advanced=false;for(int sample=0;sample<8&&!advanced;sample++){yield return new WaitForSeconds(.13f);RenderFrame();advanced=terrain.water.GetAnimationFrame(wet)!=frame;}
+                Check(advanced,"Water frame advances in actual player: "+island.key);
             }
             game.world.SetArea(0,new Vector2(-6,-2.5f));game.Model.State.reducedMotion=true;game.Model.Notify();Check(game.world.saltleaf.GetComponentInChildren<TileWorld>().water.animationFrameRate==0,"Reduced motion pauses tile water animation");game.Model.State.reducedMotion=false;game.Model.Notify();
             VisualGuide.Show(game.ui,0,game.ui.Hide);yield return null;Check(game.ui.rows.Find("Guide screenshot").GetComponent<UnityEngine.UI.Image>().sprite,"Field guide displays an actual world screenshot");Capture("27-visual-guide.png");
@@ -121,9 +121,9 @@ namespace Wildfeast
                 for(int hit=0;hit<node.hits;hit++){yield return ClickWorld(node.transform.position);yield return new WaitForSeconds(.35f);}
                 Check(game.Model.State.resources.Any(a=>a.id==entry[0]&&a.count>0),"Tool harvest yields "+entry[0]+" into the item inventory");
             }
-            game.world.SetArea(0,new Vector2(-1,1.4f));yield return new WaitForSeconds(.15f);
+            game.world.SetArea(0,new Vector2(-9.5f,1.4f));yield return new WaitForSeconds(.15f);
             InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.D));yield return new WaitForSeconds(1);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
-            Check(game.world.player.position.x<.6f,"Solid fountain footprint blocks walking through the prop");
+            Check(game.world.player.position.x<-8f,"Solid restaurant footprint blocks walking through the prop");
             game.world.SetArea(0,new Vector2(-10,-6));game.Sail(1);yield return new WaitForSeconds(.6f);
             Check(game.Sailing&&game.world.transform.Find("Sailing skiff").position.y<-7.2f,"Ship visibly leaves its dock with player aboard");Capture("12-sailing.png");
             float sailDeadline=Time.time+12;while(game.Sailing&&Time.time<sailDeadline)yield return null;
@@ -303,12 +303,12 @@ namespace Wildfeast
             game.Model.Travel(1);game.world.SetArea(1,Archipelago.Get(1).arrival);
             foreach(var island in Archipelago.Islands)
             {
-                game.Sail(island.id);float deadline=Time.time+12;while(game.Sailing&&Time.time<deadline)yield return null;
+                game.Sail(island.id);float deadline=Time.time+20;while(game.Sailing&&Time.time<deadline)yield return null;
                 Check(game.world.Area==island.id&&game.Model.State.island==island.id,"Continuous ship docks at "+island.name);
                 Check(!WorldView.Water(game.world.player.position,island.id),"Disembarkation is on real dry land: "+island.key);
                 if(island.id!=0)Check(Vector2.Distance(game.world.player.position,island.arrival)<.1f,"Player steps onto the destination's distinct landing: "+island.key);
                 Check(game.world.IslandRoot(island.id).gameObject.activeInHierarchy&&game.world.islands.Count(r=>r.gameObject.activeInHierarchy)==1,"Only the arrived island is active: "+island.key);
-                game.world.SetArea(island.id,(Vector2)game.world.points.First(p=>p.transform.IsChildOf(game.world.IslandRoot(island.id))&&(p.action=="creature"||p.action=="hunt")).transform.position+Vector2.down*2);yield return new WaitForSeconds(.5f);Capture("20-world-"+island.key+".png");
+                game.world.SetArea(island.id,(Vector2)game.world.points.First(p=>p.transform.IsChildOf(game.world.IslandRoot(island.id))&&(p.action=="creature"||p.action=="hunt"||p.action=="talk")).transform.position+Vector2.down*2);yield return new WaitForSeconds(.5f);Capture("20-world-"+island.key+".png");
                 yield return Tap(Key.M);Check(game.ui.rows.Find("Island chart").GetComponent<UnityEngine.UI.Image>().sprite.name=="map-"+island.key,"M chart matches "+island.name);Capture("21-map-"+island.key+".png");yield return Tap(Key.M);
                 Vector2 road=island.roads[0].points[1];road=new Vector2(Mathf.Round(road.x),Mathf.Round(road.y));
                 game.world.SetArea(island.id,road+Vector2.down*.8f);yield return new WaitForSeconds(.1f);yield return Hotbar(6);yield return ClickWorld(road);
@@ -321,10 +321,10 @@ namespace Wildfeast
             Check(Mathf.Abs(game.Model.State.musicVolume-.17f)>.1f&&Mathf.Abs(game.Model.State.effectsVolume-.73f)<.001f,"Pointer audio adjustment changes music without changing SFX");Capture("22-options.png");
             game.Model.State.zoom=2;game.Model.Notify();yield return null;Check(game.world.worldCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>().refResolutionY==240,"Close zoom changes the pixel camera reference size");
             game.Model.State.zoom=1;game.Model.State.reducedMotion=true;game.Model.Notify();Check(game.world.GetComponentsInChildren<VegetationMotion>(true).All(v=>!v.enabled),"Reduced motion freezes foliage without disabling tool actions");game.Model.State.reducedMotion=false;game.Model.Notify();game.ui.Hide();
-            var ram=game.world.points.First(p=>p.item=="ramcream");game.world.SetArea(1,(Vector2)ram.transform.position+Vector2.down*2.1f);yield return new WaitForSeconds(2.5f);
+            var ram=game.world.points.First(p=>p.item=="ramcream");game.world.SetArea(1,(Vector2)ram.transform.position+Vector2.right*1.5f);Physics2D.SyncTransforms();game.world.SetArea(1,ClearApproach(ram));yield return new WaitForSeconds(2.5f);
             InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.W));yield return new WaitForSeconds(.12f);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
             Check(ram.GetComponent<FoodEcology>().Ready,"A step toward the settled ram preserves its collection window");Capture("25-ram-ready.png");
-            Check(ram.GetComponent<FoodEcology>().Ready,"Custardram settles when the player stands quietly nearby");yield return Tap(Key.E);Check(ram.artwork.transform.localPosition==Vector3.zero&&ram.transform.Find("held-ramcream"),"Creature harvest moves a compact ingredient while leaving the animal in its habitat");yield return new WaitForSeconds(1.1f);Check(game.Model.Count("ramcream",true)==1,"Quiet creature interaction yields cream once");
+            Check(game.world.PointAt(ram.artwork.bounds.center)==ram,"Quiet approach can reach the creature body around solid scenery");Check(ram.GetComponent<FoodEcology>().Ready,"Custardram settles when the player stands quietly nearby");yield return RightClickWorld(ram.artwork.bounds.center);Check(game.ActiveActivity=="forage"&&ram.artwork.transform.localPosition==Vector3.zero&&ram.transform.Find("held-ramcream"),"Creature harvest moves a compact ingredient while leaving the animal in its habitat");yield return new WaitForSeconds(1.1f);Check(game.Model.Count("ramcream",true)==1,"Quiet creature interaction yields cream once");
             var crab=game.world.points.First(p=>p.item=="spiceclaw");game.world.SetArea(3,(Vector2)crab.transform.position+Vector2.down*.9f);yield return Hotbar(9);
             for(int n=0;n<3;n++)yield return ClickWorld(crab.artwork.bounds.center);
             Capture("26-pangolin-ready.png");Check(game.world.PointAt(crab.artwork.bounds.center)==crab,"Visible pangolin body resolves the actual collection target");
@@ -332,10 +332,10 @@ namespace Wildfeast
             var sap=game.world.points.First(p=>p.item=="syrup");game.world.SetArea(3,(Vector2)sap.transform.position+Vector2.down*.9f);yield return Hotbar(5);yield return ClickWorld(sap.transform.position);yield return new WaitForSeconds(1);Check(game.Model.Count("syrup",true)==2,"Animated field knife taps Cinnamon sap");
             var bulb=game.world.points.First(p=>p.item=="emberbulb");game.world.SetArea(3,(Vector2)bulb.transform.position+Vector2.down*.9f);yield return Tap(Key.E);yield return new WaitForSeconds(1.1f);Check(game.Model.Seeds("emberbulb")==1,"New wild forage gives a plantable seed packet");
             var bud=game.world.points.First(p=>p.item=="dewnectar");game.world.SetArea(4,(Vector2)bud.transform.position+Vector2.down*.9f);yield return Hotbar(2);int beforeWater=game.Model.State.water;yield return ClickWorld(bud.transform.position);
-            Check(bud.GetComponent<FoodEcology>().Ready&&game.Model.State.water==beforeWater-1,"Watering opens a Dewblossom and consumes one water unit");yield return Tap(Key.E);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("dewnectar",true)==1,"Opened bloom yields dew nectar through the pull animation");
+            Check(bud.GetComponent<FoodEcology>().Ready&&game.Model.State.water==beforeWater-1,"Watering opens a Dewblossom and consumes one water unit");yield return RightClickWorld(bud.artwork.bounds.center);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("dewnectar",true)==1,"Opened bloom yields dew nectar through the pull animation");
             game.Model.Gather("lanternroot");int slot=Array.FindIndex(game.Model.State.slots,s=>s.id=="lanternroot");ItemInventory.Swap(game.Model.State,slot,0);game.Model.Notify();game.Equip(0);
-            var moth=game.world.points.First(p=>p.item=="mochipollen");game.world.SetArea(4,(Vector2)moth.transform.position+Vector2.down*1.2f);yield return new WaitForSeconds(1.5f);Check(moth.GetComponent<FoodEcology>().Ready,"Holding actual Lanternroot attracts Mochimoth");yield return Tap(Key.E);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("mochipollen",true)==1,"Lured Mochimoth gives pollen");
-            var snail=game.world.points.First(p=>p.item=="kelpjelly");game.world.SetArea(5,(Vector2)snail.transform.position+Vector2.down*1.1f);yield return Hotbar(2);beforeWater=game.Model.State.water;yield return ClickWorld(snail.transform.position);Check(snail.GetComponent<FoodEcology>().Ready&&game.Model.State.water==beforeWater-1,"Kelpsnail wakes after an animated watering action");yield return Tap(Key.E);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("kelpjelly",true)==1,"Kelpsnail ingredient enters the real inventory");
+            var moth=game.world.points.First(p=>p.item=="mochipollen");game.world.SetArea(4,(Vector2)moth.transform.position+Vector2.down*1.2f);yield return new WaitForSeconds(1.5f);Check(moth.GetComponent<FoodEcology>().Ready,"Holding actual Lanternroot attracts Mochimoth");yield return RightClickWorld(moth.artwork.bounds.center);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("mochipollen",true)==1,"Lured Mochimoth gives pollen");
+            var snail=game.world.points.First(p=>p.item=="kelpjelly");game.world.SetArea(5,(Vector2)snail.transform.position+Vector2.down*1.1f);yield return Hotbar(2);beforeWater=game.Model.State.water;yield return ClickWorld(snail.transform.position);Check(snail.GetComponent<FoodEcology>().Ready&&game.Model.State.water==beforeWater-1,"Kelpsnail wakes after an animated watering action");yield return RightClickWorld(snail.artwork.bounds.center);yield return new WaitForSeconds(1.1f);Check(game.Model.Count("kelpjelly",true)==1,"Kelpsnail ingredient enters the real inventory");
             game.ShowJournal();yield return null;Check(Enumerable.Range(0,game.ui.rows.childCount).Count(i=>game.ui.rows.GetChild(i).gameObject.activeSelf&&game.ui.rows.GetChild(i).name=="Row")==5,"Expanded journal stays within five-row pages");Capture("23-journal.png");game.ShowMenu();yield return null;
             var next=game.ui.rows.GetComponentsInChildren<UnityEngine.UI.Button>().First(b=>b.GetComponentInChildren<TMPro.TMP_Text>()?.text=="Next >");yield return Click(Center(next.GetComponent<RectTransform>()));Check(game.ui.rows.Find("Recipe custard"),"Pointer pagination reaches expansion recipes");Capture("24-recipes.png");game.ui.Hide();
             game.Model.Deposit();Check(game.Model.CanCook("claw"),"New Spiceclaw Bisque uses actual gathered ingredients");game.Model.State.menu.Clear();game.Model.State.menu.Add("claw");Check(game.Model.StartService(),"Restaurant accepts an expanded island recipe");game.world.SetArea(2,new Vector2(0,-3));
@@ -369,6 +369,12 @@ namespace Wildfeast
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position}.WithButton(MouseButton.Right));yield return null;yield return null;
             InputSystem.QueueStateEvent(testMouse,new MouseState{position=position});yield return null;yield return null;
+        }
+        Vector2 ClearApproach(WorldPoint point)
+        {
+            foreach(float radius in new[]{1.5f,1.8f,1.2f})foreach(var direction in new[]{Vector2.down,Vector2.right,Vector2.left,Vector2.up})
+            {var position=(Vector2)point.transform.position+direction*radius;if(WorldView.Water(position,game.world.Area))continue;if(!Physics2D.OverlapCircleAll(position,.25f).Any(c=>!c.isTrigger&&!c.transform.IsChildOf(game.world.player)))return position;}
+            throw new Exception("No clear creature approach: "+point.label);
         }
         Vector2 FindGardenCell()
         {

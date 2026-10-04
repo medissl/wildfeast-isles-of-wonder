@@ -47,6 +47,8 @@ namespace Wildfeast
             if (p.orders.Any(o => o == null || !data.recipes.Any(r => r.id == o.recipe) || (o.paid && !o.cooked)) || p.orders.Select(o => o.number).Distinct().Count() != p.orders.Count) throw new InvalidDataException();
             if (p.crops.Any(c => c == null || c.growth < 0 || (c.item != "pepperbell" && c.item != "lanternroot"))) throw new InvalidDataException();
             if (!Archipelago.Valid(p.island) || p.menu.Any(id => !data.recipes.Any(r => r.id == id)) || p.upgrades.Any(id => !data.upgrades.Any(u => u.id == id))) throw new InvalidDataException();
+            if(p.residents==null)p.residents=new System.Collections.Generic.List<ResidentProgress>();
+            if(p.residents.Count>5||p.residents.Any(r=>r==null||Residents.Get(r.id)==null||r.friendship<0||r.friendship>10||r.talkDay<0||r.talkDay>p.day)||p.residents.Select(r=>r.id).Distinct().Count()!=p.residents.Count)throw new InvalidDataException();
             if(!text.Contains("\"energy\""))p.energy=100;
             if(p.energy<0||p.energy>100)throw new InvalidDataException();
             if(!text.Contains("\"water\""))p.water=20;

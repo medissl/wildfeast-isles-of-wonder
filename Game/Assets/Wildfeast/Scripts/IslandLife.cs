@@ -34,15 +34,16 @@ namespace Wildfeast
                     var crop=WorldView.Add(soil.transform,"planted-seed",new Vector2(0,.2f),1000-f.y*32);
                     views=new[]{soil,crop};plots.Add(f,views);
                 }
-                views[0].sprite=null;game.world.IslandRoot(f.island).GetComponentInChildren<TileWorld>(true).Soil(f.x,f.y,f.crop.wateredDay==game.Model.State.day);
+                views[0].sprite=null;game.world.IslandRoot(f.island).GetComponentInChildren<TileWorld>(true).Soil(f.x,f.y,f.crop.wateredDay==game.Model.State.day,game.Model.State);
                 views[1].sprite=!f.crop.planted?null:WorldView.Art(f.crop.growth>=game.Model.Data.cropDays?f.crop.item:f.crop.growth>0?"sprout":"planted-seed");
             }
             foreach(var node in nodes)
             {
                 bool harvested=game.Model.State.harvested.Contains(node.source);
-                node.art.sprite=harvested?(node.item=="wood"?WorldView.Art("stump"):null):node.original;
-                foreach(var collider in node.colliders)collider.enabled=!harvested||node.item=="wood";
-                if(!harvested&&node.lastDay!=game.Model.State.day){node.damage=0;node.lastDay=game.Model.State.day;}
+                bool stump=harvested&&node.item=="wood"&&!game.Model.State.harvested.Contains(node.source+"-stump");
+                node.art.sprite=stump?WorldView.Art("stump"):harvested?null:node.original;
+                foreach(var collider in node.colliders)collider.enabled=!harvested||stump;
+                if(node.lastDay!=game.Model.State.day){node.damage=0;node.lastDay=game.Model.State.day;}
             }
         }
         public Vector2 Target(Vector2 facing)
@@ -57,47 +58,48 @@ namespace Wildfeast
             }
             return hero+facing*.85f;
         }
+        FoodEcology Ecology(Vector2 target)=>game.world.points.Where(p=>p&&p.gameObject.activeInHierarchy&&p.GetComponent<FoodEcology>()&&Vector2.Distance(p.transform.position,target)<1.25f).OrderBy(p=>Vector2.Distance(p.transform.position,target)).FirstOrDefault()?.GetComponent<FoodEcology>();
+        HarvestNode[] Targets(int tool,Vector2 target)=>nodes.Where(n=>n.gameObject.activeInHierarchy&&!n.falling&&n.art.sprite&&n.required==tool&&(!game.Model.State.harvested.Contains(n.source)||n.item=="wood"&&!game.Model.State.harvested.Contains(n.source+"-stump"))&&Vector2.Distance(n.transform.position,target)<(tool==8?1.5f:1.2f)).OrderBy(n=>Vector2.Distance(n.transform.position,target)).Take(tool==8?20:1).ToArray();
+        public bool CanWork(int tool,Vector2 target)
+        {
+            if(Districts.Interior(game.world.Area)||game.Model.State.phase!="explore")return false;
+            if(Ecology(target)?.CanTool(tool)==true)return true;
+            Vector2 tile=TerrainGrid.Cell(target);var m=game.Model;var f=ItemInventory.Plot(m.State,game.world.Area,tile);
+            if(tool==6)return f==null&&m.State.fields.Count<256&&Archipelago.Tillable(tile,game.world.Area)&&!Physics2D.OverlapBoxAll(tile+Vector2.up*.2f,new Vector2(.8f,.5f),0).Any(c=>!c.transform.IsChildOf(game.world.player)&&!c.isTrigger);
+            if(tool==2)return f!=null?f.crop.planted&&f.crop.wateredDay!=m.State.day&&m.State.water>0:m.State.water<20&&game.world.WaterAt(game.world.player.position,(target-(Vector2)game.world.player.position).normalized).HasValue;
+            if((tool==3||tool==4)&&f!=null)return !f.crop.planted&&m.Seeds(ItemInventory.SeedItem(m.State.slots[m.State.equipped].id))>0;
+            if(f!=null&&f.crop.planted&&f.crop.growth>=m.Data.cropDays)return m.BagCount+3<=m.Capacity;
+            return (tool==7||tool==8||tool==9)&&Targets(tool,target).Length>0;
+        }
         public bool Use(int tool,Vector2 facing,Vector2 target)
         {
-            if((game.world.Area==2||game.world.Area==6)||game.Model.State.phase!="explore")return false;
-            var ecology=game.world.points.Where(p=>p&&p.gameObject.activeInHierarchy&&p.GetComponent<FoodEcology>()&&Vector2.Distance(p.transform.position,target)<1.25f).OrderBy(p=>Vector2.Distance(p.transform.position,target)).FirstOrDefault();
-            if(ecology&&ecology.GetComponent<FoodEcology>().Tool(tool))return true;
-            Vector2 tile=TerrainGrid.Cell(target);
-            var model=game.Model;var f=ItemInventory.Plot(model.State,game.world.Area,tile);
-            if(tool==6)
+            if(!CanWork(tool,target))return false;
+            var ecology=Ecology(target);if(ecology&&ecology.CanTool(tool)&&ecology.Tool(tool))return true;
+            Vector2 tile=TerrainGrid.Cell(target);var model=game.Model;var f=ItemInventory.Plot(model.State,game.world.Area,tile);
+            if(tool==6){if(!ItemInventory.Till(model,game.world.Area,tile))return false;game.Sound("cook");game.world.Burst(tile,"dirt-puff");return true;}
+            if(tool==2){bool changed=f!=null?ItemInventory.Water(model,f):model.State.water<20;if(changed){if(f==null){model.State.water=20;model.Notify();}game.Sound("splash");game.world.Burst(tile,"splash");}return changed;}
+            if((tool==3||tool==4)&&f!=null){bool changed=ItemInventory.Plant(model,f,ItemInventory.SeedItem(model.State.slots[model.State.equipped].id));if(changed)game.world.Burst(tile,"dirt-puff");return changed;}
+            if(f!=null&&f.crop.planted&&f.crop.growth>=model.Data.cropDays){string item=f.crop.item;bool changed=ItemInventory.Harvest(model,f);if(changed)game.world.Burst(tile,item);return changed;}
+            var selected=Targets(tool,target);
+            foreach(var node in selected)
             {
-                game.Sound("cook");
-                if(Archipelago.Road(tile,game.world.Area)){Notice("Paving and boardwalks cannot be tilled.");return true;}
-                var blockers=Physics2D.OverlapBoxAll(tile+Vector2.up*.2f,new Vector2(.8f,.5f),0);
-                bool solid=blockers.Any(c=>!c.transform.IsChildOf(game.world.player));
-                if(!WorldView.Water(tile,game.world.Area)&&!solid&&ItemInventory.Till(model,game.world.Area,tile)){game.world.Burst(tile,"dirt-puff");Notice("Soil tilled");}
-                else Notice(f!=null?"This soil is already tilled.":"Choose clear soil");return true;
-            }
-            if(tool==2)
-            {
-                game.Sound("splash");
-                if(game.world.WaterAt(game.world.player.position,facing).HasValue&&f==null){model.State.water=20;model.Notify();game.world.Burst(target,"splash");Notice("Water 20/20");return true;}
-                if(f!=null){if(ItemInventory.Water(model,f))game.world.Burst(tile,"splash");else Notice(model.State.water<1?"Your can is empty. Refill beside water.":"Plant seeds here first, or water tomorrow.");return true;}
-                // Legacy authored beds continue to use their own interaction.
-                return false;
-            }
-            if((tool==3||tool==4)&&f!=null)
-            {if(ItemInventory.Plant(model,f,ItemInventory.SeedItem(model.State.slots[model.State.equipped].id)))game.world.Burst(tile,"dirt-puff");else Notice("Use an empty tilled plot and a seed packet.");return true;}
-            if(f!=null&&f.crop.growth>=model.Data.cropDays)
-            {if(ItemInventory.Harvest(model,f))game.world.Burst(tile,f.crop.item);return true;}
-            if(tool==7||tool==8||tool==9)
-            {
-                var candidates=nodes.Where(n=>n.gameObject.activeInHierarchy&&!model.State.harvested.Contains(n.source)&&n.required==tool&&Vector2.Distance(n.transform.position,target)<(tool==8?1.5f:1.2f)).OrderBy(n=>Vector2.Distance(n.transform.position,target));
-                var selected=tool==8?candidates.ToArray():candidates.Take(1).ToArray();
-                foreach(var node in selected)
+                game.Sound("cook");node.damage++;game.world.Burst(node.transform.position,node.item);
+                bool stump=model.State.harvested.Contains(node.source);int needed=stump?2:node.hits;
+                if(node.damage>=needed)
                 {
-                    game.Sound("cook");
-                    node.damage++;StartCoroutine(Shake(node));game.world.Burst(node.transform.position,node.item=="wood"?"wood":node.item=="stone"?"stone":"fiber");
-                    if(node.damage>=node.hits){if(ItemInventory.Resource(model,node.item,node.item=="fiber"?1:3,node.source))Notice("Gathered "+ItemInventory.Name(node.item,model.Data));}
+                    if(ItemInventory.Resource(model,node.item,stump?1:node.item=="fiber"?1:3,node.source+(stump?"-stump":"")))
+                    {node.damage=0;if(node.item=="wood"&&!stump)StartCoroutine(Fall(node));}
+                    else Notice("Make room for gathered materials.");
                 }
-                if(selected.Length==0)Notice(tool==7?"Aim at a Cinnamonwood tree.":tool==9?"Aim at a Saltstone outcrop.":"Sweep the Noodlegrass around you.");return true;
+                else StartCoroutine(Shake(node));
             }
-            return false;
+            return selected.Length>0;
+        }
+        IEnumerator Fall(HarvestNode node)
+        {
+            node.falling=true;var tree=WorldView.Add(node.transform.parent,node.original.name,node.transform.localPosition,node.art.sortingOrder+1);tree.sprite=node.original;float direction=game.world.player.position.x<node.transform.position.x?-1:1;
+            for(float t=0;t<.8f;t+=Time.deltaTime){float u=t/.8f;tree.transform.rotation=Quaternion.Euler(0,0,direction*u*u*88);if(t>.55f)tree.color=new Color(1,1,1,Mathf.Clamp01((.8f-t)/.25f));yield return null;}
+            Destroy(tree.gameObject);node.falling=false;game.world.Burst(node.transform.position,"dirt-puff");
         }
         void Notice(string text){game.Say(text);}
         void ClearNotice(){game.ui.Message("");}
@@ -129,24 +131,23 @@ namespace Wildfeast
         {
             Sailing=true;var curtain=SceneCurtain.Create(game.ui);var world=game.world;var body=world.player.GetComponent<Rigidbody2D>();body.simulated=false;
             var ships=world.GetComponentsInChildren<SpriteRenderer>(true).Where(sr=>sr.gameObject.name=="boat").ToArray();foreach(var sr in ships)sr.enabled=false;
-            Vector2 departure=Archipelago.Get(world.Area).dock,landing=Archipelago.Get(destination).dock;
+            int origin=world.Area;Vector2 departure=WaterRoute.Harbor(origin),landing=WaterRoute.Harbor(destination);
             var ship=WorldView.Add(world.transform,"boat",departure,1800);ship.gameObject.name="Sailing skiff";
             world.FollowSea=true;world.playerArt.sortingOrder=1802;
-            // Temporarily position both authored islands in a continuous sea route.
-            // Rebase to the destination's local coordinates only after physically docking.
             Transform arrival=world.IslandRoot(destination);
-            Vector3 offset=new Vector3(40,-35,0);arrival.localPosition=offset;arrival.gameObject.SetActive(true);
-            var oceanTiles=new List<GameObject>();
-            oceanTiles.Add(TileWorld.Ocean(world.transform,game.Model.State.reducedMotion));
-            Vector2 parked=landing+(Vector2)offset;
-            yield return MoveShip(ship,departure,departure+Vector2.down*4.3f,2.2f);
-            yield return MoveShip(ship,departure+Vector2.down*4.3f,new Vector2(12,-27),2.5f);
-            yield return MoveShip(ship,new Vector2(12,-27),parked+Vector2.down*4.3f,2.5f);
-            yield return MoveShip(ship,parked+Vector2.down*4.3f,parked,2.2f);
+            Vector3 offset=new Vector3(Archipelago.Get(origin).size.x/2+Archipelago.Get(destination).size.x/2+24,0,0);arrival.localPosition=offset;arrival.gameObject.SetActive(true);
+            var oceanTiles=new List<GameObject>{TileWorld.Ocean(world.transform,game.Model.State.reducedMotion)};
+            float seaY=-Mathf.Max(Archipelago.Get(origin).size.y,Archipelago.Get(destination).size.y)/2-8;
+            var departurePath=WaterRoute.Escape(origin,seaY);var arrivalPath=WaterRoute.Escape(destination,seaY).Reverse().Select(p=>p+(Vector2)offset).ToArray();
+            yield return FollowShip(ship,departurePath,3.2f);
+            yield return MoveShip(ship,departurePath.Last(),arrivalPath.First(),3.8f);
+            yield return FollowShip(ship,arrivalPath,3.2f);
             yield return curtain.Fade(true);arrival.localPosition=Vector3.zero;foreach(var tile in oceanTiles)Destroy(tile);
             foreach(var sr in ships)sr.enabled=true;Destroy(ship.gameObject);body.simulated=true;world.FollowSea=false;
             world.SetArea(destination,Archipelago.Get(destination).arrival);yield return curtain.Fade(false);Destroy(curtain.gameObject);Sailing=false;complete();
         }
+        IEnumerator FollowShip(SpriteRenderer ship,Vector2[] path,float duration)
+        {for(int i=1;i<path.Length;i++)yield return MoveShip(ship,path[i-1],path[i],duration/Mathf.Max(1,path.Length-1));}
         IEnumerator MoveShip(SpriteRenderer ship,Vector2 start,Vector2 end,float duration)
         {
             float t=0;while(t<duration)

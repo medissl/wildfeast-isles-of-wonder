@@ -1,3 +1,11 @@
+# Current Living Districts guidance — 4 October 2026
+
+Read docs/LIVING_DISTRICTS.md first. This supersedes the historical five-independent-island, original menu-only, and energy-on-air-swing instructions below. Preserve the restored native pixel direction and existing textured ground/roads. Three geographic islands contain six outdoor districts; walking passages join Saltleaf/Bramblewick/Cloudfruit Heights and Emberfold/Moonfen. Only three ports appear in the ferry menu. Keep stable outdoor IDs for saves, three resident homes (8–10), bedroom (6), and dining room (2).
+
+The mountain daytime panorama, carved plaque/buttons, ingredient icons, residents and expression portraits are original native pixel drawings, not image generation service output. Catalog layouts are authoritative; tools/living_districts.py refreshes only soil/materials and never rebuilds the layout. tools/living_art.py refreshes this pass’s explicit pixel drawings; do not run historical global generators over them. Author scene changes through ArchipelagoBuilder.Author, preserving restaurant/UI. No packaging.
+
+Successful tool contact costs energy once; air swings and duplicate/invalid planting/watering cost none. Preserve falling trees, cuttable persistent stumps, accurate rod-tip line, natural independent ambient movement, five daily residents and one ingredient event each. Sleep checkpoints residents and restores the next morning atomically. Run isolated LivingRunner, FirstLightRunner, full SmokeRunner and EditMode checks; inspect actual captures. Automated diagnostics are not human playtesting.
+
 # Latest: restored First Light design and Harbor Rest
 
 The creator explicitly requests preserving the existing design before the generated-art experiments. See HARBOR_REST.md and the top of AGENTS.md. Original art/UI were restored from e08d0de; preserve the grid and targeted bedroom, energy and sleep checkpoint additions. Earlier generated-menu directions are superseded.

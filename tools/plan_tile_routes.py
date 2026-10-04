@@ -13,8 +13,12 @@ for i in data['islands']:
  deck={(x,y) for x in [dx,dx+(1 if arrival[0]>=dx else -1)] for y in range(dy,arrival[1]+2)}
  land|=deck;i['gridDeck']=sorted(idx(p) for p in deck);i['gridLand']=sorted(idx(p) for p in land)
  for prop in i['props']:
-  if prop['role']!='grass':obstacles.add((prop['position']['x'],prop['position']['y']))
+  if prop['role']!='grass':
+   px,py=prop['position']['x'],prop['position']['y'];obstacles.add((px,py))
+   if prop['role']=='decor':obstacles|={(px-1,py),(px+1,py)}
  for pt in i['points']:
+  if pt['action'] in ('home','shop') and pt.get('art'):
+   px,py=round(pt['position']['x']),round(pt['position']['y']);obstacles|={(px+dx,py+dy) for dx in range(-2,3) for dy in range(1,4)}
   if pt['action'] in ('upgrades','discovery','tap') or pt.get('kind') in ('ram','crab','snail'):obstacles.add((pt['position']['x'],pt['position']['y']))
  if i['id']==0:
   obstacles|={(x,y) for x in range(-8,-3) for y in range(0,3)}
@@ -23,10 +27,14 @@ for i in data['islands']:
  safe={p for p in land if p in deck or all((p[0]+x,p[1]+y) in land for x,y in [(0,1),(1,0),(0,-1),(-1,0)])}-obstacles
  def nearest(p):return min(safe,key=lambda a:(a[0]-p[0])**2+(a[1]-p[1])**2)
  anchors=[arrival,nearest((dx,dy))]
- anchors += [nearest((pt['position']['x'],pt['position']['y']-1)) for pt in i['points'] if pt['action'] in ('enter','upgrades','story','discovery','forage','fruit')]
+ anchors += [nearest((pt['position']['x'],pt['position']['y']-1)) for pt in i['points'] if pt['action'] in ('enter','upgrades','story','discovery','forage','fruit','passage','home','shop','talk')]
  anchors += [nearest((r['center']['x'],r['center']['y'])) for r in i['regions']]
  if i['id']==0:anchors += [nearest((-6,-2)),nearest((1,0))]
  if i['id']==1:anchors += [nearest((3,2))]
+ # Keep new doorway/passage cells on dry reachable ground.
+ for pt in i['points']:
+  if pt['action'] in ('passage','talk'):
+   q=nearest((pt['position']['x'],pt['position']['y']));pt['position']={'x':q[0],'y':q[1]};anchors.append(q)
  anchors=list(dict.fromkeys(anchors));roads=set(deck);connected=[arrival];routes=[]
  for goal in anchors[1:]:
   start=min(connected,key=lambda p:abs(p[0]-goal[0])+abs(p[1]-goal[1]));front=[(0,0,start)];cost={start:0};parents={start:None}
@@ -52,4 +60,4 @@ for mask in range(16):
   d.line((0,y,31,y),fill='#63482e');d.line((0,y+1,31,y+1),fill='#deb878');d.line((5,y+4,22,y+4),fill='#c29458')
   for x in [3,28]:d.point((x,y+3),fill='#65513b')
  im.save(ROOT/f'Game/Assets/Wildfeast/Resources/Art/tile-deck-{mask}.png')
-print('Five route networks connect docks and landmarks, avoiding solid footprints.')
+print('District route networks connect docks and landmarks, avoiding solid footprints.')

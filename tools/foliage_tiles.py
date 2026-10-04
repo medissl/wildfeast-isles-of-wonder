@@ -7,7 +7,7 @@ isles=json.loads((ART.parent/'Archipelago.json').read_text())['islands']
 palettes=[['#284f36','#367a3d','#559744','#80b650','#b0cf67'],['#2f5841','#478c50','#6faf60','#96cc7b','#c3de93'],['#3c5031','#587435','#7c953d','#a9b451','#d0ce72'],['#3b426b','#665684','#92789d','#b5a2bb','#d5c5ca'],['#265854','#38887a','#5db296','#8ed0ac','#bde7c6']]
 # Canonical bases are authored assets. Derive motion without redesigning them.
 for n,isle in enumerate(isles):
- pal=palettes[n]
+ pal=palettes[n%5]
  base=Image.open(ART/f'tree-{isle["tree"]}.png').convert('RGBA')
  split=base.height*2//3
  for f,shift in enumerate([0,1,0,-1]):

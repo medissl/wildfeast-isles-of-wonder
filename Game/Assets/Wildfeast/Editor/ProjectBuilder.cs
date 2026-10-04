@@ -69,6 +69,8 @@ namespace Wildfeast.Editor
         [MenuItem("Wildfeast/Build Windows player")]
         public static void Build()
         {
+            // Newly baked maps must be full single sprites, not auto-sliced sheets.
+            foreach(var island in Archipelago.Islands){var map=(TextureImporter)AssetImporter.GetAtPath("Assets/Wildfeast/Resources/Art/map-"+island.key+".png");if(map&&map.spriteImportMode!=SpriteImportMode.Single){map.spriteImportMode=SpriteImportMode.Single;map.SaveAndReimport();}}
             string destination=Path.GetFullPath("../Builds/Windows/Wildfeast.exe");
             var args=Environment.GetCommandLineArgs();int index=Array.IndexOf(args,"-wildfeastBuild");if(index>=0)destination=args[index+1];
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
@@ -96,7 +98,7 @@ namespace Wildfeast.Editor
                     string path="Assets/Wildfeast/Resources/Art/map-"+island.key+".png";
                     File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);RenderTexture.active=previous;
                     AssetDatabase.ImportAsset(path);
-                    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=4096;importer.SaveAndReimport();
+                    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=4096;importer.SaveAndReimport();
                     target.Release();UnityEngine.Object.DestroyImmediate(target);target=null;
                 }
             }

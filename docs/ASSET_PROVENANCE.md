@@ -1,3 +1,7 @@
+# Living Districts additions
+
+All new menu art, 25 resident expression portraits, five 16-frame directional resident sets, village buildings/props, compact ingredient/dish icons, rod sprites, and matching cultivated terrain are explicit original native-grid pixel drawings authored locally. No image generation service or downloaded reference-game assets were used. Pixelify Sans retains its bundled license. Existing creature, character, building and foliage designs remain from the restored original game. Reference screenshots informed density, destination layout and framed dialogue, not copied artwork.
+
 # Archipelago additions
 
 tools/archipelago_art.py creates the original five-island layout catalog and native pixel terrain, foliage/grass animation frames, biome stone patches, rooted forage/seed packets, four food creatures, open blossom/cracked-shell states, trail landmarks and 14 distinct dish silhouettes/compact servings. Fixed seeds, Pillow primitives and original ecological designs are used; none of the reference screenshots or franchise artwork is sampled. Map images are baked from this game's authored Unity scenery.

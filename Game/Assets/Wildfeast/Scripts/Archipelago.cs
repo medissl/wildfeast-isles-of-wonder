@@ -59,6 +59,8 @@ namespace Wildfeast
                         WorldView.Block(sr.transform,placement.art=="trail-post"?new Vector2(.2f,.2f):new Vector2(1.45f,.45f),Vector2.up*.15f);
                         var anchor=sr.gameObject.AddComponent<PropDepth>();anchor.groundOffset=.15f;anchor.Apply();continue;
                     }
+                    if(placement.role=="decor")
+                    {WorldView.Block(sr.transform,new Vector2(placement.art=="village-barrel"?.65f:1.65f,.35f),Vector2.up*.12f);var anchor=sr.gameObject.AddComponent<PropDepth>();anchor.groundOffset=.12f;anchor.Apply();continue;}
                     var node=sr.gameObject.AddComponent<HarvestNode>();node.art=sr;node.original=sr.sprite;
                     node.item=placement.role=="tree"?"wood":placement.role=="stone"?"stone":"fiber";
                     node.required=node.item=="wood"?7:node.item=="stone"?9:8;node.hits=node.item=="fiber"?1:3;
@@ -89,16 +91,26 @@ namespace Wildfeast
                     Vector2 pos=definition.pond+new Vector2(Mathf.Cos(k)*2,Mathf.Sin(k)*.9f);
                     WorldView.Add(root,"ripple-0",pos,-1499).gameObject.AddComponent<WorldMotion>().mode=5;
                 }
+                int habitatIndex=0;
+                foreach(var region in definition.regions)
+                {
+                    var pos=region.center+new Vector2(-2.5f+(habitatIndex%3)*2.5f,1.5f);habitatIndex++;if(WorldView.Water(pos,definition.id))continue;
+                    var light=WorldView.Add(root,n==3?"spark":"butterfly",pos,1400);var motion=light.gameObject.AddComponent<HabitatMotion>();motion.kind="butterfly";motion.area=definition.id;motion.radius=5;
+                }
+                // Harmless food wildlife wanders independently through clear habitat.
                 foreach(var region in definition.regions.Take(2))
-                for(int k=0;k<3;k++){var light=WorldView.Add(root,n==3?"spark":"butterfly",region.center+new Vector2(k-1,.5f),1400);var motion=light.gameObject.AddComponent<WorldMotion>();motion.mode=1;motion.phase=k;motion.radius=.25f;motion.speed=.5f;}
+                {var pos=region.center+Vector2.down*2;if(WorldView.Water(pos,definition.id))continue;var animal=WorldView.Add(root,definition.points.FirstOrDefault(p=>p.action=="creature"||p.action=="hunt")?.art??"custardram-0",pos,1000-Mathf.RoundToInt(pos.y*32));if(!animal.sprite){UnityEngine.Object.DestroyImmediate(animal.gameObject);continue;}var behavior=animal.gameObject.AddComponent<HabitatMotion>();behavior.kind="animal";behavior.area=definition.id;behavior.radius=3;}
+
             }
             world.saltleaf=world.islands[0];world.mistwake=world.islands[1];
             var home=WorldView.Add(world.saltleaf,"restaurant",new Vector2(-6,-.9f),1030);WorldView.Block(home.transform,new Vector2(4.8f,2.7f),new Vector2(0,2));home.gameObject.AddComponent<PropDepth>().groundOffset=2;
-            var fountain=WorldView.Add(world.saltleaf,"fountain",new Vector2(1.3f,1.4f),955);WorldView.Block(fountain.transform,new Vector2(1.5f,.9f),Vector2.up*.25f);fountain.gameObject.AddComponent<PropDepth>().groundOffset=.25f;
             var cottage=WorldView.Add(world.mistwake,"iona-house",new Vector2(3,3),880);WorldView.Block(cottage.transform,new Vector2(3,1.8f),Vector2.up*1.2f);cottage.gameObject.AddComponent<PropDepth>().groundOffset=1.2f;
             // Workshop footprint, independent of the interaction prompt.
             foreach(var p in world.points.Where(p=>p.action=="upgrades"&&p.artwork))WorldView.Block(p.artwork.transform,new Vector2(1.5f,.6f),Vector2.up*.25f);
-            var keeper=WorldView.Add(world.saltleaf,"guest-2",new Vector2(-.65f,-3.2f),1100);var stroll=keeper.gameObject.AddComponent<WorldMotion>();stroll.mode=4;stroll.radius=.25f;stroll.speed=.35f;
+            foreach(var i in Islands)
+            {foreach(var ship in world.IslandRoot(i.id).GetComponentsInChildren<SpriteRenderer>(true).Where(sr=>sr.name=="boat"))ship.transform.position=WaterRoute.Harbor(i.id);}
+            LivingDistrictBuilder.Author(world);
+
         }
     }
 }

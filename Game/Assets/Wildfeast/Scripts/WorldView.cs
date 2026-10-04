@@ -8,7 +8,7 @@ namespace Wildfeast
     {
         public Transform saltleaf, mistwake, restaurant, bedroom;
         public Transform[] islands;
-        public Transform IslandRoot(int area)=>islands!=null&&islands.Length==5?islands[System.Array.FindIndex(Archipelago.Islands,i=>i.id==area)]:area==0?saltleaf:mistwake;
+        public Transform IslandRoot(int area)=>islands!=null&&islands.Length==Archipelago.Islands.Length?islands[System.Array.FindIndex(Archipelago.Islands,i=>i.id==area)]:area==0?saltleaf:mistwake;
         public Transform player;
         public Camera worldCamera;
         public SpriteRenderer playerArt;
@@ -45,6 +45,7 @@ namespace Wildfeast
         WorldPoint beast;
         Vector2 beastHome;
         public static Sprite Art(string name) => Resources.Load<Sprite>("Art/" + (name=="tool-scythe"?"icon-scythe":name=="tool-pickaxe"?"icon-pickaxe":name));
+        public static Sprite ItemArt(string name)=>Art("item-"+name)??Art("held-"+name)??Art(name);
         public void Init()
         {
             AuthorBedroom();
@@ -68,9 +69,10 @@ namespace Wildfeast
         {
             foreach(var effect in transientEffects)if(effect)Destroy(effect);transientEffects.Clear();
             Area = area;
-            if(islands!=null&&islands.Length==5)for(int i=0;i<islands.Length;i++)islands[i].gameObject.SetActive(Archipelago.Islands[i].id==area);
+            if(islands!=null&&islands.Length==Archipelago.Islands.Length)for(int i=0;i<islands.Length;i++)islands[i].gameObject.SetActive(Archipelago.Islands[i].id==area);
             else {saltleaf.gameObject.SetActive(area==0);mistwake.gameObject.SetActive(area==1);}
             restaurant.gameObject.SetActive(area==2);if(bedroom)bedroom.gameObject.SetActive(area==6);
+            foreach(var room in GetComponentsInChildren<ResidentRoom>(true))room.gameObject.SetActive(room.area==area);
             player.position = position; player.GetComponent<Rigidbody2D>().position = position;
             worldCamera.transform.position = area==2||area==6?new Vector3(0,0,-10):new Vector3(position.x,position.y+1,-10);
         }
@@ -88,7 +90,7 @@ namespace Wildfeast
         }
         public WorldPoint PointAt(Vector2 cursor)
         {
-            return points.Where(p=>p&&p.gameObject.activeInHierarchy&&Vector2.Distance(player.position,p.transform.position)<=(p.GetComponent<FoodEcology>()?2.4f:2)&&(Vector2.Distance(cursor,p.transform.position)<.9f||(p.artwork&&p.artwork.bounds.Contains(new Vector3(cursor.x,cursor.y,p.artwork.transform.position.z))))&&(!p.artwork||p.artwork.enabled)).OrderBy(p=>Vector2.Distance(cursor,p.transform.position)).FirstOrDefault();
+            return points.Where(p=>p&&p.gameObject.activeInHierarchy&&Vector2.Distance(player.position,p.transform.position)<=(p.GetComponent<FoodEcology>()?2.4f:2)&&(Vector2.Distance(cursor,p.transform.position)<.9f||(p.artwork&&p.artwork.bounds.Contains(new Vector3(cursor.x,cursor.y,p.artwork.transform.position.z))))&&(!p.artwork||p.artwork.enabled)).OrderBy(p=>p.artwork&&p.artwork.bounds.Contains(new Vector3(cursor.x,cursor.y,p.artwork.transform.position.z))?0:1).ThenBy(p=>Vector2.Distance(cursor,p.transform.position)).FirstOrDefault();
         }
         public void Face(Vector2 direction){if(direction.sqrMagnitude>.01f)facing=direction.normalized;}
         public void Animate(Vector2 motion)
@@ -121,7 +123,7 @@ namespace Wildfeast
         {
             if(chefFrames==null)return;
             Vector3 target = new Vector3(player.position.x, player.position.y + 1, -10);
-            if (Area == 2 || Area == 6) target = new Vector3(0, 0, -10);
+            if (Area == 2 || Area == 6 || Area>=8) target = new Vector3(0, 0, -10);
             else if(!FollowSea) {var size=Archipelago.Get(Area).size;float halfX=worldCamera.orthographicSize*worldCamera.aspect;target.x=Mathf.Clamp(target.x,-Mathf.Max(0,size.x/2-halfX),Mathf.Max(0,size.x/2-halfX));target.y=Mathf.Clamp(target.y,-Mathf.Max(0,size.y/2-worldCamera.orthographicSize),Mathf.Max(0,size.y/2-worldCamera.orthographicSize));}
             var cameraPosition = Vector3.Lerp(worldCamera.transform.position, target, 1 - Mathf.Exp(-8 * Time.deltaTime));
             cameraPosition.x = Mathf.Round(cameraPosition.x * 32) / 32f; cameraPosition.y = Mathf.Round(cameraPosition.y * 32) / 32f;
@@ -183,6 +185,7 @@ namespace Wildfeast
             string id=slot>=0&&slot<10?icons[slot]:item;
             heldTool.sprite=string.IsNullOrEmpty(id)?null:Art(id.StartsWith("tool-")?id.Replace("tool-","held-"):"held-"+id)??Art(id);
             if(carriedDish.sprite)heldTool.sprite=null;
+            if(activity=="fish")heldTool.sprite=Art("held-rod");
             string kind=activity=="forage"?"pull":activity=="fish"?poseProgress<1?"cast":"pull":activity=="cook"?usingTool?cookStep==0?"swing":cookStep==1?"stir":"plant":null:usingTool?slot==2?"pour":slot==3||slot==4?"plant":slot==0||slot<0?"pull":"swing":null;
             int d=Mathf.Abs(direction.x)>Mathf.Abs(direction.y)?direction.x<0?2:3:direction.y>0?1:0;
             int frame=Mathf.Min(4,Mathf.FloorToInt(poseProgress*5));
@@ -210,14 +213,16 @@ namespace Wildfeast
             pixel.refResolutionX=widths[level];pixel.refResolutionY=heights[level];
         }
         public void Cast(Vector2 target){castPoint=target;bobber.gameObject.SetActive(true);bobber.transform.position=target;fishingLine.enabled=true;Burst(target,"splash");}
+        public Vector3 RodTip
+        {get{if(!heldTool||!heldTool.sprite)return player.position+Vector3.up;var sprite=heldTool.sprite;var tip=new Vector3((18-sprite.pivot.x)/sprite.pixelsPerUnit,(sprite.rect.height-2-sprite.pivot.y)/sprite.pixelsPerUnit,0);if(heldTool.flipX)tip.x=-tip.x;return heldTool.transform.TransformPoint(tip);}}
         public void Fishing(float time,float tension,float progress)
         {
-            var end=(Vector3)castPoint+new Vector3(Mathf.Sin(time*4)*.1f,Mathf.Sin(time*5)*.04f,0);
-            end=Vector3.Lerp(player.position+Vector3.up*.8f,end,Mathf.Clamp01(time/.4f));
+            var target=(Vector3)castPoint+new Vector3(Mathf.Sin(time*4)*.1f,Mathf.Sin(time*5)*.04f,0);var start=RodTip;float u=Mathf.Clamp01(time/.65f);
+            var end=Vector3.Lerp(start,target,u)+Vector3.up*Mathf.Sin(u*Mathf.PI)*1.2f;
             bobber.transform.position=end;bobber.color=time>1.5f&&Mathf.Sin(time*9)>0?new Color(1,.66f,.34f):Color.white;
-            var start=player.position+new Vector3(facing.x>=0?.65f:-.65f,1.28f,0);fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*(.12f+(1-tension)*.45f),end});
+            fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*(.12f+(1-tension)*.25f),end});
         }
-        public void Retrieve(float amount){var start=player.position+new Vector3(facing.x>=0?.65f:-.65f,1.28f,0);var end=Vector3.Lerp(castPoint,player.position+Vector3.up*.6f,amount);bobber.transform.position=end;fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*.12f,end});}
+        public void Retrieve(float amount){var start=RodTip;var end=Vector3.Lerp(castPoint,player.position+Vector3.up*.6f,amount);bobber.transform.position=end;fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*.12f,end});}
         public void CancelCast(){if(bobber)bobber.gameObject.SetActive(false);if(fishingLine)fishingLine.enabled=false;}
         public void LandFish(string item){var fish=Add(transform,item,castPoint,1800);transientEffects.Add(fish.gameObject);var motion=fish.gameObject.AddComponent<WorldMotion>();motion.mode=6;motion.destination=player.position+Vector3.up*.7f;Destroy(fish.gameObject,.7f);Burst(player.position+Vector3.up*.8f,"spark",0);}
         public void Burst(Vector3 position,string sprite,float cooldown=0)
@@ -231,7 +236,7 @@ namespace Wildfeast
         public static bool Water(Vector2 position,int area=0)=>!TerrainGrid.Land(TerrainGrid.Cell(position),area);
         public Vector2? WaterAt(Vector2 position,Vector2 direction)
         {
-            if(Area==2||Area==6)return null;
+            if(Districts.Interior(Area))return null;
             // Aim towards nearby water; a shoreline cast also works without precise facing.
             for(int k=0;k<16;k++){var aim=k==0?direction:new Vector2(Mathf.Cos(k*Mathf.PI/8),Mathf.Sin(k*Mathf.PI/8));for(float d=.6f;d<=2.3f;d+=.3f){var test=position+aim*d;if(Water(test,Area))return test+aim*.55f;}}
             return null;
@@ -348,7 +353,7 @@ namespace Wildfeast
         }
         public static void Block(Transform parent, Vector2 size, Vector2 offset)
         { var go = new GameObject("Collision", typeof(BoxCollider2D)); go.transform.SetParent(parent, false); go.transform.localPosition = offset; go.GetComponent<BoxCollider2D>().size = size; }
-        static void Border(Transform parent, float x, float y)
+        public static void Border(Transform parent, float x, float y)
         {
             Block(parent, new Vector2(x * 2, 1), new Vector2(0, y)); Block(parent, new Vector2(x * 2, 1), new Vector2(0, -y));
             Block(parent, new Vector2(1, y * 2), new Vector2(x, 0)); Block(parent, new Vector2(1, y * 2), new Vector2(-x, 0));

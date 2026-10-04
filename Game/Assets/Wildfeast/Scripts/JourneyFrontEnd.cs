@@ -20,6 +20,7 @@ namespace Wildfeast
         readonly List<RectTransform> clouds=new List<RectTransform>();
         readonly List<Image> glints=new List<Image>();
         readonly List<GameObject> introPlates=new List<GameObject>();bool servedIntro;Image fade;
+        bool finishingIntro;WorldPoint introSource;SpriteRenderer introIngredient;
         int newSlot,beat=-1;float introClock;Vector2 introStart;
         static readonly Color Cream=GameUI.C("f9e7be"),Ink=GameUI.C("3b353a");
         public void Init(GameController controller,string directory)
@@ -50,11 +51,9 @@ namespace Wildfeast
         public void Title()
         {
             game.ui.Hide();Page("Title");game.SuspendJourney();game.world.SetArea(0,new Vector2(-6,-2.5f));
-            var plaque=GameUI.Box(content,"Title sign",new Vector2(0,-75),new Vector2(650,174),new Vector2(.5f,1),Color.white);GameUI.Frame(plaque);
-            var title=GameUI.Text(plaque,"WILDFEAST",new Vector2(24,-20),new Vector2(602,90),64,Ink);title.alignment=TextAlignmentOptions.Center;
-            var sub=GameUI.Text(plaque,"ISLES OF WONDER",new Vector2(24,-113),new Vector2(602,40),28,GameUI.C("845c42"));sub.alignment=TextAlignmentOptions.Center;
+            var plaque=GameUI.Box(content,"Title sign",new Vector2(0,-48),new Vector2(720,276),new Vector2(.5f,1),Color.white);plaque.GetComponent<Image>().sprite=WorldView.Art("title-plaque");plaque.GetComponent<Image>().preserveAspect=true;plaque.GetComponent<Image>().raycastTarget=false;
             string[] names={"New","Load","Options","Exit"};Action[] actions={NewJourney,LoadPage,Options,()=>Application.Quit()};
-            for(int i=0;i<4;i++)GameUI.Button(content,names[i],new Vector2(204+i*170,-470),new Vector2(158,64),actions[i],new Vector2(0,1));
+            for(int i=0;i<4;i++){var button=GameUI.Button(content,names[i],new Vector2(204+i*170,-470),new Vector2(158,64),actions[i],new Vector2(0,1));button.GetComponent<Image>().sprite=WorldView.Art("menu-button");button.GetComponentInChildren<TMP_Text>().color=GameUI.C("65472f");}
             UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(content.GetComponentsInChildren<UnityEngine.UI.Button>().FirstOrDefault()?.gameObject);
 
         }
@@ -92,7 +91,7 @@ namespace Wildfeast
             var text=GameUI.Text(field,Draft.name,new Vector2(12,-5),new Vector2(276,32),22,Ink);text.raycastTarget=true;
             NameField=field.gameObject.AddComponent<TMP_InputField>();NameField.textViewport=field;NameField.textComponent=(TextMeshProUGUI)text;NameField.fontAsset=text.font;NameField.characterLimit=18;NameField.contentType=TMP_InputField.ContentType.Standard;NameField.text=Draft.name;
             NameField.onValueChanged.AddListener(value=>Draft.name=value);
-            string[] names={"Skin","Hair style","Hair color","Face","Shirt","Pants","Boots"};
+            string[] names={"Skin","Hair style","Hair color","Face","Shirt","Pants","Boots","Accessory"};
             for(int i=0;i<names.Length;i++)
             {
                 int index=i;var label=GameUI.Text(panel,names[i],new Vector2(295,-197-i*39),new Vector2(175,30),20,Ink);
@@ -100,20 +99,20 @@ namespace Wildfeast
                 var value=GameUI.Text(panel,"",new Vector2(541,-198-i*39),new Vector2(145,28),18,Ink);value.name="Choice "+i;value.alignment=TextAlignmentOptions.Center;
                 GameUI.Button(panel,">",new Vector2(699,-193-i*39),new Vector2(40,33),()=>Change(index,1),new Vector2(0,1));
             }
-            GameUI.Button(panel,"Random",new Vector2(38,-424),new Vector2(222,42),()=>{Draft.skin=UnityEngine.Random.Range(0,6);Draft.hairColor=UnityEngine.Random.Range(0,6);Draft.hairStyle=UnityEngine.Random.Range(0,4);Draft.face=UnityEngine.Random.Range(0,3);Draft.shirt=UnityEngine.Random.Range(0,6);Draft.pants=UnityEngine.Random.Range(0,6);Draft.boots=UnityEngine.Random.Range(0,6);UpdatePreview();},new Vector2(0,1));
+            GameUI.Button(panel,"Random",new Vector2(38,-424),new Vector2(222,42),()=>{Draft.skin=UnityEngine.Random.Range(0,6);Draft.hairColor=UnityEngine.Random.Range(0,6);Draft.hairStyle=UnityEngine.Random.Range(0,6);Draft.face=UnityEngine.Random.Range(0,5);Draft.shirt=UnityEngine.Random.Range(0,6);Draft.pants=UnityEngine.Random.Range(0,6);Draft.boots=UnityEngine.Random.Range(0,6);Draft.accessory=UnityEngine.Random.Range(0,4);UpdatePreview();},new Vector2(0,1));
             GameUI.Button(panel,"Back",new Vector2(38,-507),new Vector2(200,46),Title,new Vector2(0,1));
             GameUI.Button(panel,"Begin journey",new Vector2(-35,-507),new Vector2(250,46),Confirm,new Vector2(1,1));UpdatePreview();
         }
         public void Change(int category,int delta)
         {
-            int[] values={Draft.skin,Draft.hairStyle,Draft.hairColor,Draft.face,Draft.shirt,Draft.pants,Draft.boots};int count=category==1?4:category==3?3:6;values[category]=(values[category]+delta+count)%count;
-            Draft.skin=values[0];Draft.hairStyle=values[1];Draft.hairColor=values[2];Draft.face=values[3];Draft.shirt=values[4];Draft.pants=values[5];Draft.boots=values[6];UpdatePreview();
+            int[] values={Draft.skin,Draft.hairStyle,Draft.hairColor,Draft.face,Draft.shirt,Draft.pants,Draft.boots,Draft.accessory};int count=category==1?6:category==3?5:category==7?4:6;values[category]=(values[category]+delta+count)%count;
+            Draft.skin=values[0];Draft.hairStyle=values[1];Draft.hairColor=values[2];Draft.face=values[3];Draft.shirt=values[4];Draft.pants=values[5];Draft.boots=values[6];Draft.accessory=values[7];UpdatePreview();
         }
         void UpdatePreview()
         {
             look?.Dispose();look=new CharacterLook(Draft);portrait.sprite=look.Apply(WorldView.Art("chef-down-0"));
-            int[] values={Draft.skin,Draft.hairStyle,Draft.hairColor,Draft.face,Draft.shirt,Draft.pants,Draft.boots};
-            foreach(var t in content.GetComponentsInChildren<TMP_Text>())if(t.name.StartsWith("Choice ")){int n=int.Parse(t.name.Substring(7));t.text=n==1?new[]{"Short","Long","Top knot","Chef hat"}[values[n]]:n==3?new[]{"Bright eyes","Smile","Glasses"}[values[n]]:n==0?new[]{"Honey","Light","Golden","Brown","Deep","Warm dark"}[values[n]]:n==2?new[]{"Chestnut","Wheat","Copper","Ink","Lavender","Silver"}[values[n]]:n==4?new[]{"Sea glass","Rose","Blue","Plum","Ochre","Moss"}[values[n]]:n==5?new[]{"Slate","Night","Earth","Berry","Lagoon","Sand"}[values[n]]:new[]{"Leather","Charcoal","Amber","Wine","Storm","Stone"}[values[n]];}
+            int[] values={Draft.skin,Draft.hairStyle,Draft.hairColor,Draft.face,Draft.shirt,Draft.pants,Draft.boots,Draft.accessory};
+            foreach(var t in content.GetComponentsInChildren<TMP_Text>())if(t.name.StartsWith("Choice ")){int n=int.Parse(t.name.Substring(7));t.text=n==1?new[]{"Short","Long","Top knot","Chef hat","Bob","Braid"}[values[n]]:n==3?new[]{"Bright eyes","Smile","Glasses","Freckles","Soft eyes"}[values[n]]:n==0?new[]{"Honey","Light","Golden","Brown","Deep","Warm dark"}[values[n]]:n==2?new[]{"Chestnut","Wheat","Copper","Ink","Lavender","Silver"}[values[n]]:n==4?new[]{"Sea glass","Rose","Blue","Plum","Ochre","Moss"}[values[n]]:n==5?new[]{"Slate","Night","Earth","Berry","Lagoon","Sand"}[values[n]]:n==6?new[]{"Leather","Charcoal","Amber","Wine","Storm","Stone"}[values[n]]:new[]{"None","Scarf","Leaf pin","Earring"}[values[n]];}
         }
         public void Confirm()
         {
@@ -133,19 +132,50 @@ namespace Wildfeast
         }
         public void Intro()
         {
-            Page("Introduction",false);introClock=0;beat=-1;servedIntro=false;
+            Page("Introduction",false);introClock=0;beat=-1;servedIntro=false;finishingIntro=false;
             var curtain=GameUI.Box(root,"Gentle scene transition",Vector2.zero,Vector2.zero,new Vector2(.5f,.5f),new Color(.08f,.12f,.16f,1));curtain.anchorMin=Vector2.zero;curtain.anchorMax=Vector2.one;curtain.offsetMin=curtain.offsetMax=Vector2.zero;fade=curtain.GetComponent<Image>();fade.raycastTarget=false;game.world.FollowSea=false;
             var lower=GameUI.Box(root,"Intro caption",new Vector2(0,0),new Vector2(1280,114),new Vector2(.5f,0),new Color(.12f,.16f,.18f,.91f));
             caption=GameUI.Text(lower,"",new Vector2(130,-24),new Vector2(1020,72),25,Cream);caption.alignment=TextAlignmentOptions.Center;
             GameUI.Button(root,"Skip introduction",new Vector2(-28,-26),new Vector2(205,40),FinishIntro,new Vector2(1,1));
             game.world.player.GetComponent<Rigidbody2D>().simulated=false;
         }
-        public void FinishIntro()
+        public void FinishIntro(){if(!finishingIntro){finishingIntro=true;StartCoroutine(FinishIntroRoutine());}}
+        System.Collections.IEnumerator FinishIntroRoutine()
         {
-            foreach(var plate in introPlates)if(plate)Destroy(plate);introPlates.Clear();
-            foreach(var guest in game.world.guests)guest.gameObject.SetActive(false);game.world.carriedDish.sprite=null;
+            if(fade){fade.raycastTarget=true;float alpha=fade.color.a;fade.transform.SetAsLastSibling();for(float t=0;t<.55f;t+=Time.unscaledDeltaTime){fade.color=new Color(.08f,.12f,.16f,Mathf.Lerp(alpha,1,t/.55f));yield return null;}}
+            ResetIntroSource();foreach(var plate in introPlates)if(plate)Destroy(plate);introPlates.Clear();
+            foreach(var guest in game.world.guests)guest.gameObject.SetActive(false);game.world.carriedDish.sprite=null;game.world.CancelCast();
             game.world.player.GetComponent<Rigidbody2D>().simulated=true;game.Model.State.introSeen=true;game.Model.Notify();game.SaveIntroduction();
-            game.world.SetArea(game.Model.State.island,Archipelago.Get(game.Model.State.island).arrival);Resume();
+            var curtain=SceneCurtain.Create(game.ui);yield return curtain.Fade(true);Resume();yield return curtain.Fade(false);Destroy(curtain.gameObject);
+        }
+        void ResetIntroSource(){if(introSource&&introSource.artwork)introSource.artwork.transform.localPosition=Vector3.zero;introSource=null;if(introIngredient)Destroy(introIngredient.gameObject);introIngredient=null;}
+        Vector2 IntroShore(WorldPoint fish,int area)
+        {for(float radius=.5f;radius<8;radius+=.3f)for(int k=0;k<32;k++){var p=(Vector2)fish.transform.position+new Vector2(Mathf.Cos(k*Mathf.PI/16),Mathf.Sin(k*Mathf.PI/16))*radius;if(!WorldView.Water(p,area)&&game.world.WaterAt(p,((Vector2)fish.transform.position-p).normalized).HasValue)return p;}return Archipelago.Get(area).arrival;}
+        void BeginBeat(int next)
+        {
+            ResetIntroSource();game.world.CancelCast();game.world.carriedDish.sprite=null;servedIntro=false;beat=next;
+            string[] text={"Beyond the familiar seas, a little harbor waits for a new cook.","Here, even the animals have a flavor worth befriending.","Cast a line. The sea has a different idea of vegetables.","Follow the scent of fruit that dreams of becoming a cloud.","Bring the world's strange ingredients to your stove.","Then share a little wonder. There is always room at the table."};caption.text=text[beat];
+            int area=beat<3?0:beat==3?1:2;
+            if(beat==0)introStart=new Vector2(-6,-4);
+            else if(beat==1){introSource=game.world.points.First(p=>p.action=="hunt");introStart=(Vector2)introSource.transform.position+Vector2.left*3;}
+            else if(beat==2){introSource=game.world.points.First(p=>p.action=="fish"&&p.transform.IsChildOf(game.world.saltleaf));introStart=IntroShore(introSource,0);}
+            else if(beat==3){introSource=game.world.points.First(p=>p.action=="fruit");introStart=(Vector2)introSource.transform.position+Vector2.down*1.4f;}
+            else introStart=beat==4?new Vector2(0,1.3f):new Vector2(-4,-2.2f);
+            game.world.SetArea(area,introStart);
+            if(beat==2)game.world.Cast(introSource.transform.position);
+            if(beat==5){var sign=game.world.points.First(p=>p.action=="service");if(sign.artwork)sign.artwork.sprite=WorldView.Art("sign-open");for(int i=0;i<3;i++){game.world.guests[i].gameObject.SetActive(true);game.world.guests[i].position=new Vector2(-5+i*5,-.9f);}game.world.carriedDish.sprite=WorldView.Art("held-dish-fish");}
+        }
+        void UpdateIntro()
+        {
+            if(finishingIntro)return;introClock+=Time.unscaledDeltaTime;int next=Mathf.Min(5,(int)(introClock/8));if(next!=beat)BeginBeat(next);
+            float t=Mathf.Repeat(introClock,8);if(fade)fade.color=new Color(.08f,.12f,.16f,Mathf.Max(Mathf.Clamp01((.7f-t)/.7f),Mathf.Clamp01((t-7.3f)/.7f)));
+            Vector2 motion=Vector2.zero;Vector2 facing=Vector2.down;
+            if(beat==0||beat==1){motion=t<4?Vector2.right:Vector2.zero;game.world.player.position=introStart+Vector2.right*Mathf.Min(t,4)*.5f;game.world.Animate(motion);game.world.Tool(-1,Vector2.right,false,null,"");if(beat==1&&t>4)game.world.Burst(introSource.transform.position+Vector3.up,"spark",1.2f);game.world.Roam();}
+            if(beat==2){facing=((Vector2)introSource.transform.position-introStart).normalized;game.world.Face(facing);game.world.Animate(Vector2.zero);game.world.Tool(1,facing,true,"fish",null,t<1?t:1);if(t<5)game.world.Fishing(t,.6f,.7f);else if(t<6.2f)game.world.Retrieve((t-5)/1.2f);else if(!servedIntro){servedIntro=true;game.world.LandFish("leafgill");game.world.CancelCast();}}
+            if(beat==3){facing=Vector2.up;game.world.Face(facing);game.world.Animate(Vector2.zero);game.world.Tool(-1,facing,t>2&&t<5,t>2&&t<5?"forage":null,"",Mathf.Repeat(t*.5f,1));if(t>2&&t<4&&introSource.artwork)introSource.artwork.transform.localPosition=new Vector3(Mathf.Sin(t*25)/32,(t-2)*.15f,0);if(t>4&&!servedIntro){servedIntro=true;introIngredient=WorldView.Add(game.world.transform,"held-cloudfruit",introSource.transform.position,1800);}if(introIngredient)introIngredient.transform.position=Vector3.Lerp(introSource.transform.position,game.world.player.position+Vector3.up*.65f,Mathf.Clamp01((t-4)/1.1f));}
+            if(beat==4){game.world.Face(Vector2.up);game.world.Animate(Vector2.zero);game.world.Tool(5,Vector2.up,true,"cook",null,Mathf.Repeat(t*.8f,1),t<2?0:t<5?1:2);if(t>2)game.world.Burst(introStart+Vector2.up,"steam",.65f);if(t>6)game.world.carriedDish.sprite=WorldView.Art("held-dish-fish");}
+            if(beat==5){motion=t<4?Vector2.right:Vector2.zero;game.world.player.position=introStart+Vector2.right*Mathf.Min(t,4)*1.1f;game.world.Animate(motion);game.world.Tool(-1,Vector2.right,false,null,"");if(t>4&&!servedIntro){servedIntro=true;game.world.carriedDish.sprite=null;for(int i=0;i<3;i++){var plate=WorldView.Add(game.world.restaurant,"held-dish-fish",game.world.guests[i].position+Vector3.up*.7f,1800);introPlates.Add(plate.gameObject);game.world.Burst(game.world.guests[i].position+Vector3.up,"spark");}}}
+            if(introClock>=48||Keyboard.current?.escapeKey.wasPressedThisFrame==true)FinishIntro();
         }
         public void Options()
         {
@@ -169,24 +199,9 @@ namespace Wildfeast
         void Update()
         {
             if(!Active)return;
-            if(ScreenName=="Introduction")
-            {
-                introClock+=Time.unscaledDeltaTime;int next=Mathf.Min(5,(int)(introClock/4));
-                if(next!=beat)
-                {
-                    beat=next;int[] areas={0,1,3,4,5,2};string[] text={"Beyond the familiar seas, ingredients grow into worlds…","Cloudfruit rises where gentle Custardrams dream.","Warm stone hides spice, stories, and stubborn little cooks.","Moonlight feeds flowers that remember your touch.","Here, even a quiet tide brings something extraordinary.","Bring your discoveries home. There is always room at the table."};
-                    Vector2[] positions={new Vector2(-3,2),new Vector2(4,3),new Vector2(6,4),new Vector2(1,12),new Vector2(14,3),new Vector2(0,-2)};
-                    introStart=positions[beat];game.world.SetArea(areas[beat],introStart);caption.text=text[beat];game.world.Burst(introStart+Vector2.up,"spark");
-                    if(beat==5){var sign=game.world.points.First(p=>p.action=="service");if(sign.artwork)sign.artwork.sprite=WorldView.Art("sign-open");for(int i=0;i<3;i++){game.world.guests[i].gameObject.SetActive(true);game.world.guests[i].position=new Vector2(-5+i*5,-.9f);}game.world.carriedDish.sprite=WorldView.Art("held-dish-fish");}
-                }
-                float t=Mathf.Repeat(introClock,4);if(fade)fade.color=new Color(.08f,.12f,.16f,game.Model.State.reducedMotion?0:Mathf.Max(Mathf.Clamp01((.4f-t)/.4f),Mathf.Clamp01((t-3.6f)/.4f)));
-                if(beat==5&&t>2&&!servedIntro){servedIntro=true;game.world.carriedDish.sprite=null;for(int i=0;i<3;i++){var plate=WorldView.Add(game.world.restaurant,"held-dish-fish",game.world.restaurant.InverseTransformPoint(game.world.guests[i].position+Vector3.up*.7f),1800);introPlates.Add(plate.gameObject);game.world.Burst(game.world.guests[i].position+Vector3.up,"spark");}}
-                game.world.player.position=introStart+Vector2.right*(Mathf.Min(t,2)*.45f);game.world.Animate(t<2?Vector2.right:Vector2.zero);game.world.Tool(-1,Vector2.right,false,null,"");game.world.Roam();
-                if(beat==5)for(int i=0;i<3;i++){game.world.guests[i].GetComponentInChildren<SpriteRenderer>().sprite=WorldView.Art("visitor-"+i+"-"+((int)(Time.time*3)%4));if(t>2&&t<2.04f)game.world.Burst(game.world.guests[i].position+Vector3.up,"spark");}
-                if(introClock>=24||Keyboard.current?.escapeKey.wasPressedThisFrame==true)FinishIntro();return;
-            }
+            if(ScreenName=="Introduction"){UpdateIntro();return;}
             if(Keyboard.current?.escapeKey.wasPressedThisFrame==true&&ScreenName!="Title")Title();
-            if(ScreenName=="Character"&&portrait&&look!=null){int f=(int)(Time.unscaledTime*5)%4;portrait.sprite=look.Apply(WorldView.Art("chef-down-"+f));}
+            if(ScreenName=="Character"&&portrait&&look!=null){int f=(int)(Time.unscaledTime*5)%4;portrait.sprite=look.Apply(WorldView.Art("chef-"+new[]{"down","right","up","left"}[(int)(Time.unscaledTime/2)%4]+"-"+f));}
             for(int i=0;i<glints.Count;i++)glints[i].color=new Color(1,.96f,.8f,PlayerPrefs.GetInt("journey-motion",0)==1?.18f:Mathf.Pow(Mathf.Max(0,Mathf.Sin(Time.unscaledTime*1.1f+i*1.7f)),6)*.6f);
             if(PlayerPrefs.GetInt("journey-motion",0)==0)for(int i=0;i<clouds.Count;i++){var p=clouds[i].anchoredPosition;p.x+=Time.unscaledDeltaTime*(4+i);if(p.x>740)p.x=-740;clouds[i].anchoredPosition=p;}
         }

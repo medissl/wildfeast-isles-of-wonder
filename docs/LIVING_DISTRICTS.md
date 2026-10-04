@@ -1,0 +1,19 @@
+# Living food districts — implementation brief
+
+Preserve the textured invisible-grid ground, frayed trails, native creatures and restaurant gameplay. This pass responds to the creator's 4 October inspection, superseding the old five-independent-island and energy-on-empty-swing rules.
+
+Build three geographical islands: Saltleaf (restaurant harbor, Bramblewick town, Cloudfruit Heights), Emberfold (spice ridge and Moonfen), Pearltide (tidal gardens). Existing outdoor IDs remain for save compatibility; town is 7, private homes are 8–10. Walking passages connect districts; the ferry lists only the three island ports. Entrances, shops, homes and residents have clear purposes and reachable approaches. Sailing follows validated water paths, never arbitrary straight lines through terrain.
+
+The screenshot feels inhabited because paths connect buildings, planting borders organize outdoor space, materials share a palette, and characters occupy useful places. Apply those principles with original food fantasy: noodlegrass hedges, pastry roofs, spice workshops, mochi lanterns, inhabited orchards. Add independently roaming butterflies, animals with idle/wander/avoid states, shop smoke and water-edge motion; respect reduced motion. No generative images. All new art is explicitly authored on native pixel grids.
+
+Audit compact ingredient/tool/dish icons separately from world silhouettes. Tilled soil uses each biome's established path-earth texture, blended grass edges and contiguous cells. Crop stages remain individually readable. Keep tools in the hand; rod line starts at its transformed tip, and no string exists on the unused rod sprite. Empty hands and air swings do not jump or spend energy. Charge only actual successful world work, once per contact. Trees visibly fall, leave persistent cuttable stumps, and regrow only after sleep.
+
+Five original residents: Nori (town seed merchant), Iona (cloudfruit botanist), Saff (spice smith), Luma (moonfen tea keeper), Pico (tidal pilot). Each has authored native portraits for neutral, smile, mad, love and laugh expressions, changing with dialogue; daily conversations, persistent friendship, one ingredient delivery event and a home or workplace. Do not suggest full romance or a completed campaign.
+
+Menu: original hand-authored daytime mountain panorama and warm carved wooden plaque; berries/leaves/spoon accents, restrained readable title, animated clouds. Intro: six slower beats (arrival, approach creature, casting/retrieval, forage pull, kitchen preparation, serving), scene fades and final fade into actual gameplay; skip also fades safely and restores actors without reward/state mutations.
+
+Verify domain transactions, saves/migrations, directional custom avatar frames and cache lifecycle, reachable passage exits and building fronts, ferry water clearance, menu/creation/intro/slot flow, natural world actions and the retained restaurant journey in the actual Windows player. Inspect captured images. No packaging; preserve unrelated project settings.
+
+Reference study: [Stardew Valley’s world, NPC and interaction update notes](https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/) and [Slynyrd’s top-down tile study](https://www.slynyrd.com/blog/2019/8/27/pixelblog-20-top-down-tiles). Applied principles: coherent material clusters, readable ground planes, purposeful paths, compact portraits and small environmental interactions. Preserve original food-world content and pixel assets.
+
+The catalog is the saved authored layout, including bakery/exchange/garden borders and reciprocal passage arrivals. Refresh materials with living_districts.py; it intentionally never reconstructs that layout. Refresh explicit art with living_art.py. Reauthor with ArchipelagoBuilder.Author, then build and verify. Existing terrain and character bases are not replaced by a generated backdrop.

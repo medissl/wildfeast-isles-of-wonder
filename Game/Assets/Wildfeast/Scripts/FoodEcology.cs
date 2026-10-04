@@ -50,6 +50,7 @@ namespace Wildfeast
             if(rewardCue){rewardCue.enabled=Ready&&!harvested;rewardCue.sortingOrder=point.artwork?point.artwork.sortingOrder+3:1800;}
         }
         public string Hint=>game&&game.Model.State.harvested.Contains(point.source)?"Resting":kind=="ram"?(Ready?"E · Collect cream":"Wait quietly"):kind=="moth"?(Ready?"E · Collect pollen":"Lanternroot lure"):kind=="crab"?(Ready?"E · Collect shed spice":$"Pickaxe · Loosen spice plates {Contacts}/3"):kind=="snail"?(Ready?"E · Collect kelp jelly":"Water Kelpsnail"):kind=="bud"?(Ready?"E · Harvest dew nectar":"Water Dewblossom"):"Field knife · Tap Cinnamon sap";
+        public bool CanTool(int tool)=>game&&!game.Model.State.harvested.Contains(point.source)&&(kind=="crab"&&tool==9&&!Ready||(kind=="snail"||kind=="bud")&&tool==2&&!Ready&&game.Model.State.water>0||kind=="tap"&&tool==5&&game.Model.BagCount+2<=game.Model.Capacity&&game.Model.State.energy>=3);
         public bool Tool(int tool)
         {
             if(game.Model.State.harvested.Contains(point.source)){game.Say("This source recovers tomorrow.");return true;}

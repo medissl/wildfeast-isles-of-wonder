@@ -1,3 +1,7 @@
+# Current work prompt: inhabited food islands
+
+Continue from docs/LIVING_DISTRICTS.md and the newest verification entry. Preserve the restored native pixel identity, original creatures and textured grid terrain. Improve the three geographic islands and six connected outdoor districts through meaningful destinations and food ecology. Use only explicitly authored native pixel art; no image generation service. Preserve five resident identities, expressive dialogue, their daily friendship and one ingredient event each. Keep island-port travel distinct from walking district transitions, compact portion icons, successful-contact energy charging, falling trees/cuttable stumps, accurate fishing line, directional avatar cache, and atomic sleep checkpoints. Validate in the actual Windows game and inspect captures. Describe limits honestly; no release packaging unless requested.
+
 # Current execution brief: First Light
 
 Follow docs/FIRST_LIGHT.md and FIRST_LIGHT_PLAYTEST.md, then current HANDOFF/VERIFICATION. Preserve the normal animated title, five independent journeys, legacy continue, persistent character customization across every native action, and a once-per-new-save skippable world introduction. Keep input locked behind the front end. New may only create an empty slot; never reset or overwrite another journey. Switch every model subscription cleanly when loading.

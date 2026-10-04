@@ -29,6 +29,7 @@ namespace Wildfeast
         public CharacterProfile avatar=new CharacterProfile();
         public bool introSeen;
         public List<string> landmarks=new List<string>();
+        public List<ResidentProgress> residents=new List<ResidentProgress>();
         public List<Amount> bag = new List<Amount>(), pantry = new List<Amount>();
         public List<string> discovered = new List<string>(), recipes = new List<string>(), upgrades = new List<string>(), harvested = new List<string>();
         public List<Order> orders = new List<Order>();
