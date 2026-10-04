@@ -79,7 +79,7 @@ namespace Wildfeast
         {
             if(!energyFill)
             {
-                var panel=Box(transform,"Energy",new Vector2(-18,-88),new Vector2(248,47),new Vector2(1,1),Color.white);Frame(panel);
+                var panel=Box(transform,"Energy",new Vector2(-18,-88),new Vector2(248,47),new Vector2(1,1),Color.white);Frame(panel);if(overlay)panel.SetSiblingIndex(overlay.GetSiblingIndex());
                 Text(panel,"Energy",new Vector2(12,-6),new Vector2(84,22),16,C("244e48"));
                 var rail=Box(panel,"Energy track",new Vector2(96,-12),new Vector2(136,12),new Vector2(0,1),C("244e48"));
                 energyFill=Box(rail,"Energy fill",Vector2.zero,new Vector2(136,12),new Vector2(0,1),C("8cbd68"));

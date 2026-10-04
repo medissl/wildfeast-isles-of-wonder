@@ -17,6 +17,7 @@ namespace Wildfeast
             game=GetComponent<GameController>();var args=Environment.GetCommandLineArgs();output=args[Array.IndexOf(args,"--test-output")+1];Directory.CreateDirectory(output);
             Application.logMessageReceived+=Log;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;mouse=InputSystem.AddDevice<Mouse>();keyboard=InputSystem.AddDevice<Keyboard>();InputSystem.onAfterUpdate+=Current;
             yield return new WaitForSeconds(.5f);game.ui.Hide();game.Model.State.stage=1;game.Model.Notify();
+            Check(game.ui.transform.Find("Energy").GetSiblingIndex()<game.ui.overlay.GetSiblingIndex(),"Energy HUD stays behind modal map and dialogue panels");
             Check(game.world.islands.Length==6&&Districts.Ports.Length==3,"Six outdoor districts grouped into three islands");
             Check(!game.world.GetComponentsInChildren<SpriteRenderer>(true).Any(sr=>sr.name=="fountain"),"Unmotivated restaurant fountain removed");
             Check(WorldView.ItemArt("brothback").rect.width==32&&WorldView.ItemArt("brothback")!=WorldView.Art("brothback"),"Broth ingredient is a compact jar");
