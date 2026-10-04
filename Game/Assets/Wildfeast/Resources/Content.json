@@ -138,6 +138,13 @@
       "icon": "syrup",
       "habitat": "Emberfold sap stand",
       "description": "Use your field knife on the Cinnamon sap tap. Each tree gives two portions each morning."
+    },
+    {
+      "id": "pearlfin",
+      "name": "Pearlfin",
+      "habitat": "Pearltide coral shallows",
+      "description": "A little fish with a flowering sail and pearl-soft scales. It grazes on salt blossoms around the coral islands.",
+      "icon": "pearlfin"
     }
   ],
   "recipes": [
@@ -225,7 +232,7 @@
     },
     {
       "id": "cloud",
-      "name": "Cloudfruit SoufflÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©",
+      "name": "Cloudfruit Souffle",
       "description": "A little island sky, served warm.",
       "flavor": "sweet",
       "icon": "dish-cloud",
@@ -481,6 +488,28 @@
         },
         {
           "id": "pearlsprout",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "pearlchowder",
+      "name": "Pearlfin Chowder",
+      "description": "Pearl-soft fish simmered with harbor grain and a drop of moon dew.",
+      "flavor": "gentle",
+      "icon": "dish-pearlchowder",
+      "price": 96,
+      "ingredients": [
+        {
+          "id": "pearlfin",
+          "count": 1
+        },
+        {
+          "id": "grain",
+          "count": 1
+        },
+        {
+          "id": "dewnectar",
           "count": 1
         }
       ]

@@ -12,6 +12,7 @@ namespace Wildfeast
         public SaveStore(string path) { Path = path; }
         public void Write(Progress p)
         {
+            ItemInventory.Sync(p);
             Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path));
             string temp = Path + ".tmp";
             File.WriteAllText(temp, JsonUtility.ToJson(p, true));
@@ -31,6 +32,7 @@ namespace Wildfeast
                 catch { Warning = "Save data could not be read. Started a fresh day; original files are preserved."; return Progress.New(); }
             }
         }
+        public static Progress Parse(string text, Content data)=>Validate(text,data);
         static Progress Validate(string text, Content data)
         {
             var p = JsonUtility.FromJson<Progress>(text);
@@ -64,6 +66,7 @@ namespace Wildfeast
                 var candidates=Enumerable.Range(-(int)island.size.x/2,(int)island.size.x).SelectMany(x=>Enumerable.Range(-(int)island.size.y/2,(int)island.size.y).Select(y=>new Vector2(x,y))).Where(tile=>Archipelago.Tillable(tile,field.island)&&!p.fields.Any(f=>f!=field&&f.island==field.island&&f.x==tile.x&&f.y==tile.y)&&!island.props.Any(prop=>prop.role!="grass"&&Vector2.Distance(prop.position,tile)<1.2f)&&!island.points.Any(point=>point.action!="fish"&&Vector2.Distance(point.position,tile)<1.5f)).OrderBy(tile=>(tile-origin).sqrMagnitude).ToArray();
                 if(candidates.Length==0)throw new InvalidDataException();field.x=(int)candidates[0].x;field.y=(int)candidates[0].y;
             }
+            if(p.avatar==null)p.avatar=new CharacterProfile();p.avatar.Normalize();if(p.landmarks==null)p.landmarks=new System.Collections.Generic.List<string>();
             ItemInventory.Sync(p);return p;
         }
         public void ArchiveAndReset()

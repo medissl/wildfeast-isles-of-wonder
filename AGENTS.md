@@ -1,3 +1,11 @@
+# Current First Light guidance
+
+Read docs/FIRST_LIGHT.md and docs/FIRST_LIGHT_PLAYTEST.md first. Normal startup opens JourneyFrontEnd; only --smoke-test bypasses it. --frontend-test exercises the actual title/creation/intro/slots flow with isolated --save-path and --test-output. Preserve five independent slot files and the legacy save. Avatar, introSeen and landmarks are additive state; slot creation initializes inventory before writing. CharacterLook changes actual native walk/action frames, keeping 32 PPU and point filtering. Its temporary textures require safe runtime/editor cleanup.
+
+Run tools/first_light_art.py AFTER wonder_art.py, preferably with Python -X utf8. It enlarges outer landforms, adds five grounded responsive discoveries and water habitats, and appends original Pearlfin/chowder content (20 ingredients, 21 recipes). Terrain, collision, maps and arrivals use the shared catalog. Author outdoors with ArchipelagoBuilder.Author after backing up the scene; preserve room/UI. Chef/action textures must remain readable for customization, large island textures use a 4096 cap. C# source stays valid UTF-8.
+
+FishingChallenge is a moving fish and inertial catch zone, with gain inside and slow loss outside. Preserve cast/wait/track/retrieve stages, one reward after retrieval, and safe cancellation. World input must remain blocked during menu/intro. New never overwrites an occupied slot. Keep model changes and discovery rewards/water/recipe unlocks atomic. Previous Wonder diagnostics still apply.
+
 # Wildfeast project guidance
 
 Read docs/WONDER_REDESIGN.md and docs/WONDER_PLAYTEST.md first for current art/geography. Run tools/wonder_art.py LAST after archipelago_art.py. It preserves IDs while replacing terrain, creatures, characters and sign lettering. Island dimensions/docks/arrivals differ: consume catalog size/dock/arrival in camera, map, ferry and save startup. Soil is centred and its entire footprint must avoid roads/water. Preserve body targeting, calm/lure grace, visible ready cues and persistent boar stock. Re-run body-click, dry-docking and isolated saved-island relaunch diagnostics when changing these flows.

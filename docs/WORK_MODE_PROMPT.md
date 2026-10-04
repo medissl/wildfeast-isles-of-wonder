@@ -1,3 +1,11 @@
+# Current execution brief: First Light
+
+Follow docs/FIRST_LIGHT.md and FIRST_LIGHT_PLAYTEST.md, then current HANDOFF/VERIFICATION. Preserve the normal animated title, five independent journeys, legacy continue, persistent character customization across every native action, and a once-per-new-save skippable world introduction. Keep input locked behind the front end. New may only create an empty slot; never reset or overwrite another journey. Switch every model subscription cleanly when loading.
+
+Keep the fishing sequence physical and readable: cast, flying float, bite, moving fish/catch zone, recoverable progress loss, retrieval, then one ingredient reward. Species/habitats belong to all five islands. Preserve the larger outer regions, walkable protected roads, native responsive landmarks and atomic discovery/water/recipe rewards. The catalog now preserves the old content plus Pearlfin/chowder: 20 ingredients and 21 dishes.
+
+Use tools/first_light_art.py after wonder_art.py with Python -X utf8. Keep source encoding valid UTF-8, readable native chef/action textures, point sampling and 32 PPU. Use supported outdoor authoring, retain restaurant/UI, and preserve unrelated files. Verify actual title/character/intro/slot controls in --frontend-test, the whole restaurant/ecology/ferry progression in --smoke-test, and isolated saved-island relaunch. Inspect captures at 1080p and 1366×768. State actual evidence; automated input cannot determine human game feel or real display FPS.
+
 # Current execution brief
 
 Follow docs/WONDER_REDESIGN.md (analysis, reference sources and full implementation prompt) and docs/WONDER_PLAYTEST.md. Preserve five differently sized/structured islands and native unique creature/character art. Road protection covers the whole centred soil tile, collection uses visible body targeting and forgiving readiness, ferry/maps/camera/relaunch use catalog geography, and signs use measured lettering. Run wonder_art.py last. Verify actual body-click input and saved-island startup as well as the full restaurant journey.

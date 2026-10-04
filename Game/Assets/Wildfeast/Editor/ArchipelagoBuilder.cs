@@ -25,7 +25,7 @@ namespace Wildfeast.Editor
                 var path=file.Replace('\\','/');var importer=(TextureImporter)AssetImporter.GetAtPath(path);
                 if(!importer)continue;
                 importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
-                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;string name=Path.GetFileNameWithoutExtension(path);settings.spritePivot=name.StartsWith("held-")?CozyPolish.HeldPivot(name):new Vector2(.5f,0);importer.SetTextureSettings(settings);importer.maxTextureSize=2048;
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;string name=Path.GetFileNameWithoutExtension(path);settings.spritePivot=name.StartsWith("held-")?CozyPolish.HeldPivot(name):new Vector2(.5f,0);importer.SetTextureSettings(settings);importer.maxTextureSize=new[]{"emberfold","moonfen","pearltide","map-emberfold","map-moonfen","map-pearltide"}.Contains(name)?4096:2048;importer.isReadable=name.StartsWith("chef-")||name.StartsWith("action-")||name.StartsWith("player-");
                 // Existing compact tool handle pivots and UI borders remain intact.
                 importer.SaveAndReimport();
             }

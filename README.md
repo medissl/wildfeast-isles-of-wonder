@@ -1,3 +1,9 @@
+# Wildfeast: Isles of Wonder — First Light
+
+Modern top-down pixel-art food adventure for offline Windows play. First Light adds an animated title, five save slots, character creation, a short world introduction, fishing throughout the archipelago, larger outer regions and responsive island discoveries. The catalog contains 20 original ingredients and 21 dishes.
+
+Read [First Light design](docs/FIRST_LIGHT.md), [playtest guide](docs/FIRST_LIGHT_PLAYTEST.md), [verification](docs/VERIFICATION.md) and [handoff](docs/HANDOFF.md). Open the Unity project in `Game/` using Unity 6000.3.7f1. Existing saves remain available through Continue original save.
+
 Current playable revision: **Wonder redesign** — five different landforms/dimensions, distinct food wildlife, native cast/forage, protected road edges and reliable collection. See [design analysis](docs/WONDER_REDESIGN.md), [playtest guide](docs/WONDER_PLAYTEST.md) and [verification](docs/VERIFICATION.md). Run `tools/wonder_art.py` last when regenerating art.
 
 # Wildfeast: Isles of Wonder

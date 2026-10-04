@@ -9,7 +9,7 @@ namespace Wildfeast
     {
         public string kind,sprite; public WorldPoint point;
         public bool Ready {get;private set;} public int Contacts {get;private set;}
-        GameController game; Vector3 home; Vector2 lastHero; float calm,grace; int day; SpriteRenderer rewardCue;
+        GameModel owner;GameController game; Vector3 home; Vector2 lastHero; float calm,grace; int day; SpriteRenderer rewardCue;
         void Start(){game=FindFirstObjectByType<GameController>();home=transform.localPosition;lastHero=game.world.player.position;day=game.Model.State.day;ReadCondition();rewardCue=WorldView.Add(transform,"held-"+point.item,Vector2.up*(kind=="ram"?1.8f:1.6f),1800);rewardCue.enabled=false;}
         void ReadCondition()
         {var state=game.Model.State.ecology.FirstOrDefault(s=>s.source==point.source);if(state!=null){Contacts=state.contacts;Ready=state.ready;}}
@@ -17,6 +17,7 @@ namespace Wildfeast
         {
             if(!game||game.Model==null||game.Sailing)return;
             if(day!=game.Model.State.day){day=game.Model.State.day;Ready=false;Contacts=0;calm=0;grace=0;transform.localPosition=home;}
+            if(owner!=game.Model){owner=game.Model;Ready=false;Contacts=0;calm=0;grace=0;transform.localPosition=home;ReadCondition();}
             bool harvested=game.Model.State.harvested.Contains(point.source);
             Vector2 hero=game.world.player.position;float distance=Vector2.Distance(hero,transform.position);
             if(kind=="ram")

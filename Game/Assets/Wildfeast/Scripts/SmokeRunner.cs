@@ -120,7 +120,7 @@ namespace Wildfeast
                 float deadline=Time.time+25;
                 while(game.ActiveActivity=="fish" && Time.time<deadline)
                 {
-                    InputSystem.QueueStateEvent(keyboard,game.FishingTension<.55f?new KeyboardState(Key.Space):new KeyboardState());
+                    InputSystem.QueueStateEvent(keyboard,game.CatchZone<game.FishPosition?new KeyboardState(Key.Space):new KeyboardState());
                     yield return null;
                 }
                 InputSystem.QueueStateEvent(keyboard,new KeyboardState());

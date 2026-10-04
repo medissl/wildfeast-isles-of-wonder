@@ -25,6 +25,9 @@ namespace Wildfeast
     {
         public int version = 1, day = 1, coins, earned, served, stage, island, requestIndex;
         public string phase = "explore";
+        public CharacterProfile avatar=new CharacterProfile();
+        public bool introSeen;
+        public List<string> landmarks=new List<string>();
         public List<Amount> bag = new List<Amount>(), pantry = new List<Amount>();
         public List<string> discovered = new List<string>(), recipes = new List<string>(), upgrades = new List<string>(), harvested = new List<string>();
         public List<Order> orders = new List<Order>();
@@ -45,7 +48,7 @@ namespace Wildfeast
         {
             var p = new Progress(); p.pantry.Add(new Amount("grain", 6)); p.discovered.Add("grain");
             p.recipes.Add("seared"); p.recipes.Add("wrap"); p.recipes.Add("porridge"); p.menu.Add("seared"); p.menu.Add("wrap");
-            return p;
+            ItemInventory.Sync(p);return p;
         }
     }
 
@@ -66,6 +69,12 @@ namespace Wildfeast
             var a = list.FirstOrDefault(x => x.id == id);
             if (a == null) { if (value > 0) list.Add(new Amount(id, value)); }
             else { a.count += value; if (a.count == 0) list.Remove(a); }
+        }
+        public bool Discover(string source,string item,string recipe,bool water)
+        {
+            if(State.landmarks.Contains(source)||!Data.recipes.Any(r=>r.id==recipe)||(water&&State.water<1))return false;
+            if(!GatherInternal(item,2,null,false))return false;
+            State.landmarks.Add(source);if(!State.recipes.Contains(recipe))State.recipes.Add(recipe);if(water)State.water--;Notify();return true;
         }
         public bool Gather(string id, int count = 1, string source = null)
             => GatherInternal(id, count, source, true);

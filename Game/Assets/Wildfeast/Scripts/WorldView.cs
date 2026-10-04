@@ -19,6 +19,9 @@ namespace Wildfeast
         public List<SpriteRenderer> cropArt = new List<SpriteRenderer>();
         public int Area { get; private set; }
         public bool FollowSea;
+        CharacterLook characterLook;
+        public void Appearance(CharacterProfile profile){characterLook?.Dispose();characterLook=new CharacterLook(profile);Animate(Vector2.zero);}
+        void OnDestroy(){characterLook?.Dispose();}
         Sprite[] chefFrames;
         Sprite[][] directional;
         readonly Dictionary<string,Sprite[][]> actionFrames=new Dictionary<string,Sprite[][]>();
@@ -91,7 +94,7 @@ namespace Wildfeast
         {
             if(motion.sqrMagnitude>.01f)facing=motion.normalized;
             int direction=Mathf.Abs(facing.x)>Mathf.Abs(facing.y)?facing.x<0?2:3:facing.y>0?1:0;
-            playerArt.sprite = directional[direction][motion.sqrMagnitude > .01f ? (int)(Time.time * 9) % 4 : 0]??chefFrames[0];playerArt.flipX=false;
+            playerArt.sprite = directional[direction][motion.sqrMagnitude > .01f ? (int)(Time.time * 9) % 4 : 0]??chefFrames[0];if(characterLook!=null)playerArt.sprite=characterLook.Apply(playerArt.sprite);playerArt.flipX=false;
             playerArt.sortingOrder = 1000 - Mathf.RoundToInt(player.position.y * 32);
             if(carriedDish)carriedDish.sortingOrder=playerArt.sortingOrder+2;
             foreach (var p in points)
@@ -184,7 +187,7 @@ namespace Wildfeast
             int frame=Mathf.Min(4,Mathf.FloorToInt(poseProgress*5));
             if(activity=="fish"&&poseProgress>=1)frame=1+(int)(Time.time*5)%3;
             PlayerPose=kind??"idle";
-            if(kind!=null){playerArt.sprite=actionFrames[kind][d][frame];if(activity=="forage")heldTool.sprite=null;if(activity=="cook")heldTool.sprite=cookStep==0?Art("held-knife"):null;}
+            if(kind!=null){playerArt.sprite=actionFrames[kind][d][frame];if(characterLook!=null)playerArt.sprite=characterLook.Apply(playerArt.sprite);if(activity=="forage")heldTool.sprite=null;if(activity=="cook")heldTool.sprite=cookStep==0?Art("held-knife"):null;}
             float side=d==2?-1:1;
             float handY=kind=="swing"||kind=="cast"?new[]{.6f,1.05f,.56f,.43f,.6f}[frame]:kind=="plant"||kind=="pull"?new[]{.56f,.4f,.28f,.64f,.56f}[frame]:.56f;
             heldTool.transform.localPosition=new Vector3(side*.38f,handY,0);
@@ -213,6 +216,7 @@ namespace Wildfeast
             bobber.transform.position=end;bobber.color=time>1.5f&&Mathf.Sin(time*9)>0?new Color(1,.66f,.34f):Color.white;
             var start=player.position+new Vector3(facing.x>=0?.65f:-.65f,1.28f,0);fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*(.12f+(1-tension)*.45f),end});
         }
+        public void Retrieve(float amount){var start=player.position+new Vector3(facing.x>=0?.65f:-.65f,1.28f,0);var end=Vector3.Lerp(castPoint,player.position+Vector3.up*.6f,amount);bobber.transform.position=end;fishingLine.SetPositions(new[]{start,(start+end)*.5f+Vector3.up*.12f,end});}
         public void CancelCast(){if(bobber)bobber.gameObject.SetActive(false);if(fishingLine)fishingLine.enabled=false;}
         public void LandFish(string item){var fish=Add(transform,item,castPoint,1800);transientEffects.Add(fish.gameObject);var motion=fish.gameObject.AddComponent<WorldMotion>();motion.mode=6;motion.destination=player.position+Vector3.up*.7f;Destroy(fish.gameObject,.7f);Burst(player.position+Vector3.up*.8f,"spark",0);}
         public void Burst(Vector3 position,string sprite,float cooldown=0)

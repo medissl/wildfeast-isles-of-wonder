@@ -75,6 +75,8 @@ namespace Wildfeast
                 foreach(var p in definition.points)
                 {
                     var point=world.Point(root,p.action,p.label,p.position,p.item,p.source,p.art);
+                    if(p.action=="fish"&&point.artwork)point.artwork.enabled=false;
+                    if(p.action=="discovery")WorldView.Block(point.transform,new Vector2(.8f,.35f),Vector2.up*.15f);
                     if(p.action=="creature"||p.action=="bud"||p.action=="tap")
                     {
                         var behavior=point.gameObject.AddComponent<FoodEcology>();behavior.kind=string.IsNullOrEmpty(p.kind)?p.action:p.kind;behavior.point=point;behavior.sprite=p.art;

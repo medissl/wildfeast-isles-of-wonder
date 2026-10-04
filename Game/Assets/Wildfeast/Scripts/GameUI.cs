@@ -64,7 +64,7 @@ namespace Wildfeast
             var pin=Box(map,"You are here",new Vector2((position.x+island.size.x/2)*scale,-(island.size.y/2-position.y)*scale),new Vector2(16,16),new Vector2(0,1),Color.white);
             pin.GetComponent<UnityEngine.UI.Image>().sprite=WorldView.Art("map-player");
             Text(rows,"YOU · Gold diamond",new Vector2(12,-361),new Vector2(320,28),18,Gold);
-            var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish"}.Contains(p.action)).ToArray();
+            var locations=world.points.Where(p=>p.transform.IsChildOf(world.IslandRoot(island.id))&&new[]{"enter","boat","upgrades","story","hunt","forage","fruit","creature","bud","tap","fish","discovery"}.Contains(p.action)).ToArray();
             for(int i=0;i<locations.Length;i++)
             {
                 var p=locations[i];var marker=Box(map,"Landmark",new Vector2((p.transform.position.x+island.size.x/2)*scale,-(island.size.y/2-p.transform.position.y)*scale),new Vector2(12,12),new Vector2(0,1),Color.white);
@@ -215,6 +215,13 @@ namespace Wildfeast
         public void Mini(float position,float progress,string label,string info)
         {
             cursor.anchoredPosition=new Vector2(Mathf.Clamp01(position)*330,2); progressFill.sizeDelta=new Vector2(Mathf.Clamp01(progress)*334,4);activityText.text=label+"\n"+info;
+        }
+        public void FishTrack(FishingChallenge challenge,string status,string item)
+        {
+            float width=challenge.Width*334;targetZone.sizeDelta=new Vector2(width,15);targetZone.anchoredPosition=new Vector2(challenge.Zone*334-width/2,0);
+            cursor.sizeDelta=new Vector2(18,18);cursor.anchoredPosition=new Vector2(challenge.Fish*334-9,2);var icon=cursor.GetComponent<UnityEngine.UI.Image>();icon.sprite=WorldView.Art("held-"+item)??WorldView.Art(item);icon.color=Color.white;icon.preserveAspect=true;
+            progressFill.sizeDelta=new Vector2(challenge.Progress*334,4);progressFill.GetComponent<UnityEngine.UI.Image>().color=C("65985f");activityText.text=status+"  ·  "+Mathf.RoundToInt(challenge.Progress*100)+"%\nMouse/Space: hold right, release left";
+            targetZone.GetComponent<UnityEngine.UI.Image>().color=challenge.Tracking?C("87b565"):C("cbaa70");
         }
         public void Fishing()
         { overlay.gameObject.SetActive(false);activityPanel.gameObject.SetActive(true);MiniOpen=true; }

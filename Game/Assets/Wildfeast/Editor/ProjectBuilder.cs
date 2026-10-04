@@ -38,7 +38,7 @@ namespace Wildfeast.Editor
             {
                 var importer=(TextureImporter)AssetImporter.GetAtPath(path.Replace('\\','/'));
                 importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.spritePixelsPerUnit=32;
-                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;string name=Path.GetFileNameWithoutExtension(path);settings.spritePivot=name.StartsWith("held-")?CozyPolish.HeldPivot(name):new Vector2(.5f,0);importer.SetTextureSettings(settings);if(path.EndsWith("ui-frame.png")||path.EndsWith("ui-board.png"))importer.spriteBorder=new Vector4(6,6,6,6);if(name=="ui-slot"||name=="ui-button")importer.spriteBorder=new Vector4(3,3,3,3);importer.maxTextureSize=2048;importer.SaveAndReimport();
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteAlignment=(int)SpriteAlignment.Custom;string name=Path.GetFileNameWithoutExtension(path);settings.spritePivot=name.StartsWith("held-")?CozyPolish.HeldPivot(name):new Vector2(.5f,0);importer.SetTextureSettings(settings);if(path.EndsWith("ui-frame.png")||path.EndsWith("ui-board.png"))importer.spriteBorder=new Vector4(6,6,6,6);if(name=="ui-slot"||name=="ui-button")importer.spriteBorder=new Vector4(3,3,3,3);importer.maxTextureSize=4096;importer.SaveAndReimport();
             }
             var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             var cameraObject=new GameObject("WorldCamera",typeof(Camera),typeof(AudioListener),typeof(UniversalAdditionalCameraData));
@@ -96,7 +96,7 @@ namespace Wildfeast.Editor
                     string path="Assets/Wildfeast/Resources/Art/map-"+island.key+".png";
                     File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);RenderTexture.active=previous;
                     AssetDatabase.ImportAsset(path);
-                    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=2048;importer.SaveAndReimport();
+                    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spritePixelsPerUnit=32;importer.filterMode=FilterMode.Point;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.maxTextureSize=4096;importer.SaveAndReimport();
                     target.Release();UnityEngine.Object.DestroyImmediate(target);target=null;
                 }
             }

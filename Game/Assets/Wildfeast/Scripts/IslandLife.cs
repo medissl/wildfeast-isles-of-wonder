@@ -21,6 +21,8 @@ namespace Wildfeast
             nodes.AddRange(game.world.GetComponentsInChildren<HarvestNode>(true));
             game.Model.Changed+=Refresh;Refresh();
         }
+        public void Rebind(GameModel previous)
+        {previous.Changed-=Refresh;foreach(var views in plots.Values)if(views[0])Destroy(views[0].gameObject);plots.Clear();foreach(var node in nodes){node.damage=0;node.lastDay=-1;}game.Model.Changed+=Refresh;Refresh();}
         void Refresh()
         {
             foreach(var f in game.Model.State.fields)
