@@ -1,4 +1,4 @@
-# Wildfeast: Isles of Wonder — First Light
+# Wildfeast: Isles of Wonder [ First Light ]
 
 Modern top-down pixel-art food adventure for offline Windows play. First Light adds an animated title, five save slots, character creation, a short world introduction, fishing throughout the archipelago, larger outer regions and responsive island discoveries. The catalog contains 20 original ingredients and 21 dishes.
 
