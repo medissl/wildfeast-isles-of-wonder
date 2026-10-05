@@ -1,63 +1,33 @@
-# Wildfeast: Isles of Wonder [ First Light ]
-
-Modern top-down pixel-art food adventure for offline Windows play. First Light adds an animated title, five save slots, character creation, a short world introduction, fishing throughout the archipelago, larger outer regions and responsive island discoveries. The catalog contains 20 original ingredients and 21 dishes.
-
-Read [First Light design](docs/FIRST_LIGHT.md), [playtest guide](docs/FIRST_LIGHT_PLAYTEST.md), [verification](docs/VERIFICATION.md) and [handoff](docs/HANDOFF.md). Open the Unity project in `Game/` using Unity 6000.3.7f1. Existing saves remain available through Continue original save.
-
-Current playable revision: **Wonder redesign** — five different landforms/dimensions, distinct food wildlife, native cast/forage, protected road edges and reliable collection. See [design analysis](docs/WONDER_REDESIGN.md), [playtest guide](docs/WONDER_PLAYTEST.md) and [verification](docs/VERIFICATION.md). Run `tools/wonder_art.py` last when regenerating art.
-
 # Wildfeast: Isles of Wonder
 
-A free, offline single-player Unity game prototype for Windows. Explore strange islands, bring impossible ingredients home, and grow a harbor restaurant in modern top-down pixel art.
+![Wildfeast title screen](docs/screenshots/wildfeastmenu.png)
 
-The archipelago expansion adds five deliberately laid-out islands, 19 ingredients, 20 dishes, four new food creatures, six crops and six original music themes. Roads stay untillable; rooted grass, subtly animated trees and biome habitats replace random scatter. Independent audio sliders, pixel zoom and paged books extend the cozy Pixelify UI. See [the expansion and playtest guide](docs/ARCHIPELAGO_EXPANSION.md).
+I've wanted to make a game like this for a long time: explore a strange food world, bring home whatever you find, and turn a tiny restaurant into somewhere people love to eat.
 
-## Play
+I'm taking inspiration from **Toriko**, **Dave the Diver**, and **Stardew Valley**. Toriko especially stuck with me as a kid. A whole world of animals and plants that become food you could never find in real life? I want to explore that.
 
-Open `Wildfeast.exe` from the Windows build folder. Keep its accompanying data folder and DLLs together. First launch shows the controls and daily loop.
+So that's Wildfeast. A cozy pixel-art adventure where dinner might be swimming in a pond, growing in the ground, or about to charge at you.
 
-- WASD / arrows: walk.
-- Click hotbar, 1–0 or scroll: select an item/tool. The first inventory row is the hotbar.
-- Left click / Space: use a tool; allow its windup and recovery to finish. Mouse targets must be within reach. Hold and release to reel.
-- Right click / E: doors, signs, forage, guests and other world interactions.
-- Tab / B: inventory; drag or click two slots to rearrange. Includes Recipes, Journal, Requests and Options tabs.
-- M: island map with player and landmark markers.
-- Shovel: till clear green land, never roads; seed packet: plant; can: water, holding 20 units. Refill beside water.
-- Axe: chop Cinnamonwood; scythe: sweep Noodlegrass; pickaxe: mine Saltstone. Trade materials at the workshop.
-- Cooking: alternating A/D cuts at the chopping rhythm, A/D heat and Space stirring, then drag garnishes onto the plate (or 1/2/3).
-- Escape: close/cancel or open Options. Voyages finish at the destination dock.
+## Out looking for dinner
 
-The player starts in borderless fullscreen; windowed mode is available in pause. Keyboard and mouse are the supported target for this pass. Complete gamepad tool selection and cooking controls remain future work.
+![Exploring Saltleaf Shore outside the restaurant](docs/screenshots/wildfeastoutdoor.png)
 
-## Your first day
+Fish, forage, grow weird crops, and meet creatures with ingredients worth bringing home. Explore towns and islands, meet the people who live there, and see what ends up on tomorrow's menu.
 
-Walk to the shore or spring bank. Equip the rod with 2 and cast with Space; catches animate out of the water. Gather Pepperbell from the path. Enter your restaurant to store ingredients. Flip the clearly marked CLOSED sign beside the front door (E) and choose OPEN in its short confirmation. Customers walk in and show dish icons above their heads. At the stove, choose an order, prepare/cook/plate it, and carry it to the numbered table. The separate menu board changes the offered dishes. Rest at the bed to begin tomorrow.
+Yes, I want cabbage-looking fish. Yes, some animals carry soup on their backs. This world gets to be weird.
 
-If ingredients run out, add Harbor Porridge to the menu. The pantry restores three grain portions each morning. Wild gathering sources recover daily; fishing can be repeated while your bag has room. Progress saves after each meaningful change.
+## Back at the restaurant
 
-## Beyond the first supper
+![Inside the Harbor Table restaurant](docs/screenshots/wildfeastindoor.png)
 
-Brothback patrols the northeast springs and reacts when you approach. Dodge its steam charge and collect stock with E while it cools. Search the northwest grove for Lanternroot and its seeds. Till clear ground on any island, plant seeds and water on successive days. The ferry visibly carries you along a sea route to all five islands from the start; no equipment purchase unlocks exploration or Cloudfruit. Restore the terrace and hire Nori, who walks cooked meals to guests. The provision locker increases bag capacity, and botanical gloves increase fruit yield. Four harbor letters connect discoveries to served dishes.
+Bring your haul home, cook it, serve your guests, and use the earnings to make the place a little better. Then sleep, wake up, and go looking for something new.
 
-## Open the Unity project
+**Explore → gather → cook → serve → grow.** That's the loop I'm building around.
 
-Use Unity Hub to open `Game/` with **Unity 6000.3.7f1**. Open `Game/Assets/Wildfeast/Scenes/Wildfeast.unity` and enter Play mode. The repository includes the serialized, integrated scene and all required original art. Unity will regenerate its ignored Library folder on a fresh checkout.
+## Still cooking
 
-From the repository root, `tools/build.ps1` builds a Windows player and `tools/test.ps1` runs the Unity rule tests. Both accept `-UnityEditor` if your editor executable is in a different location.
+This is a work in progress. Fishing, farming, cooking, restaurant service, character customization, and exploration are playable, and I'm still working on the art, maps, creatures, and all the little things that make a world feel alive.
 
-Editor and standalone saves use separate files. See `docs/HANDOFF.md` for their location and project tooling. Rebuild the scene only intentionally via **Wildfeast → Assemble playable scene**; this reconstructs the authored scene and replaces manual edits to it. Regular gameplay iteration should edit the scene normally.
+I'm making it for **Windows**, **offline and single-player**, and I want it to be **free, with no ads or purchases**.
 
-## Documentation
-
-- `docs/WILDFEAST_PLAN.md`: original vision and milestone definitions.
-- `docs/WORK_MODE_PROMPT.md`: development instructions.
-- `docs/DECISIONS.md`: settled choices and tradeoffs.
-- `docs/PRODUCTION_PLAN.md`: content budget, release scope, accessibility, and performance goals.
-- `docs/VERIFICATION.md`: actual checks and limitations.
-- `docs/HANDOFF.md`: implementation status and next work.
-- `docs/ASSET_PROVENANCE.md`: original artwork and audio sources.
-- `docs/ARCHIPELAGO_EXPANSION.md`: five maps, ecology, crops, dishes, options and test route.
-- `docs/ISLAND_LIFE_PASS.md`: previous tools, item inventory, menus, map, sailing and audio.
-- `docs/LIVING_WORLD_PASS.md`: creator feedback, interaction redesign, controls, and remaining polish targets.
-
-This is an implemented small-world prototype, not a finished commercial-scale game. Human playtesting should establish whether the loop and art direction warrant a larger production.
+Thanks for having a look. I've got a lot more strange food to put in this world.
